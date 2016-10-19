@@ -12,7 +12,7 @@
 </head>
 
 <body>
-    <div class="navbar navbar-default navbar-fixed-top">
+    <div class="navbar navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -21,12 +21,14 @@
 
                 <a href="/" class="navbar-brand">
                     <img src="../../static/app/images/logo.svg" class="logo" />
-                    Emotion Commotion
+                    <p> Emotion Commotion </p>
                 </a>
             </div>
-            <div class="navbar-collapse collapse">
+            <div class="navbar-collapse collapse navbar-right">
                 <ul class="nav navbar-nav">
                     <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="#team">The Team</a></li>
+                    <li><a href="#about-us">About Us</a></li>
                 </ul>
             </div>
         </div>

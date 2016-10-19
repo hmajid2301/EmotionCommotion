@@ -1,14 +1,58 @@
+@import "library";
+
 @header-font: #367ee9;
+@header-border: #367ee9;
+
+
+//#######################################################################
+// HEADER
+//
+//  -NAVIGATION BAR
+//#######################################################################
+
+.nav > li > a {
+    font-size: 16px;
+
+    &:hover {
+        font-weight: 800;
+        background: transparent;
+        .transition(0.35s);
+        color: lighten(@header-font, 2%);
+    }
+}
 
 .navbar {
     height: 70px;
     font-family: 'Open Sans', sans-serif;
+    border-bottom: 3.5px solid @header-border;
+    background: #fff;
 }
 
+
 .navbar-brand {
+    background: @header-border;
+    color: #fff;
+    font-weight: 800;
+    height: 70px;
+
+    &:hover {
+        color: #fff;
+        background: darken(@header-border, 10%);
+        .transition(0.35s);
+    }
+
     img {
         height: 40px;
         width: auto;
         margin-right: 15px; 
     }
+
+    p {
+        padding-top: 10px;
+        display: inline;
+    }
+}
+
+.navbar-collapse {
+    padding-top: 10px;
 }
