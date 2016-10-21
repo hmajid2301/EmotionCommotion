@@ -2,13 +2,22 @@
 
 {% block content %}
 
-<div id="waveform"></div>
 
-<p align="center">
-  <i onclick="microphone.start()"  class="fa fa-microphone record"></i>
-</p>
+<div class="record">
+    <div class="container">
+      <div class="row">
+          <i onclick="microphone.start()"  class="fa fa-microphone" id="microphone"></i>
+          <i class="fa fa-play" id="play"></i>
+          <i class="fa fa-pause" id="pause"></i>
+          <i class="fa fa-stop" id="stop"></i>
+      </div>
+    </div>
+
+    <div id="waveform"></div>
+</div>
+
 {% endblock %}
 
 {% block scripts %}
-<script src="../../static/app/scripts/microphone.js"></script>
+<script src="../../static/app/scripts/index.js"></script>
 {% endblock %}

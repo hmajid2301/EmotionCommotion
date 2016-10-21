@@ -57,24 +57,29 @@
     padding-top: 10px;
 }
 
-#waveform {
-    display: none;
-}
-
 .body-content {
     padding-top: 100px;
 
     .fa {
-        font-size: 10em;
+        font-size: 7em;
 
         &:hover {
-            font-size: 15em;
+            font-size: 10em;
             background: @header-border;
             color: #fff;
             cursor: pointer;
             .transition(0.2s);
-            padding: 80px;
+            padding: 50px;
             border-radius: 95%;
+            margin: 15px;
+        }
+    }
+
+    .record {
+        text-align: center;
+
+        #waveform, #play, #pause, #stop {
+            display: none;
         }
     }
 }

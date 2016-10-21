@@ -114,17 +114,14 @@
 .navbar-collapse {
   padding-top: 10px;
 }
-#waveform {
-  display: none;
-}
 .body-content {
   padding-top: 100px;
 }
 .body-content .fa {
-  font-size: 10em;
+  font-size: 7em;
 }
 .body-content .fa:hover {
-  font-size: 15em;
+  font-size: 10em;
   background: #367ee9;
   color: #fff;
   cursor: pointer;
@@ -133,6 +130,16 @@
   -moz-transition: 0.2s;
   -ms-transition: 0.2s;
   -o-transition: 0.2s;
-  padding: 80px;
+  padding: 50px;
   border-radius: 95%;
+  margin: 15px;
+}
+.body-content .record {
+  text-align: center;
+}
+.body-content .record #waveform,
+.body-content .record #play,
+.body-content .record #pause,
+.body-content .record #stop {
+  display: none;
 }

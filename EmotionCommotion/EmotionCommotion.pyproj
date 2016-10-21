@@ -56,11 +56,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="compilerconfig.json" />
+    <Content Include="app\static\app\content\library.less" />
     <Content Include="app\static\app\content\site.less" />
     <Content Include="app\static\app\content\site.min.css" />
     <Content Include="app\static\app\images\logo.svg" />
-    <Content Include="app\static\app\images\microphone.svg" />
-    <Content Include="app\static\app\scripts\microphone.js" />
+    <Content Include="app\static\app\scripts\index.js" />
     <Content Include="compilerconfig.json.defaults">
       <SubType>Content</SubType>
       <DependentUpon>compilerconfig.json</DependentUpon>

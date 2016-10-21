@@ -13,15 +13,12 @@ microphone.on('deviceError', function (code) {
     console.warn('Device error: ' + code);
 });
 
-// pause rendering
-//microphone.pause();
+$("#microphone").click(function () {
 
-// resume rendering
-//microphone.play();
-
-// stop visualization and disconnect microphone
-//microphone.stopDevice();
-
-// same as stopDevice() but also clears the wavesurfer canvas
-//microphone.stop();
-
+    if ($('#microphone').is(':visible')) {
+        $("#microphone").hide()
+        $("#waveform").show()
+        $("#pause").show()
+        $("#stop").show()
+    }
+});
