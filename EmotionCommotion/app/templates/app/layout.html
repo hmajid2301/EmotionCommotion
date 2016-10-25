@@ -26,7 +26,7 @@
             </div>
             <div class="navbar-collapse collapse navbar-right">
                 <ul class="nav navbar-nav">
-                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li class="active"><a href="{% url 'home' %}">Home</a></li>
                     <li><a href="#team">The Team</a></li>
                     <li><a href="#about-us">About Us</a></li>
                 </ul>
@@ -34,17 +34,16 @@
         </div>
     </div>
 
-    <div class="container body-content">
+    <div class="body-content">
         {% block content %}{% endblock %}
-        <hr />
-        <footer>
-            <p>&copy; Team "Emotion Commotion", All rights Reserved. {{ year }} </p>
-        </footer>
     </div>
 
-    <script src="{% static 'app/scripts/jquery-1.10.2.js' %}"></script>
-    <script src="{% static 'app/scripts/bootstrap.js' %}"></script>
-    <script src="{% static 'app/scripts/respond.js' %}"></script>
+    <footer id="footer">
+        <p>&copy; Team "Emotion Commotion", All rights Reserved. {{ year }} </p>
+    </footer>
+
+    <script src="{% static 'app/scripts/jquery-1.10.2.min.js' %}"></script>
+    <script src="{% static 'app/scripts/bootstrap.min.js' %}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.1.2/wavesurfer.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.1.2/plugin/wavesurfer.microphone.min.js"></script>
     <script src="https://use.fontawesome.com/bc46617bcd.js"></script>

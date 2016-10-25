@@ -1,4 +1,7 @@
-﻿var wavesurfer = WaveSurfer.create({ container: '#waveform', waveColor: 'violet' });
+﻿var wavesurfer = WaveSurfer.create({
+    container: '#waveform',
+    waveColor: '#367ee9'
+});
 
 var microphone = Object.create(WaveSurfer.Microphone);
 
@@ -14,11 +17,15 @@ microphone.on('deviceError', function (code) {
 });
 
 $("#microphone").click(function () {
+    $("#microphone").hide()
+    $("#waveform").show()
+    $("#stop").show()
+});
 
-    if ($('#microphone').is(':visible')) {
-        $("#microphone").hide()
-        $("#waveform").show()
-        $("#pause").show()
-        $("#stop").show()
-    }
+
+$("#stop").click(function () {
+    $("#microphone").show()
+    $("#waveform").hide()
+    $("#stop").hide()
+    microphone.stop()
 });

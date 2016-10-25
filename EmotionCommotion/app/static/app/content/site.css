@@ -68,6 +68,13 @@
   -o-animation-delay: 1s !important;
   animation-delay: 1s !important;
 }
+html,
+body {
+  height: 100%;
+}
+.navbar-nav .active {
+  font-weight: 800;
+}
 .nav > li > a {
   font-size: 16px;
 }
@@ -115,21 +122,30 @@
   padding-top: 10px;
 }
 .body-content {
-  padding-top: 100px;
+  padding: 130px 0 0 60px;
+  min-height: 100%;
+  height: auto;
+  margin: 0 auto -60px;
 }
 .body-content .fa {
-  font-size: 7em;
+  font-size: 5em;
+  margin-top: 10px;
 }
 .body-content .fa:hover {
-  font-size: 10em;
+  font-size: 7em;
   background: #367ee9;
   color: #fff;
   cursor: pointer;
-  transition: 0.2s;
-  -webkit-transition: 0.2s;
-  -moz-transition: 0.2s;
-  -ms-transition: 0.2s;
-  -o-transition: 0.2s;
+  transition: 0.4s;
+  -webkit-transition: 0.4s;
+  -moz-transition: 0.4s;
+  -ms-transition: 0.4s;
+  -o-transition: 0.4s;
+  -webkit-transform: rotate(360deg);
+  -moz-transform: rotate(360deg);
+  -ms-transform: rotate(360deg);
+  -o-transform: rotate(360deg);
+  transform: rotate(360deg);
   padding: 50px;
   border-radius: 95%;
   margin: 15px;
@@ -142,4 +158,11 @@
 .body-content .record #pause,
 .body-content .record #stop {
   display: none;
+}
+#footer {
+  height: 60px;
+  background-color: #367ee9;
+  text-align: center;
+  color: #fff;
+  padding-top: 20px;
 }
