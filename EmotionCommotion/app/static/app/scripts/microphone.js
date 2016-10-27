@@ -58,7 +58,7 @@ $("#microphone").click(function () {
     $("#microphone").hide()
     $("#waveform").show()
     $("#graph").show()
-    $("#emojis-toggle").show()
+    $(".toggle.btn").show()
     $("#stop").show()
     recorder.start();
     chunks = [];
@@ -71,6 +71,8 @@ $("#stop").click(function () {
     $("#waveform").hide()
     $("#stop").hide()
     $("#graph").hide()
+    $(".toggle.btn").hide()
+    $("#emojis").hide()
     microphone.stop()
     recorder.stop();
 });

@@ -166,12 +166,17 @@ body {
 #graph svg {
   margin: 30px auto !important;
 }
-.toggle + .btn {
+.toggle.btn {
   display: none;
   float: right;
+  min-width: 80px;
+}
+#emojis {
+  display: none;
 }
 #emojis .emoji {
-  display: none;
+  width: 100px;
+  height: auto;
 }
 .label {
   font-family: 'Open Sans';

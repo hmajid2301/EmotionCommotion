@@ -81,13 +81,45 @@ function UpdateGraph(data) {
     cv_text.exit().remove();
 }
 
-$(function () {
-    $('#emoji-toggle').change(function () {
-        $('#console-event').html('Toggle: ' + $(this).prop('checked'))
-    })
+$('#emoji-toggle').change(function () {
+    console.log('Toggle: ' + $(this).prop('checked'))
+
+    if ($(this).prop('checked') == false) {
+        $('#graph').hide()
+        $('#emojis').show()
+    }
+    else {
+        $('#graph').show()
+        $('#emojis').hide()
+
+    }
 })
 
+function UpdateEmoji() {
+    var max = 100;
+    var angry = randombetween(1, max - 3);
+    var sad = randombetween(1, max - 2 - angry);
+    var neutral = randombetween(1, max - 1 - angry - sad);
+    var happy = max - angry - sad - neutral;
+
+    $("#angry").animate({
+        width: angry * 3 + "px"
+    })
+    $("#sad").animate({
+        width: sad * 3 + "px"
+    })
+    $("#neutal").animate({
+        width: neutal * 3 + "px"
+    })
+    $("#happy").animate({
+        width: happy * 3 + "px"
+    })
+}
+
+
+function randombetween(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
 setInterval(function() { UpdateGraph(); }, 2500);
-
-
-
+setInterval(function() { UpdateEmoji(); }, 2500);
