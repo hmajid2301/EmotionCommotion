@@ -129,7 +129,7 @@ body {
 }
 .body-content .fa {
   font-size: 5em;
-  margin-top: 10px;
+  margin: 20px;
 }
 .body-content .fa:hover {
   font-size: 7em;
@@ -158,6 +158,23 @@ body {
 .body-content .record #pause,
 .body-content .record #stop {
   display: none;
+  margin-top: 20px;
+}
+#graph {
+  display: none;
+}
+#graph svg {
+  margin: 30px auto !important;
+}
+.toggle + .btn {
+  display: none;
+  float: right;
+}
+#emojis .emoji {
+  display: none;
+}
+.label {
+  font-family: 'Open Sans';
 }
 #footer {
   height: 60px;

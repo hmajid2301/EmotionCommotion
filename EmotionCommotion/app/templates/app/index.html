@@ -6,18 +6,32 @@
     <div class="record">
         <div class="container">
           <div class="row">
-              <i onclick="microphone.start()"  class="fa fa-microphone" id="microphone"></i>
+              <i class="fa fa-microphone" id="microphone"></i>
               <i class="fa fa-stop" id="stop"></i>
               <div id="waveform"></div>
+              <div id="ul"></div>
           </div>
         </div>
 
     </div>
+
+
+    <input type="checkbox" checked data-toggle="toggle" id="emoji-toggle" data-onstyle="danger">
+    <div id ="graph"></div>
+    <div id="emojis">
+        <img class="emoji"src="../../static/app/images/emojis/angry.svg" />
+        <img class="emoji"  src="../../static/app/images/emojis/sad.svg" />
+        <img class="emoji" src="../../static/app/images/emojis/sceptic.svg" />
+        <img class="emoji" src="../../static/app/images/emojis/smile.svg" />
+    </div>
+
 </div>
+
 
 
 {% endblock %}
 
 {% block scripts %}
-<script src="../../static/app/scripts/index.js"></script>
+<script src="../../static/app/scripts/microphone.js"></script>
+<script src="../../static/app/scripts/graph.js"></script>
 {% endblock %}

@@ -1,7 +1,7 @@
 @import "library";
 
-@header-font: #367ee9;
-@header-border: #367ee9;
+@font: 'Open Sans';
+@blue: #367ee9;
 
 
 //#######################################################################
@@ -26,27 +26,27 @@ html,body {
         font-weight: 800;
         background: transparent;
         .transition(0.35s);
-        color: lighten(@header-font, 2%);
+        color: lighten(@blue, 2%);
     }
 }
 
 .navbar {
     height: 70px;
     font-family: 'Open Sans', sans-serif;
-    border-bottom: 3.5px solid @header-border;
+    border-bottom: 3.5px solid @blue;
     background: #fff;
 }
 
 
 .navbar-brand {
-    background: @header-border;
+    background: @blue;
     color: #fff;
     font-weight: 800;
     height: 70px;
 
     &:hover {
         color: #fff;
-        background: darken(@header-border, 10%);
+        background: darken(@blue, 10%);
         .transition(0.35s);
     }
 
@@ -74,11 +74,11 @@ html,body {
 
     .fa {
         font-size: 5em;
-        margin-top: 10px;
+        margin: 20px;
 
         &:hover {
             font-size: 7em;
-            background: @header-border;
+            background: @blue;
             color: #fff;
             cursor: pointer;
             .transition(0.4s);
@@ -94,13 +94,38 @@ html,body {
 
         #waveform, #play, #pause, #stop {
             display: none;
+            margin-top: 20px;
         }
     }
 }
 
+#graph {
+    display: none;
+    svg {
+        margin: 30px auto !important;
+    }
+
+}
+
+.toggle + .btn {
+    display: none;
+    float: right;
+}
+
+#emojis {
+    .emoji {
+        display: none;
+    }
+}
+
+
+.label {
+    font-family: @font;
+}
+
 #footer {
   height: 60px;
-  background-color: #367ee9;
+  background-color: @blue;
   text-align: center;
   color: #fff;
   padding-top: 20px;

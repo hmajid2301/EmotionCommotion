@@ -1,0 +1,8 @@
+[
+  {
+    "outputFileName": "app/static/app/scripts/d3.legend.min.js",
+    "inputFiles": [
+      "app/static/app/scripts/d3.legend.js"
+    ]
+  }
+]
