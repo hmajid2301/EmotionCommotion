@@ -3,7 +3,7 @@
 """
 Created on Fri Nov 11 14:18:26 2016
 
-@author: olly
+@author: Olly Styles
 """
 # In[1]
 import scipy.io.wavfile as wav   # Reads wav file
