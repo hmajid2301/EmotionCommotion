@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[43]:
+# In[1]:
 
 import pandas as pd
 import glob
@@ -17,5 +17,5 @@ for n in range(1,6):
         f = f[f.session.str.contains('^Ses')]
         file = file.append(f)
         file = file.sort_values(by='session')
-        file.to_csv(SAVE_LOCATION + 'session' + str(n) + '.csv',index=False)
+        file.to_csv(SAVE_LOCATION + 'session' + str(n) + 'Labels.csv',index=False)
 
