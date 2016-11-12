@@ -38,5 +38,3 @@ def f0(dirPath, clipName, threshold):
     return sorted_by_Hz[0]
 
 f0('C:/Users/Tom/PycharmProjects/SoundTest/ThinkDSP-master/code/', '92002__jcveliz__violin-origional.wav', 0.5)
-
-##https://www.boundless.com/physics/textbooks/boundless-physics-textbook/waves-and-vibrations-15/wave-behavior-and-interaction-126/energy-intensity-frequency-and-amplitude-450-1130/
