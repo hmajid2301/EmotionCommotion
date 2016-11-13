@@ -39,7 +39,7 @@ def f0(filename, threshold=0.5):
     # selected_pairs is now a list of the pairs which have a prominent amplitude
     sorted_by_Hz = sorted(selected_pairs, key=lambda tup: tup[1])
     # the lowest Hz should now be F0, will need to tweek 0.5
-    return sorted_by_Hz[0][0]
+    return sorted_by_Hz[0][1]
 
 f0('/home/olly/cs/4_year/project/local/IEMOCAP_full_release/Session1/sentences/wav/Ses01F_impro02/Ses01F_impro02_F001.wav',0.5)
 
