@@ -6,14 +6,17 @@ Created on Sat Nov 12 12:04:22 2016
 @author: Tom
 """
 from importlib.machinery import SourceFileLoader
+from datagrabber import extractAndSave
+
+IEMOCAP_LOCATION = "../../../../local"
+
 
 # assuming for now that thinkdsp and clip is in the same directory
 # the energy function returns the sum of the amplitudes squared (as energy is proportional to amplitude squared)
-def energy(dirPath, clipName):
-    thinkplot = SourceFileLoader("thinkplot", dirPath + "thinkplot.py").load_module()
-    thinkdsp = SourceFileLoader("thinkdsp", dirPath + "thinkdsp.py").load_module()
+def energy(filename):
+    thinkdsp = SourceFileLoader("thinkdsp", "../sourceFiles/thinkdsp.py").load_module()
 
-    clip = thinkdsp.read_wave(dirPath + clipName)
+    clip = thinkdsp.read_wave(filename)
 
     ###shortening the clip is a good idea for testing###
     #start = 1.2
@@ -33,8 +36,7 @@ def energy(dirPath, clipName):
 
     return totalEnergy
 
-
-energy('C:/Users/Tom/PycharmProjects/SoundTest/ThinkDSP-master/code/', '92002__jcveliz__violin-origional.wav')
-
 ##https://www.boundless.com/physics/textbooks/boundless-physics-textbook/waves-and-vibrations-15/wave-behavior-and-interaction-126/energy-intensity-frequency-and-amplitude-450-1130/
 #energy is proportional to amplitude^2, frequency generally assumed to not impact energy
+
+extractAndSave(energy,IEMOCAP_LOCATION,2)
