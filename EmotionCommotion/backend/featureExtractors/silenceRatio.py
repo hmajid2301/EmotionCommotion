@@ -14,7 +14,7 @@ import glob
 
 
 # In[2]
-IEMOCAP_LOCATION = "/home/olly/cs/4_year/project/local"
+IEMOCAP_LOCATION = "../../../../local"
 silenceRatio = {}
 for session in range(1,6):
     for directory in os.listdir(IEMOCAP_LOCATION + '/IEMOCAP_full_release/Session' + str(session) + '/sentences/wav/'):
