@@ -38,4 +38,3 @@ def extractAndSave(funct,IEMOCAP_LOCATION,verbose=1):
     df.columns = ['session',funct.__name__]
     df = df.sort_values(by='session')
     df.to_csv('../features/' + funct.__name__ + '.csv',index=False)
-
