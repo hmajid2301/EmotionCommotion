@@ -6,9 +6,8 @@ from datagrabber import extractAndSave
 
 IEMOCAP_LOCATION = "../../../../local"
 
-def cepstrum(filename):
-    audio = pd.DataFrame(wav.read(filename)[1])
-    audio = np.fft.fft(audio)
+def cepstrum(frame, filename):
+    audio = np.fft.fft(frame)
     audio = abs(audio)
     audio = audio ** 2
     audio = np.log2(audio)
