@@ -29,8 +29,7 @@ agg_func_names = ["max", "mean", "var"]
 def aggregate(vals):
     agg_vals = []
     for i in range(0, len(agg_funcs)):
-        for j in range(0, len(vals[0])-1):
-            agg_vals = np.concatenate((agg_vals,agg_funcs[i](vals, axis=0)), axis=0)
+        agg_vals = np.concatenate((agg_vals,agg_funcs[i](vals, axis=0)), axis=0)
     return agg_vals
                      
 
