@@ -3,7 +3,6 @@ import scipy.io.wavfile as wav   # Reads wav file
 
 IEMOCAP_LOCATION = "../../../../local"
 
-import math
 import numpy as np
 import pandas as pd
 import os
