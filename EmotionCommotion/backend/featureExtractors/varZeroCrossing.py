@@ -15,6 +15,6 @@ IEMOCAP_LOCATION = "../../../../local"
 
 def varZeroCrossing(filename):
     audio,sr = librosa.load(filename,sr=None)
-    return librosa.feature.zero_crossing_rate(audio).varr()
+    return librosa.feature.zero_crossing_rate(audio).var()
 
 extractAndSave(varZeroCrossing,IEMOCAP_LOCATION,2,5,False)
