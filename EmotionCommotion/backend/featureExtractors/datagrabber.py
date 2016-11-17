@@ -69,8 +69,4 @@ def extractAndSave(funct,labels,IEMOCAP_LOCATION,verbose=1):
     #df.columns = ['session',funct.__name__+"max-max", funct.__name__+"mean-max",funct.__name__+"max-mean", funct.__name__+"max-var", funct.__name__+"mean-mean", funct.__name__+"mean-var"]
     df = df.sort_values(by='session')
     df.to_csv('../features/' + funct.__name__ + '.csv',index=False)
-    
-def amplitude(frame):
-    return [np.amax(frame), np.average(frame)]
-    
-extractAndSave(amplitude,["max", "mean"],IEMOCAP_LOCATION,2)
+
