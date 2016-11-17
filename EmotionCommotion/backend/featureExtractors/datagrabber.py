@@ -10,11 +10,10 @@ from glob import glob
 import sys
 
 
-def get_frames(filename):
-    [sample_rate, audio] = wav.read(filename)
-    frame_size = sample_rate // 5
-    overlap_ratio = 0.5
-    frame_overlap = int(frame_size * overlap_ratio)
+def get_frames(audiofile):
+    frame_size = audiofile['frame_size']
+    frame_overlap = audiofile['frame_overlap']
+    audio = audiofile['audio']
     frames = []
     i = 0
     while ((i+1)*(frame_size - frame_overlap) < len(audio)):
@@ -30,7 +29,18 @@ def aggregate(vals):
     for i in range(0, len(agg_funcs)):
         agg_vals = np.concatenate((agg_vals,agg_funcs[i](vals, axis=0)), axis=0)
     return agg_vals
-                     
+
+def get_audiofile(filename):
+    audiofile = {}
+    [sample_rate, audio] = wav.read(filename)
+    audiofile['sample_rate'] = sample_rate
+    audiofile['frame_size'] = sample_rate // 5
+    audiofile['filename'] = filename
+    audiofile['overlap_ratio'] = 0.5
+    audiofile['frame_overlap'] = int(audiofile['frame_size'] * audiofile['overlap_ratio'])
+    audiofile['audio'] = audio
+    audiofile['threshold'] = max(audio) * 0.03
+    return audiofile
 
 def extractAndSave(funct,labels,IEMOCAP_LOCATION,verbose=1):
     '''
@@ -52,10 +62,11 @@ def extractAndSave(funct,labels,IEMOCAP_LOCATION,verbose=1):
                 sys.stdout.flush()
             for filename in glob(IEMOCAP_LOCATION + '/IEMOCAP_full_release/Session' + str(session) + '/sentences/wav/' + directory + '/*.wav'):
                 name = filename.split('/')[-1][:-4]
-                frames = get_frames(filename)
+                audiofile = get_audiofile(filename)
+                frames = get_frames(audiofile)
                 vals = []
                 for frame in frames:
-                    vals.append(funct(frame, filename))
+                    vals.append(funct(frame, audiofile))
                 agg_vals = aggregate(vals)
                 dic[name] = agg_vals
     
@@ -69,7 +80,3 @@ def extractAndSave(funct,labels,IEMOCAP_LOCATION,verbose=1):
     #df.columns = ['session',funct.__name__+"max-max", funct.__name__+"mean-max",funct.__name__+"max-mean", funct.__name__+"max-var", funct.__name__+"mean-mean", funct.__name__+"mean-var"]
     df = df.sort_values(by='session')
     df.to_csv('../features/' + funct.__name__ + '.csv',index=False)
-<<<<<<< HEAD
-
-=======
->>>>>>> c83ad3cb1adfc72d70ed8267a43f78aa4e04df16
