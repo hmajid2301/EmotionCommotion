@@ -10,7 +10,7 @@ import numpy as np
 
 IEMOCAP_LOCATION = "../../../../local"
 
-def energy(frame):
+def energy(frame, audiofile):
     return [sum(np.apply_along_axis(lambda x: x**2,0,frame))]
 
-extractAndSave(energy,IEMOCAP_LOCATION,2)
+extractAndSave(energy,['energy'],IEMOCAP_LOCATION,2)
