@@ -12,13 +12,13 @@ svg.append("g")
 	.attr("class", "lines");
 
 var width = 960,
-    height = 450,
+	height = 450,
 	radius = Math.min(width, height) / 2;
 
 var pie = d3.layout.pie()
 	.sort(null)
 	.value(function(d) {
-	    return d.value;
+		return d.value;
 	});
 
 var arc = d3.svg.arc()
@@ -43,181 +43,181 @@ var color = d3.scale.ordinal()
 
 function newData() {
 
-    ran = [Math.floor((Math.random() * 10) + 1),
-           Math.floor((Math.random() * 10) + 1),
-           Math.floor((Math.random() * 10) + 1),
-           Math.floor((Math.random() * 10) + 1)]
+	ran = [Math.floor((Math.random() * 10) + 1),
+		   Math.floor((Math.random() * 10) + 1),
+		   Math.floor((Math.random() * 10) + 1),
+		   Math.floor((Math.random() * 10) + 1)]
 
-    sum = ran.reduce(function(a, b) { return a + b; }, 0);
+	sum = ran.reduce(function(a, b) { return a + b; }, 0);
 
 
-    return [
-            {label:"Neutral", value: parseInt((ran[0]/sum)*100)}, 
-            {label:"Happy", value: parseInt((ran[1]/sum)*100)}, 
-            {label:"Sadness", value: parseInt((ran[2]/sum)*100)},
-            {label:"Angry", value: parseInt((ran[3]/sum)*100)}
-    ];
+	return [
+			{label:"Neutral", value: parseInt((ran[0]/sum)*100)}, 
+			{label:"Happy", value: parseInt((ran[1]/sum)*100)}, 
+			{label:"Sadness", value: parseInt((ran[2]/sum)*100)},
+			{label:"Angry", value: parseInt((ran[3]/sum)*100)}
+	];
 }
 	
 function change(data) {
 
-    /* ------- PIE SLICES -------*/
-    var slice = svg.select(".slices").selectAll("path.slice")
-        .data(pie(data), function(d){ return d.data.label });
+	/* ------- PIE SLICES -------*/
+	var slice = svg.select(".slices").selectAll("path.slice")
+		.data(pie(data), function(d){ return d.data.label });
 
-    slice.enter()
-        .insert("path")
-        .style("fill", function(d) { return color(d.data.label); })
-        .attr("class", "slice");
+	slice.enter()
+		.insert("path")
+		.style("fill", function(d) { return color(d.data.label); })
+		.attr("class", "slice");
 
-    slice
-        .transition().duration(1000)
-        .attrTween("d", function(d) {
-            this._current = this._current || d;
-            var interpolate = d3.interpolate(this._current, d);
-            this._current = interpolate(0);
-            return function(t) {
-                return arc(interpolate(t));
-            };
-        })
-    slice
+	slice
+		.transition().duration(1000)
+		.attrTween("d", function(d) {
+			this._current = this._current || d;
+			var interpolate = d3.interpolate(this._current, d);
+			this._current = interpolate(0);
+			return function(t) {
+				return arc(interpolate(t));
+			};
+		})
+	slice
 
-    slice.exit()
-        .remove();
+	slice.exit()
+		.remove();
 
-    var legend = svg.selectAll('.legend')
-        .data(color.domain())
-        .enter()
-        .append('g')
-        .attr('class', 'legend')
-        .attr('transform', function(d, i) {
-            var height = legendRectSize + legendSpacing;
-            var offset =  height * color.domain().length / 2;
-            var horz = -3 * legendRectSize;
-            var vert = i * height - offset;
-            return 'translate(' + (horz+335) + ',' + -(vert+150) + ')';
-        });
+	var legend = svg.selectAll('.legend')
+		.data(color.domain())
+		.enter()
+		.append('g')
+		.attr('class', 'legend')
+		.attr('transform', function(d, i) {
+			var height = legendRectSize + legendSpacing;
+			var offset =  height * color.domain().length / 2;
+			var horz = -3 * legendRectSize;
+			var vert = i * height - offset;
+			return 'translate(' + (horz+335) + ',' + -(vert+150) + ')';
+		});
 
-    legend.append('rect')
-        .attr('width', legendRectSize)
-        .attr('height', legendRectSize)
-        .style('fill', color)
-        .style('stroke', color);
+	legend.append('rect')
+		.attr('width', legendRectSize)
+		.attr('height', legendRectSize)
+		.style('fill', color)
+		.style('stroke', color);
 
-    legend.append('text')
-        .attr('x', legendRectSize + legendSpacing)
-        .attr('y', legendRectSize - legendSpacing)
-        .text(function(d) { return d; });
+	legend.append('text')
+		.attr('x', legendRectSize + legendSpacing)
+		.attr('y', legendRectSize - legendSpacing)
+		.text(function(d) { return d; });
 
-    /* ------- TEXT LABELS -------*/
+	/* ------- TEXT LABELS -------*/
 
-    var text = svg.select(".labelName").selectAll("text")
-        .data(pie(data), function(d){ return d.data.label });
+	var text = svg.select(".labelName").selectAll("text")
+		.data(pie(data), function(d){ return d.data.label });
 
-    text.enter()
-        .append("text")
-        .attr("dy", ".35em")
-        .text(function(d) {
-            return (d.data.label+": "+d.value+"%");
-        });
+	text.enter()
+		.append("text")
+		.attr("dy", ".35em")
+		.text(function(d) {
+			return (d.data.label+": "+d.value+"%");
+		});
 
-    function midAngle(d){
-        return d.startAngle + (d.endAngle - d.startAngle)/2;
-    }
+	function midAngle(d){
+		return d.startAngle + (d.endAngle - d.startAngle)/2;
+	}
 
-    text
-        .transition().duration(1000)
-        .attrTween("transform", function(d) {
-            this._current = this._current || d;
-            var interpolate = d3.interpolate(this._current, d);
-            this._current = interpolate(0);
-            return function(t) {
-                var d2 = interpolate(t);
-                var pos = outerArc.centroid(d2);
-                pos[0] = radius * (midAngle(d2) < Math.PI ? 1 : -1);
-                return "translate("+ pos +")";
-            };
-        })
-        .styleTween("text-anchor", function(d){
-            this._current = this._current || d;
-            var interpolate = d3.interpolate(this._current, d);
-            this._current = interpolate(0);
-            return function(t) {
-                var d2 = interpolate(t);
-                return midAngle(d2) < Math.PI ? "start":"end";
-            };
-        })
-        .text(function(d) {
-            return (d.data.label+": "+d.value+"%");
-        });
+	text
+		.transition().duration(1000)
+		.attrTween("transform", function(d) {
+			this._current = this._current || d;
+			var interpolate = d3.interpolate(this._current, d);
+			this._current = interpolate(0);
+			return function(t) {
+				var d2 = interpolate(t);
+				var pos = outerArc.centroid(d2);
+				pos[0] = radius * (midAngle(d2) < Math.PI ? 1 : -1);
+				return "translate("+ pos +")";
+			};
+		})
+		.styleTween("text-anchor", function(d){
+			this._current = this._current || d;
+			var interpolate = d3.interpolate(this._current, d);
+			this._current = interpolate(0);
+			return function(t) {
+				var d2 = interpolate(t);
+				return midAngle(d2) < Math.PI ? "start":"end";
+			};
+		})
+		.text(function(d) {
+			return (d.data.label+": "+d.value+"%");
+		});
 
 
-    text.exit()
-        .remove();
+	text.exit()
+		.remove();
 
-    /* ------- SLICE TO TEXT POLYLINES -------*/
+	/* ------- SLICE TO TEXT POLYLINES -------*/
 
-    var polyline = svg.select(".lines").selectAll("polyline")
-        .data(pie(data), function(d){ return d.data.label });
+	var polyline = svg.select(".lines").selectAll("polyline")
+		.data(pie(data), function(d){ return d.data.label });
 
-    polyline.enter()
-        .append("polyline");
+	polyline.enter()
+		.append("polyline");
 
-    polyline.transition().duration(1000)
-        .attrTween("points", function(d){
-            this._current = this._current || d;
-            var interpolate = d3.interpolate(this._current, d);
-            this._current = interpolate(0);
-            return function(t) {
-                var d2 = interpolate(t);
-                var pos = outerArc.centroid(d2);
-                pos[0] = radius * 0.95 * (midAngle(d2) < Math.PI ? 1 : -1);
-                return [arc.centroid(d2), outerArc.centroid(d2), pos];
-            };
-        });
+	polyline.transition().duration(1000)
+		.attrTween("points", function(d){
+			this._current = this._current || d;
+			var interpolate = d3.interpolate(this._current, d);
+			this._current = interpolate(0);
+			return function(t) {
+				var d2 = interpolate(t);
+				var pos = outerArc.centroid(d2);
+				pos[0] = radius * 0.95 * (midAngle(d2) < Math.PI ? 1 : -1);
+				return [arc.centroid(d2), outerArc.centroid(d2), pos];
+			};
+		});
 
-    polyline.exit()
-        .remove();
+	polyline.exit()
+		.remove();
 };
 
 
 $('#emoji-toggle').change(function () {
-    if ($(this).prop('checked') == false) {
-        $("#emojis").show()
-        $("#graph").hide()
-    }
-    else {
-        $("#graph").show()
-        $("#emojis").hide()
-    }
+	if ($(this).prop('checked') == false) {
+		$("#emojis").show()
+		$("#graph").hide()
+	}
+	else {
+		$("#graph").show()
+		$("#emojis").hide()
+	}
 })
 
 
 
 function UpdateEmoji() {
-    var max = 100;
-    var angry = randombetween(1, max - 3);
-    var sad = randombetween(1, max - 2 - angry);
-    var neutral = randombetween(1, max - 1 - angry - sad);
-    var happy = max - angry - sad - neutral;
+	var max = 100;
+	var angry = randombetween(1, max - 3);
+	var sad = randombetween(1, max - 2 - angry);
+	var neutral = randombetween(1, max - 1 - angry - sad);
+	var happy = max - angry - sad - neutral;
 
-    $("#angry").animate({
-        width: angry * 3 + "px"
-    })
-    $("#sad").animate({
-        width: sad * 3 + "px"
-    })
-    $("#neutral").animate({
-        width: neutral * 3 + "px"
-    })
-    $("#happy").animate({
-        width: happy * 3 + "px"
-    })
+	$("#angry").animate({
+		width: angry * 3 + "px"
+	})
+	$("#sad").animate({
+		width: sad * 3 + "px"
+	})
+	$("#neutral").animate({
+		width: neutral * 3 + "px"
+	})
+	$("#happy").animate({
+		width: happy * 3 + "px"
+	})
 }
 
 
 function randombetween(min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min);
+	return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
 setInterval(function() { change(newData()); }, 2500);

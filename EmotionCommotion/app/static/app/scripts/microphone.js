@@ -1,6 +1,4 @@
 ﻿
-'use strict'
-
 var wavesurfer = WaveSurfer.create({
     container: '#waveform',
     waveColor: '#367ee9'
@@ -12,12 +10,12 @@ microphone.init({
     wavesurfer: wavesurfer
 });
 
-microphone.on('deviceReady', function (stream) {
-    console.log('Device ready!', stream);
-});
-microphone.on('deviceError', function (code) {
-    console.warn('Device error: ' + code);
-});
+//microphone.on('deviceReady', function (stream) {
+//    console.log('Device ready!', stream);
+//});
+//microphone.on('deviceError', function (code) {
+//    console.warn('Device error: ' + code);
+//});
 
 let log = console.log.bind(console),
   id = val => document.getElementById(val),
@@ -34,13 +32,14 @@ let log = console.log.bind(console),
 
 window.onload = function() {
 
-  let mv = id('mediaVideo'),
-  mediaOptions = {
-          tag: 'audio',
-          type: 'audio/ogg',
-          ext: '.ogg',
-          gUM: { audio: true }
-  };
+   let mv = id('mediaVideo'),
+   mediaOptions = {
+       tag: 'audio',
+       type: 'audio/wav',
+       ext: '.wav',
+       gUM: { audio: true }
+   };
+
   media = mediaOptions;
   navigator.mediaDevices.getUserMedia(media.gUM).then(_stream => {
     stream = _stream;
@@ -49,8 +48,24 @@ window.onload = function() {
       chunks.push(e.data);
       if(recorder.state == 'inactive')  makeLink();
     };
-    log('got media successfully');
   }).catch(log);
+}
+
+
+function makeLink(){
+
+  var blob = new Blob(chunks, {type: media.type })
+  var url = URL.createObjectURL(blob);
+  $.ajax({
+      type: "POST",
+      url: "/blob",
+      data: {
+          'audio-path': url 
+      },
+      success: function () {
+          console.log("WORKING", url)
+      }
+  });
 }
 
 
@@ -76,20 +91,3 @@ $("#stop").click(function () {
     microphone.stop()
     recorder.stop();
 });
-
-
-function makeLink(){
-  let blob = new Blob(chunks, {type: media.type })
-    , url = URL.createObjectURL(blob)
-    , li = document.createElement('li')
-    , mt = document.createElement(media.tag)
-    , hf = document.createElement('a')
-  ;
-  mt.controls = true;
-  mt.src = url;
-  hf.href = url;
-  li.appendChild(mt);
-  li.appendChild(hf);
-  ul.appendChild(li);
-}
-
