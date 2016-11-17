@@ -10,7 +10,7 @@ import os
 from glob import glob
 import sys
 
-def extractAndSave(funct,IEMOCAP_LOCATION,verbose=1):
+def extractAndSave(funct,IEMOCAP_LOCATION,verbose=1,sessions=5,pickle=False):
     '''
     Expects a function of the form func(filename)
     Applies a feature extraction function to all wav files
@@ -20,7 +20,7 @@ def extractAndSave(funct,IEMOCAP_LOCATION,verbose=1):
 
     # Fill a dict with values
     dic = {}
-    for session in range(1,6):
+    for session in range(1,sessions+1):
         if verbose > 0:
             print('\n' + "Extracting from session: " + str(session) + '\n')
             numdir = len(os.listdir(IEMOCAP_LOCATION + '/IEMOCAP_full_release/Session' + str(session) + '/sentences/wav/'))
@@ -37,4 +37,12 @@ def extractAndSave(funct,IEMOCAP_LOCATION,verbose=1):
     df = pd.DataFrame.from_dict(dic,orient='index').reset_index()
     df.columns = ['session',funct.__name__]
     df = df.sort_values(by='session')
+<<<<<<< HEAD
     df.to_csv('../features/' + funct.__name__ + '.csv',index=False)
+=======
+    if pickle:
+        df.to_pickle('../features/' + funct.__name__ + '(' + str(sessions) + 'session(s)).pkl')
+    else:
+        df.to_csv('../features/' + funct.__name__ + '(' + str(sessions) + 'session(s)).csv',index=False)
+
+>>>>>>> fd0d7ac735d627ff06c6d21b623953fe096ca323
