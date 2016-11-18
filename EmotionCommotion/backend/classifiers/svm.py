@@ -20,7 +20,6 @@ import numpy as np
 
 
 
-
 X = pd.read_csv('../data/allFeatures.csv')
 y = pd.read_csv('../data/allLabels.csv')
 
@@ -28,6 +27,13 @@ assert sum(X['session'] != y['session']) == 0 # Ensure all sessions are the same
 
 X = X.drop('session',axis=1)
 y = np.ravel(y.drop(['session','time'],axis=1))
+
+X = X.replace([np.inf, -np.inf], np.nan)
+
+X = X.fillna(0)
+
+
+# In[2]
 
 min_max_scaler = preprocessing.MinMaxScaler()
 X_scaled = min_max_scaler.fit_transform(X)
@@ -49,3 +55,18 @@ cnf_matrix = confusion_matrix(y_test, preds)
 cm_normalized = cnf_matrix.astype('float') / cnf_matrix.sum(axis=1)[:, np.newaxis]
 
 print("Accuracy: ", cm_normalized.trace()/4)  # Average accuracy accross all 4 emotions
+
+# In[5]
+import matplotlib.pyplot as plt
+def plot_confusion_matrix(cm, title='Confusion matrix', cmap=plt.cm.Greens):
+    plt.imshow(cm, interpolation='nearest', cmap=cmap)
+    plt.title(title)
+    plt.colorbar()
+    tick_marks = np.arange(len(['Angry','Happy','Neutral','Sad']))
+    plt.xticks(tick_marks, ['Angry','Happy','Neutral','Sad'], rotation=45)
+    plt.yticks(tick_marks, ['Angry','Happy','Neutral','Sad'])
+    plt.tight_layout()
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label')
+
+plot_confusion_matrix(cm_normalized)
