@@ -68,7 +68,7 @@ function makeLink(){
       type: "POST",
       url: "/blob",
       data: {
-          'audio-path': url
+          'audio-path': "Hello",
       },
       success: function () {
           console.log("WORKING", url)
@@ -79,6 +79,7 @@ function makeLink(){
 
 $("#microphone").click(function () {
     $("#microphone").hide()
+    $("#emojis").hide()
     $("#waveform").show()
     $("#stop").show()
     recorder.start();

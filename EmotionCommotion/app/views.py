@@ -29,7 +29,8 @@ def home(request):
 def blob(request): 
     audio = request.POST['audio-path']
 
-    os.remove("test.wav")
+    if os.path.isfile("test.wav"):
+        os.remove("test.wav")
     os.rename("C:\\Users\\Haseeb Majid\\Downloads\\test.wav", "test.wav")
     data = np.fromfile(open('test.wav'),np.int16)[24:]
     print(data)
