@@ -8,7 +8,7 @@ import pandas as pd
 import os
 from glob import glob
 import sys
-
+from types import *
 
 def get_frames(audiofile):
     frame_size = audiofile['frame_size']
@@ -19,6 +19,8 @@ def get_frames(audiofile):
     while ((i+1)*(frame_size - frame_overlap) < len(audio)):
         frames.append(audio[i*(frame_size - frame_overlap):(i+1)*(frame_size - frame_overlap)])
         i += 1
+        
+    print(i)
     return frames
 
 agg_funcs = [np.amax,np.average,np.var]
@@ -30,9 +32,17 @@ def aggregate(vals):
         agg_vals = np.concatenate((agg_vals,agg_funcs[i](vals, axis=0)), axis=0)
     return agg_vals
 
-def get_audiofile(filename):
+def get_audiofile(filename, data=None,flag=True):
     audiofile = {}
-    [sample_rate, audio] = wav.read(filename)
+    sample_rate = 32000
+    
+
+    if (flag):
+        [sample_rate, audio] = wav.read(filename)
+    else:
+        audio = data
+
+        
     audiofile['sample_rate'] = sample_rate
     audiofile['frame_size'] = sample_rate // 5
     audiofile['filename'] = filename
