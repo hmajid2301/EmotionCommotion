@@ -11,7 +11,7 @@ import glob
 sessions = pd.read_csv('./data/allLabels.csv')
 
 
-df = pd.read_csv('./features/averageAmplitude.csv')
+df = pd.read_csv('./features/amplitude.csv')
 for filename in glob.glob('./features/*.csv'):
     new_feature = pd.read_csv(filename)
     df = pd.merge(df,new_feature)
