@@ -56,11 +56,19 @@ function makeLink(){
 
   var blob = new Blob(chunks, {type: media.type })
   var url = URL.createObjectURL(blob);
+
+  //var a = document.createElement("a");
+  //document.body.appendChild(a);
+  //a.style = "display: none";
+  //a.href = url;
+  //a.download = "test.wav";
+  //a.click();
+
   $.ajax({
       type: "POST",
       url: "/blob",
       data: {
-          'audio-path': url 
+          'audio-path': url
       },
       success: function () {
           console.log("WORKING", url)
