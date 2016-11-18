@@ -27,8 +27,9 @@ def home(request):
 
 @csrf_exempt
 def blob(request): 
-    #audio = request.POST['audio-path']
+    audio = request.POST['audio-path']
 
+    os.remove("test.wav")
     os.rename("C:\\Users\\Haseeb Majid\\Downloads\\test.wav", "test.wav")
     data = np.fromfile(open('test.wav'),np.int16)[24:]
     print(data)

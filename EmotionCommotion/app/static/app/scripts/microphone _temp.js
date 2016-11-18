@@ -80,12 +80,10 @@ function makeLink(){
 $("#microphone").click(function () {
     $("#microphone").hide()
     $("#waveform").show()
-    $("#graph").show()
-    $(".toggle.btn").show()
     $("#stop").show()
     recorder.start();
-    chunks = [];
     microphone.start()
+    chunks = [];
 });
 
 
@@ -93,9 +91,7 @@ $("#stop").click(function () {
     $("#microphone").show()
     $("#waveform").hide()
     $("#stop").hide()
-    $("#graph").hide()
-    $(".toggle.btn").hide()
-    $("#emojis").hide()
+    $("#emojis").show()
     microphone.stop()
     recorder.stop();
 });

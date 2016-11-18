@@ -86,7 +86,9 @@
     <Content Include="app\static\app\images\emojis\sceptic.svg" />
     <Content Include="app\static\app\images\emojis\smile.svg" />
     <Content Include="app\static\app\images\logo.svg" />
+    <Content Include="app\static\app\scripts\graph_temp.js" />
     <Content Include="app\static\app\scripts\graph.js" />
+    <Content Include="app\static\app\scripts\microphone _temp.js" />
     <Content Include="app\static\app\scripts\microphone.js" />
     <None Include="bundleconfig.json" />
     <Content Include="backend\data\allFeatures.csv" />
