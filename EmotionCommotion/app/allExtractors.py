@@ -25,5 +25,5 @@ def cepstrum(frame, filename):
     audio = np.fft.ifft(audio)
     return [np.amax(audio), np.average(audio), np.var(audio)]
             
-def amplitude(frame):
+def amplitude(frame, audiofile):
     return [np.amax(frame), np.average(frame),np.var(frame)]
