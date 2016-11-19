@@ -12,7 +12,6 @@
 	switch (largestIndex) {
 
 		case 0:
-		    $("angry").fadeIn(1);
 		    $("#angry").animate({
 		        width: "300px"
 		    });

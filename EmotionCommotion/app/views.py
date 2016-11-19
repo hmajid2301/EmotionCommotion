@@ -8,11 +8,20 @@ from django.template import RequestContext
 from datetime import datetime
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+from django.conf import settings
+from sklearn.externals import joblib
+
 import numpy as np
 import os
-from sklearn.externals import joblib
-import allExtractors as ext
-import datagrabber as dg
+
+import sys
+sys.path.append("/home/olly/cs/4_year/project/EmotionCommotion/EmotionCommotion")
+
+from .datagrabber import *
+from .allExtractors import *
+
 
 
 
@@ -32,31 +41,29 @@ def home(request):
 
 @csrf_exempt
 def blob(request): 
-    audio = request.POST['audio-path']
+    data = request.FILES['data'] 
+    path = default_storage.save('tmp/test.wav', ContentFile(data.read()))
+    tmp_file = os.path.join('', path)
+    mydata = np.fromfile(open(tmp_file),np.int16)[24:]
 
-    if os.path.isfile("test.wav"):
-        os.remove("test.wav")
-    os.rename("C:\\Users\\Haseeb Majid\\Downloads\\test.wav", "test.wav")
-    data = np.fromfile(open('test.wav'),np.int16)[24:]
-    print(data)
-    
-    audiofile = dg.get_audiofile(filename="test.wav",data=data)
-    
-    
-    features = [ext.amplitude,ext.cepstrum,ext.energy,ext.silence_ratio,ext.zerocrossing]
-
-    frames = dg.get_frames(audiofile)
+    audiofile = get_audiofile("test.wav",data=mydata,flag=False)
+    features = [amplitude,cepstrum,energy,silence_ratio,zerocrossing]
+    frames = get_frames(audiofile)
     
     agg_vals = []
     for feature in features:
         vals = []
         for frame in frames:
             vals.append(feature(frame, audiofile))
-        agg_vals = np.concatenate((agg_vals,dg.aggregate(vals)), axis=0)
+        vals = np.array(vals)
+        agg_vals = np.concatenate((agg_vals,aggregate(vals)), axis=0)
         
     
-    svm = joblib.load('../backend/classifiers/svm.pkl') 
+    svm = joblib.load('/home/olly/cs/4_year/project/EmotionCommotion/EmotionCommotion/backend/classifiers/svm.pkl') 
     print(svm.predict(agg_vals))
+
+    if os.path.isfile(tmp_file):
+        os.remove(tmp_file)
 
     return render(
         request,

@@ -51,30 +51,34 @@ window.onload = function() {
   }).catch(log);
 }
 
+function makeLink() {
 
-function makeLink(){
+    var blob = new Blob(chunks, { type: media.type });
+    var url = URL.createObjectURL(blob);
+    var data = new FormData();
 
-  var blob = new Blob(chunks, {type: media.type })
-  var url = URL.createObjectURL(blob);
+    data.append("fname", "test.wav");
+    data.append("enctype", "multipart/form-data");
+    data.append("data", blob);
+    data.append("other", url);
 
-  var a = document.createElement("a");
-  document.body.appendChild(a);
-  a.style = "display: none";
-  a.href = url;
-  a.download = "test.wav";
-  a.click();
+    console.log(Array.from(data.entries()));
 
-  $.ajax({
-      type: "POST",
-      url: "/blob",
-      data: {
-          'audio-path': "Hello",
-      },
-      success: function () {
-          console.log("WORKING", url)
-      }
-  });
+    $.ajax({
+        url: "/blob",
+        type: "POST",
+        data: data,
+        processData: false,
+        contentType: false,
+        success: function () {
+            console.log("SUCCESS")
+        },
+        error: function () {
+            console.log("ERROR")
+        }
+    });
 }
+
 
 
 $("#microphone").click(function () {
