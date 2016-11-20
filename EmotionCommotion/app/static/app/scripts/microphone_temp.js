@@ -93,7 +93,7 @@ function GetEmotion() {
             return 1;
             break;
 
-        case "netral":
+        case 'neu':
             return 2;
             break;
 
