@@ -89,7 +89,7 @@ def extractAndSave(funct,labels,IEMOCAP_LOCATION,verbose=1):
 # In[2]
 
 a = "fds"
-if !(a):
+if not (a):
     print("s")
 else:
     print("f")

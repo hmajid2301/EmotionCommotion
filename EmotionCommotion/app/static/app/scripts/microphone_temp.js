@@ -1,4 +1,5 @@
-﻿
+﻿var emotion;
+
 var wavesurfer = WaveSurfer.create({
     container: '#waveform',
     waveColor: '#367ee9'
@@ -53,6 +54,7 @@ window.onload = function() {
 
 function makeLink() {
 
+    finished = false;
     var blob = new Blob(chunks, { type: media.type });
     var url = URL.createObjectURL(blob);
     var data = new FormData();
@@ -60,9 +62,6 @@ function makeLink() {
     data.append("fname", "test.wav");
     data.append("enctype", "multipart/form-data");
     data.append("data", blob);
-    data.append("other", url);
-
-    console.log(Array.from(data.entries()));
 
     $.ajax({
         url: "/blob",
@@ -70,8 +69,10 @@ function makeLink() {
         data: data,
         processData: false,
         contentType: false,
-        success: function () {
-            console.log("SUCCESS")
+        success: function (a) {
+            console.log("Ajax", a.emotion)
+            emotion = a.emotion
+            $("#emojis").show()
         },
         error: function () {
             console.log("ERROR")
@@ -79,6 +80,32 @@ function makeLink() {
     });
 }
 
+function GetEmotion() {
+
+    console.log("GetEmotion", emotion)
+    switch (emotion) {
+
+        case 'ang':
+            return 0;
+            break;
+
+        case 'sad':
+            return 1;
+            break;
+
+        case "netral":
+            return 2;
+            break;
+
+        case 'hap':
+            return 3;
+            break;
+
+        default:
+            return -1;
+            break
+    }
+}
 
 
 $("#microphone").click(function () {
@@ -96,7 +123,8 @@ $("#stop").click(function () {
     $("#microphone").show()
     $("#waveform").hide()
     $("#stop").hide()
-    $("#emojis").show()
     microphone.stop()
     recorder.stop();
 });
+
+

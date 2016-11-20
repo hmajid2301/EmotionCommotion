@@ -18,7 +18,7 @@ def mfcc(frame, filename):
     P = S**2
     
     #now we compute the filter banks
-    print frame
+    print(frame)
     
     return None
 
