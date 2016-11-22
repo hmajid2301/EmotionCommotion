@@ -41,6 +41,6 @@ def f0(filename, threshold=0.5):
     # the lowest Hz should now be F0, will need to tweek 0.5
     return sorted_by_Hz[0][1]
 
-f0('/home/olly/cs/4_year/project/local/IEMOCAP_full_release/Session1/sentences/wav/Ses01F_impro02/Ses01F_impro02_F001.wav',0.5)
+#f0('C:/Users/Tom/Documents/GitHub/local/IEMOCAP_full_release/Session1/sentences/wav/Ses01F_impro02/Ses01F_impro02_F001.wav',0.5)
 
-extractAndSave(f0,IEMOCAP_LOCATION,2)
+extractAndSave(f0,['f0'],IEMOCAP_LOCATION,2)
