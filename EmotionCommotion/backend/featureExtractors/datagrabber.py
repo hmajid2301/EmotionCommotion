@@ -8,7 +8,7 @@ import pandas as pd
 import os
 from glob import glob
 import sys
-
+from types import *
 
 def get_frames(audiofile):
     frame_size = audiofile['frame_size']
@@ -17,7 +17,8 @@ def get_frames(audiofile):
     frames = []
     i = 0
     while ((i+1)*(frame_size - frame_overlap) < len(audio)):
-        frames.append(audio[i*(frame_size - frame_overlap):(i+1)*(frame_size - frame_overlap)])
+        start_index = (i*(frame_size - frame_overlap))
+        frames.append(audio[start_index:start_index + frame_size])
         i += 1
     return frames
 
@@ -30,13 +31,15 @@ def aggregate(vals):
         agg_vals = np.concatenate((agg_vals,agg_funcs[i](vals, axis=0)), axis=0)
     return agg_vals
 
-def get_audiofile(filename, audio=None):
-    print("ASDFASDFDASFASDFASDFASDFASDFAFSDASDFADSF")
+def get_audiofile(filename, data=None,flag=True):
     audiofile = {}
     sample_rate = 32000
     
-    if (not audio):
+
+    if (flag):
         [sample_rate, audio] = wav.read(filename)
+    else:
+        audio = data
 
         
     audiofile['sample_rate'] = sample_rate
@@ -86,10 +89,3 @@ def extractAndSave(funct,labels,IEMOCAP_LOCATION,verbose=1):
     #df.columns = ['session',funct.__name__+"max-max", funct.__name__+"mean-max",funct.__name__+"max-mean", funct.__name__+"max-var", funct.__name__+"mean-mean", funct.__name__+"mean-var"]
     df = df.sort_values(by='session')
     df.to_csv('../features/' + funct.__name__ + '.csv',index=False)
-# In[2]
-
-a = "fds"
-if not (a):
-    print("s")
-else:
-    print("f")
