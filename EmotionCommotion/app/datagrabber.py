@@ -17,10 +17,9 @@ def get_frames(audiofile):
     frames = []
     i = 0
     while ((i+1)*(frame_size - frame_overlap) < len(audio)):
-        frames.append(audio[i*(frame_size - frame_overlap):(i+1)*(frame_size - frame_overlap)])
+        start_index = (i*(frame_size - frame_overlap))
+        frames.append(audio[start_index:start_index + frame_size])
         i += 1
-        
-    print(i)
     return frames
 
 agg_funcs = [np.amax,np.average,np.var]
