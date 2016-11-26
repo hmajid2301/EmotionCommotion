@@ -18,8 +18,18 @@ from sklearn import preprocessing
 from sklearn.metrics import confusion_matrix
 import numpy as np
 
+# Scoring metric
+def meanAcc(estimator, X, y):
+    preds = estimator.predict(X)
+    cnf_matrix = confusion_matrix(y, preds)
+    cm_normalized = cnf_matrix.astype('float') / cnf_matrix.sum(axis=1)[:, np.newaxis]
+    return cm_normalized.trace()/4
 
-
+groups =(   [1 for _ in range(0,942)] +
+            [2 for _ in range(942,1755)] + 
+            [3 for _ in range(1755,2755)] + 
+            [4 for _ in range(2755,3548)] 
+        )
 
 X = pd.read_csv('../data/allFeatures.csv')
 y = pd.read_csv('../data/allLabels.csv')
