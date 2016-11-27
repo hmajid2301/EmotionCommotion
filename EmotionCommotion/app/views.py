@@ -48,7 +48,7 @@ def blob(request):
     mydata = np.fromfile(open(tmp_file),np.int16)[24:]
 
     audiofile = get_audiofile("test.wav",data=mydata,flag=False)
-    features = [amplitude,cepstrum,energy,silence_ratio,zerocrossing]
+    features = [amplitude,cepstrum,energy,silence_ratio,zerocrossing,f0,mfcc]
     frames = get_frames(audiofile)
     
     agg_vals = []
@@ -62,6 +62,7 @@ def blob(request):
     
     ##svm = joblib.load('/home/olly/cs/4_year/project/EmotionCommotion/EmotionCommotion/backend/classifiers/svm.pkl') 
     svm = joblib.load('backend/classifiers/svm.pkl') 
+    #print(agg_vals)
     result = svm.predict(agg_vals)
     print(result)
 

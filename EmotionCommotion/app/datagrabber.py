@@ -43,7 +43,7 @@ def get_audiofile(filename, data=None,flag=True):
 
         
     audiofile['sample_rate'] = sample_rate
-    audiofile['frame_size'] = sample_rate // 5
+    audiofile['frame_size'] = 128
     audiofile['filename'] = filename
     audiofile['overlap_ratio'] = 0.5
     audiofile['frame_overlap'] = int(audiofile['frame_size'] * audiofile['overlap_ratio'])

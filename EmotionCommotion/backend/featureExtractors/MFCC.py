@@ -5,23 +5,23 @@ Created on Sat Nov 16 12:04:22 2016
 
 @author: Tom
 """
-import scipy.io.wavfile as wav   # Reads wav file
-import pandas as pd
 import numpy as np
-from aubio import source, pvoc, mfcc
+import aubio as  aub
 from datagrabber import extractAndSave
 
 IEMOCAP_LOCATION = "../../../../local"
-
 coefficientsCount = 12
 labels = ['mfcccoeff%s' % str(i) for i in range(coefficientsCount)]
 
-sampleRate = 16000
 
-m = mfcc(512, 40, coefficientsCount, sampleRate)
-p = pvoc(512, 512/4)
-
-def mfcc(frame, filename):
+def mfcc(frame, audiofile):
+    
+    sampleRate = audiofile['sample_rate']
+    frame_size = audiofile['frame_size']
+    m = aub.mfcc(frame_size*4, 40, coefficientsCount, sampleRate)
+    p = aub.pvoc(frame_size*4, int(frame_size))
+    if len(frame) != 128:
+        frame = np.pad(frame,(0,frame_size-len(frame)),'constant',constant_values=0)
     spec = p(frame.astype(np.float32))
     
     mfcc_out = m(spec)
