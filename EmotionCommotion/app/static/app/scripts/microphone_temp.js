@@ -54,7 +54,6 @@ window.onload = function() {
 
 function makeLink() {
 
-    finished = false;
     var blob = new Blob(chunks, { type: media.type });
     var url = URL.createObjectURL(blob);
     var data = new FormData();

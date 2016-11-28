@@ -132,7 +132,6 @@ body {
   margin: 20px;
 }
 .body-content .fa:hover {
-  font-size: 7em;
   background: #367ee9;
   color: #fff;
   cursor: pointer;
@@ -146,7 +145,7 @@ body {
   -ms-transform: rotate(360deg);
   -o-transform: rotate(360deg);
   transform: rotate(360deg);
-  padding: 50px;
+  padding: 30px;
   border-radius: 95%;
   margin: 15px;
 }

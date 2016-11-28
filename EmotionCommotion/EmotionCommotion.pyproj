@@ -84,8 +84,10 @@
     <Folder Include="backend\sourceFiles\" />
     <Folder Include="backend\sourceFiles\__pycache__\" />
     <Folder Include="EmotionCommotion\" />
+    <Folder Include="tmp\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="tmp\test.wav" />
     <None Include="compilerconfig.json" />
     <Content Include="app\static\app\content\library.less" />
     <Content Include="app\static\app\content\site.less" />
