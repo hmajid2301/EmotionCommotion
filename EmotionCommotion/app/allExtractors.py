@@ -2,7 +2,7 @@
 import numpy as np
 import aubio as aub
 import sys
-sys.path.append('/home/olly/cs/4_year/project/EmotionCommotion/EmotionCommotion/backend/sourceFiles/')
+sys.path.append('backend/sourceFiles/')
 import thinkdsp as td
 
 

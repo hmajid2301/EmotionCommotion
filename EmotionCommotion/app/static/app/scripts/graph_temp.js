@@ -7,22 +7,22 @@
 
 		case 0:
 			$("#angry").animate({
-				width: "300px"
+				width: "30%"
 			});
 			break;
 		case 1:
 			$("#sad").animate({
-				width: "300px"
+				width: "30%"
 			});
 			break;
 		case 2:
 			$("#neutral").animate({
-				width: "300px"
+				width: "30%"
 			});
 			break;
 		case 3:
 			$("#happy").animate({
-				width: "300px"
+				width: "30%"
 			});
 			break;
 

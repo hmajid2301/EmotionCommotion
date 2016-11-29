@@ -127,11 +127,16 @@ body {
   height: auto;
   margin: 0 auto -60px;
 }
-.body-content .fa {
+.body-content .container {
+  text-align: center;
+}
+.body-content .fa-microphone,
+.body-content .fa-stop {
   font-size: 5em;
   margin: 20px;
 }
-.body-content .fa:hover {
+.body-content .fa-microphone:hover,
+.body-content .fa-stop:hover {
   background: #367ee9;
   color: #fff;
   cursor: pointer;
@@ -145,7 +150,7 @@ body {
   -ms-transform: rotate(360deg);
   -o-transform: rotate(360deg);
   transform: rotate(360deg);
-  padding: 30px;
+  padding: 20px;
   border-radius: 95%;
   margin: 15px;
 }
@@ -182,6 +187,57 @@ body {
 #emojis .emoji {
   width: 100px;
   height: auto;
+}
+#choice {
+  display: none;
+  z-index: 100;
+  float: right;
+  min-width: 350px;
+}
+#choice .correct {
+  display: none;
+}
+#choice .correct img {
+  max-width: 20%;
+}
+#choice .correct img:hover {
+  cursor: pointer;
+  transition: 0.4s;
+  -webkit-transition: 0.4s;
+  -moz-transition: 0.4s;
+  -ms-transition: 0.4s;
+  -o-transition: 0.4s;
+  -webkit-transform: rotate(360deg);
+  -moz-transform: rotate(360deg);
+  -ms-transform: rotate(360deg);
+  -o-transform: rotate(360deg);
+  transform: rotate(360deg);
+}
+#choice .fa {
+  font-size: 5em;
+  cursor: pointer;
+}
+#choice .fa-check {
+  color: forestgreen;
+}
+#choice .fa-check:hover {
+  color: #134e13;
+  transition: 0.4s;
+  -webkit-transition: 0.4s;
+  -moz-transition: 0.4s;
+  -ms-transition: 0.4s;
+  -o-transition: 0.4s;
+}
+#choice .fa-times {
+  color: #e54530;
+}
+#choice .fa-times:hover {
+  color: #b22816;
+  transition: 0.4s;
+  -webkit-transition: 0.4s;
+  -moz-transition: 0.4s;
+  -ms-transition: 0.4s;
+  -o-transition: 0.4s;
 }
 .label {
   font-family: 'Open Sans';
