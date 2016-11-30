@@ -26,7 +26,7 @@ def jitter(index, sumVals, valList):
 	return((np.abs(valList[i] - valList[i+1]))/((1/len(valList))*(sumVals)))
 
 def avg_jitter(valList):
-	if(len(valList)==0)
+	if(len(valList)<=1):
 		return 0
 	jitterList = []
 	sumVals = np.sum(valList)
