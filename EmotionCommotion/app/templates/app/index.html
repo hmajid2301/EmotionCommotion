@@ -5,20 +5,32 @@
 <div class="container">
     <div class="record">
         <div class="container">
-          <div class="row">
-              <i class="fa fa-microphone" id="microphone"></i>
-              <i class="fa fa-stop" id="stop"></i>
-              <div id="waveform"></div>
-              <div id="ul"></div>
-          </div>
+            <div class="row">
+                <i class="fa fa-microphone" id="microphone"></i>
+                <i class="fa fa-stop" id="stop"></i>
+                <div id="waveform"></div>
+                <canvas id="wavedisplay" width="0" height="0"></canvas>
+            </div>
         </div>
 
     </div>
 
 
+    <a id="save" href="#"></a>
     <input type="checkbox" checked data-toggle="toggle" id="emoji-toggle" data-on="Graph" data-off="Emoji" data-onstyle="success" data-offstyle="danger" />
-     
-    <div id ="graph">
+    <div id="graph"></div>
+
+    <div id="choice">
+        <i class="fa fa-check" aria-hidden="true"></i>
+        <i class="fa fa-times" aria-hidden="true"></i>
+
+        <div class="correct">
+            <img id="1" src="../../static/app/images/emojis/angry.svg" />
+            <img id="2" src="../../static/app/images/emojis/sad.svg" />
+            <img id="3" src="../../static/app/images/emojis/sceptic.svg" />
+            <img id="4" src="../../static/app/images/emojis/smile.svg" />
+        </div>
+
     </div>
 
     <div id="emojis">
@@ -28,8 +40,9 @@
         <img class="emoji" id="happy" src="../../static/app/images/emojis/smile.svg" />
     </div>
 
-</div>
 
+
+</div>
 
 
 {% endblock %}
@@ -37,6 +50,7 @@
 {% block scripts %}
 <script src="../../static/app/scripts/microphone_temp.js"></script>
 <script src="../../static/app/scripts/graph_temp.js"></script>
+<script src="../../static/app/scripts/correct_temp.js"></script>
 {#<script src="../../static/app/scripts/microphone.js"></script>#}
 {#<script src="../../static/app/scripts/graph.js"></script>#}
 {% endblock %}
