@@ -88,6 +88,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\static\app\scripts\correct_temp.js" />
+    <Content Include="app\static\app\scripts\recorder.js" />
+    <Content Include="app\static\app\scripts\recorderWorker.js" />
     <Content Include="tmp\test.wav" />
     <None Include="compilerconfig.json" />
     <Content Include="app\static\app\content\library.less" />

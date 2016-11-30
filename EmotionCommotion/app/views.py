@@ -11,11 +11,9 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.conf import settings
 from sklearn.externals import joblib
-
+import scipy.io.wavfile 
 import numpy as np
-import os
-import json
-import sys
+import os, json, sys
 sys.path.append("./")
 
 from .datagrabber import *
@@ -39,7 +37,9 @@ def blob(request):
     data = request.FILES['data'] 
     path = default_storage.save('tmp/test.wav', ContentFile(data.read()))
     tmp_file = os.path.join('', path)
-    mydata = np.fromfile(open(tmp_file),np.int16)[24:]
+    #mydata = np.fromfile(open(tmp_file),np.int16)[24:]
+    mydata = scipy.io.wavfile.read(tmp_file)
+    mydata = mydata[1][:,0]
 
     audiofile = get_audiofile("test.wav",data=mydata,flag=False)
     features = [amplitude,cepstrum,energy,silence_ratio,zerocrossing,f0,mfcc]

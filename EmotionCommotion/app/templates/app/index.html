@@ -9,13 +9,14 @@
                 <i class="fa fa-microphone" id="microphone"></i>
                 <i class="fa fa-stop" id="stop"></i>
                 <div id="waveform"></div>
-                <div id="ul"></div>
+                <canvas id="wavedisplay" width="0" height="0"></canvas>
             </div>
         </div>
 
     </div>
 
 
+    <a id="save" href="#"></a>
     <input type="checkbox" checked data-toggle="toggle" id="emoji-toggle" data-on="Graph" data-off="Emoji" data-onstyle="success" data-offstyle="danger" />
     <div id="graph"></div>
 
@@ -42,7 +43,6 @@
 
 
 </div>
-
 
 
 {% endblock %}
