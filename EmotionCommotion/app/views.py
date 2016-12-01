@@ -15,9 +15,11 @@ import scipy.io.wavfile
 import numpy as np
 import os, json, sys
 sys.path.append("./")
+import matplotlib.pyplot as plt
 
 from .datagrabber import *
 from .allExtractors import *
+
 
 def home(request):
     """Renders the home page."""
@@ -58,8 +60,8 @@ def blob(request):
     result = svm.predict(agg_vals)
     print(result)
 
-    if os.path.isfile(tmp_file):
-        os.remove(tmp_file)
+    #if os.path.isfile(tmp_file):
+    #    os.remove(tmp_file)
 
     return HttpResponse(json.dumps({'emotion': result[0]}), content_type="application/json")
     #return render(request, 'app/index.html', {'data' : result})
