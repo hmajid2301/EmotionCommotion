@@ -22,20 +22,31 @@ def get_frames(audiofile):
         i += 1
     return frames
 
-def jitter(index, sumVals, valList):
-	return((np.abs(valList[i] - valList[i+1]))/((1/len(valList))*(sumVals)))
+#remember that jitter was used on pitch period in the research paper, i.e. 1/largest frequency of signal
+def jitter(list_index, sum_vals, val_list):
+	num_labels = len(val_list[0])
+	jitters = [0] * num_labels
+	for label_index in range(0, num_labels):
+		jitters[label_index] = ((np.abs(val_list[list_index][label_index] - val_list[list_index+1][label_index]))/((1/len(val_list))*(sum_vals[label_index])))
+	return jitters
 
-def avg_jitter(valList):
-	if(len(valList)<=1):
-		return 0
-	jitterList = []
-	sumVals = np.sum(valList)
-	for i in range(0, len(valList)-1):
-		jitterList = np.concatenate((jitterList, jitter(i, sumVals, valList)), axis=0)
-	return np.average(jitterList)
+def avg_jitter(val_list, axis=0):
+	length = len(val_list)
+	if(length==0):
+		return
+	if(length==1):
+		return [0] * len(val_list[0])
+	jitter_list = [([0]*len(val_list[0]))]*length		#create a data structure of correct dimensions to store the jitters for all labels
 
-agg_funcs = [np.amax,np.average,np.var]#,avg_jitter]
-agg_func_names = ["max", "mean", "var"]#, "avg_jit"]
+	sum_vals = np.sum(val_list, axis=0)
+	for i in range(0, length-1):
+		#find jitter between vals at indexes i and i+1.
+		to_append = jitter(i, sum_vals, val_list)
+		jitter_list[i] = to_append
+	return np.average(jitter_list, axis=0)
+
+agg_funcs = [np.amax,np.average,np.var,avg_jitter]
+agg_func_names = ["max", "mean", "var", "avg_jit"]
 
 def aggregate(vals):
     agg_vals = []
