@@ -14,6 +14,9 @@ from sklearn.externals import joblib
 import scipy.io.wavfile 
 import numpy as np
 import os, json, sys
+from sklearn import preprocessing
+import pandas as pd1
+
 sys.path.append("./")
 import matplotlib.pyplot as plt
 
@@ -44,7 +47,7 @@ def blob(request):
     mydata = mydata[1][:,0]
 
     audiofile = get_audiofile("test.wav",data=mydata,flag=False)
-    features = [amplitude,cepstrum,energy,silence_ratio,zerocrossing,f0,mfcc]
+    features = [amplitude,energy,f0,silence_ratio,zerocrossing,cepstrum,mfcc]
     frames = get_frames(audiofile)
     
     agg_vals = []
@@ -54,11 +57,31 @@ def blob(request):
             vals.append(feature(frame, audiofile))
         vals = np.array(vals)
         agg_vals = np.concatenate((agg_vals,aggregate(vals)), axis=0)
+    
+    training = pd.read_csv('backend/data/allFeatures.csv')
+    training.drop('session',axis=1,inplace=True)
+    training = training.replace([np.inf, -np.inf], np.nan)
+    training = training.fillna(0)
+
+    training = training.drop(['max(zerocrossing(zerocrossing))',
+            'mean(zerocrossing(zerocrossing))'],axis=1)
+
+
+    #agg_vals = agg_vals[0:54]
+    agg_vals = np.append(agg_vals[0:18],agg_vals[20:])
+    agg_vals = agg_vals.reshape(1,-1)
+    min_max_scaler = preprocessing.MinMaxScaler()
+    min_max_scaler.fit(training)
+    agg_vals_scaled = min_max_scaler.transform(agg_vals)
+    
+   # for a,i in enumerate(training.columns):
+   #     print(a,i)
+   # for a,i in enumerate(agg_vals_scaled):
+   #     print(a,"%.2f" % i)
         
     
     svm = joblib.load('backend/classifiers/svm.pkl') 
-    result = svm.predict(agg_vals)
-    print(result)
+    result = svm.predict(agg_vals_scaled)
 
     #if os.path.isfile(tmp_file):
     #    os.remove(tmp_file)
