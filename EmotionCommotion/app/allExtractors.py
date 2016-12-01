@@ -7,11 +7,11 @@ import thinkdsp as td
 
 
 def zerocrossing(frame, audiofile):
-    i = 0
-    for x in range(0, len(frame)-1):
-        if (frame[i]*frame[i+1] < 0):
-            i += 1
-    return [i]
+    n = 0
+    for i in range(0, len(frame)-1):
+        if (frame[i]> 0 != frame[i+1] > 0): # != is xor operator in python
+            n += 1                          #it's so ambiguous i feel the need to write a comment
+    return [n]
 
 def silence_ratio(frame, audiofile):
     threshold = audiofile['threshold']
