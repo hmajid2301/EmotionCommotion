@@ -22,8 +22,20 @@ def get_frames(audiofile):
         i += 1
     return frames
 
-agg_funcs = [np.amax,np.average,np.var]
-agg_func_names = ["max", "mean", "var"]
+def jitter(index, sumVals, valList):
+	return((np.abs(valList[i] - valList[i+1]))/((1/len(valList))*(sumVals)))
+
+def avg_jitter(valList):
+	if(len(valList)<=1):
+		return 0
+	jitterList = []
+	sumVals = np.sum(valList)
+	for i in range(0, len(valList)-1):
+		jitterList = np.concatenate((jitterList, jitter(i, sumVals, valList)), axis=0)
+	return np.average(jitterList)
+
+agg_funcs = [np.amax,np.average,np.var]#,avg_jitter]
+agg_func_names = ["max", "mean", "var"]#, "avg_jit"]
 
 def aggregate(vals):
     agg_vals = []
@@ -40,7 +52,6 @@ def get_audiofile(filename, data=None,flag=True):
         [sample_rate, audio] = wav.read(filename)
     else:
         audio = data
-
         
     audiofile['sample_rate'] = sample_rate
     audiofile['frame_size'] = 2048

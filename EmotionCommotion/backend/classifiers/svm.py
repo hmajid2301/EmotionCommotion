@@ -73,6 +73,25 @@ def meanAcc(estimator, X, y):
 #X = lda.fit(new_X, y).transform(new_X)
 
 # Scale features
+'''
+X = X.drop([ 'var(mfcccoeff0(mfcc))',
+ 'var(mfcccoeff1(mfcc))',
+ 'var(mfcccoeff2(mfcc))',
+ 'var(mfcccoeff3(mfcc))',
+ 'var(mfcccoeff4(mfcc))',
+ 'var(mfcccoeff5(mfcc))',
+ 'var(mfcccoeff6(mfcc))',
+ 'var(mfcccoeff7(mfcc))',
+ 'var(mfcccoeff8(mfcc))',
+ 'var(mfcccoeff9(mfcc))',
+ 'var(mfcccoeff10(mfcc))',
+ 'var(mfcccoeff11(mfcc))'],
+axis=1)
+'''
+
+X = X.drop(['max(zerocrossing(zerocrossing))',
+            'mean(zerocrossing(zerocrossing))'],axis=1)
+
 min_max_scaler = preprocessing.MinMaxScaler()
 X_scaled = min_max_scaler.fit_transform(X)
            
@@ -92,7 +111,8 @@ gkf = GroupKFold(n_splits=4)
 fold_iter = gkf.split(X_train, y_train, groups=groups)
 
 tuned_parameters = [{'C': [50,100,200,500,1000]}]
-                    
+tuned_parameters = [{'C': [53,103,203]}]
+
 svm = GridSearchCV(SVC(class_weight='balanced'), tuned_parameters, cv=fold_iter,verbose=10,scoring=meanAcc, n_jobs = -1)
 svm.fit(X_train, y_train)
 
