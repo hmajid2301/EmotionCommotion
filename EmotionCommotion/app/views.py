@@ -18,9 +18,11 @@ from sklearn import preprocessing
 import pandas as pd1
 
 sys.path.append("./")
+import matplotlib.pyplot as plt
 
 from .datagrabber import *
 from .allExtractors import *
+
 
 def home(request):
     """Renders the home page."""
@@ -81,8 +83,8 @@ def blob(request):
     svm = joblib.load('backend/classifiers/svm.pkl') 
     result = svm.predict(agg_vals_scaled)
 
-    if os.path.isfile(tmp_file):
-        os.remove(tmp_file)
+    #if os.path.isfile(tmp_file):
+    #    os.remove(tmp_file)
 
     return HttpResponse(json.dumps({'emotion': result[0]}), content_type="application/json")
     #return render(request, 'app/index.html', {'data' : result})
