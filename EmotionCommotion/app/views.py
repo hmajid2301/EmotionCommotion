@@ -39,12 +39,16 @@ def home(request):
 
 @csrf_exempt
 def blob(request): 
+
     data = request.FILES['data'] 
     path = default_storage.save('tmp/test.wav', ContentFile(data.read()))
     tmp_file = os.path.join('', path)
-    #mydata = np.fromfile(open(tmp_file),np.int16)[24:]
     mydata = scipy.io.wavfile.read(tmp_file)
-    mydata = mydata[1][:,0]
+
+    if request.POST == {}: 
+        mydata = mydata[1]
+    else:
+        mydata = mydata[1][:,0]
 
     audiofile = get_audiofile("test.wav",data=mydata,flag=False)
     features = [amplitude,energy,f0,silence_ratio,zerocrossing,cepstrum,mfcc]
@@ -73,6 +77,7 @@ def blob(request):
     min_max_scaler = preprocessing.MinMaxScaler()
     min_max_scaler.fit(training)
     agg_vals_scaled = min_max_scaler.transform(agg_vals)
+    print(agg_vals_scaled)
     
    # for a,i in enumerate(training.columns):
    #     print(a,i)

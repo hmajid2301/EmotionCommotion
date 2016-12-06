@@ -11,75 +11,6 @@ microphone.init({
     wavesurfer: wavesurfer
 });
 
-//microphone.on('deviceReady', function (stream) {
-//    console.log('Device ready!', stream);
-//});
-//microphone.on('deviceError', function (code) {
-//    console.warn('Device error: ' + code);
-//});
-
-//let log = console.log.bind(console),
-//  id = val => document.getElementById(val),
-//  ul = id('ul'),
-//  gUMbtn = id('start'),
-//  start = id('start'),
-//  stop = id('stop'),
-//  stream,
-//  recorder,
-//  counter=1,
-//  chunks,
-//  media;
-
-
-//window.onload = function() {
-
-//   let mv = id('mediaVideo'),
-//   mediaOptions = {
-//       tag: 'audio',
-//       type: 'audio/wav',
-//       ext: '.wav',
-//       gUM: { audio: true }
-//   };
-
-//  media = mediaOptions;
-//  navigator.mediaDevices.getUserMedia(media.gUM).then(_stream => {
-//    stream = _stream;
-//    recorder = new MediaRecorder(stream);
-//    recorder.ondataavailable = e => {
-//      chunks.push(e.data);
-//      if(recorder.state == 'inactive')  makeLink();
-//    };
-//  }).catch(log);
-//}
-
-//function makeLink() {
-
-//    //shdkasdkdhas
-
-//    var blob = new Blob(chunks, { type: media.type });
-//    var url = URL.createObjectURL(blob);
-//    var data = new FormData();
-
-//    data.append("fname", "test.wav");
-//    data.append("enctype", "multipart/form-data");
-//    data.append("data", blob);
-
-//    $.ajax({
-//        url: "/blob",
-//        type: "POST",
-//        data: data,
-//        processData: false,
-//        contentType: false,
-//        success: function (a) {
-//            console.log("Ajax", a.emotion)
-//            emotion = a.emotion
-//            $("#emojis").show()
-//        },
-//        error: function () {
-//            console.log("ERROR")
-//        }
-//    });
-//}
 
 function GetEmotion() {
 
@@ -163,6 +94,7 @@ function doneEncoding(blob) {
     var data = new FormData();
 
     data.append("fname", "test.wav");
+    data.append("recording", "recording");
     data.append("enctype", "multipart/form-data");
     data.append("data", blob);
 
@@ -182,6 +114,7 @@ function doneEncoding(blob) {
         }
     });
 }
+
 
 function toggleRecording(e) {
     if (e.classList.contains("recording")) {
