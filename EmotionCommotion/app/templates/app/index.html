@@ -15,30 +15,10 @@
 
     </div>
 
-    <form enctype="multipart/form-data" method="post" action="/blob">
-        <input type="file" name="data" id="file"/>
-        <input type="submit" id="submit">
-    </form>
-
-
-
 
     <a id="save" href="#"></a>
     <input type="checkbox" checked data-toggle="toggle" id="emoji-toggle" data-on="Graph" data-off="Emoji" data-onstyle="success" data-offstyle="danger" />
     <div id="graph"></div>
-
-    <div id="choice">
-        <i class="fa fa-check" aria-hidden="true"></i>
-        <i class="fa fa-times" aria-hidden="true"></i>
-
-        <div class="correct">
-            <img id="1" src="../../static/app/images/emojis/angry.svg" />
-            <img id="2" src="../../static/app/images/emojis/sad.svg" />
-            <img id="3" src="../../static/app/images/emojis/sceptic.svg" />
-            <img id="4" src="../../static/app/images/emojis/smile.svg" />
-        </div>
-
-    </div>
 
     <div id="emojis">
         <img class="emoji" id="angry" src="../../static/app/images/emojis/angry.svg" />
@@ -55,9 +35,7 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="../../static/app/scripts/microphone_temp.js"></script>
+<script src="../../static/app/scripts/recording.js"></script>
+<script src="../../static/app/scripts/microphone.js"></script>
 <script src="../../static/app/scripts/graph_temp.js"></script>
-<script src="../../static/app/scripts/correct_temp.js"></script>
-{#<script src="../../static/app/scripts/microphone.js"></script>#}
-{#<script src="../../static/app/scripts/graph.js"></script>#}
 {% endblock %}

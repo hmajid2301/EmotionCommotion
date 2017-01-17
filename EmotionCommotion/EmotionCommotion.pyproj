@@ -87,7 +87,6 @@
     <Folder Include="tmp\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\static\app\scripts\correct_temp.js" />
     <Content Include="app\static\app\scripts\recorder.js" />
     <Content Include="app\static\app\scripts\recorderWorker.js" />
     <Content Include="tmp\test.wav" />
@@ -102,7 +101,6 @@
     <Content Include="app\static\app\images\logo.svg" />
     <Content Include="app\static\app\scripts\graph_temp.js" />
     <Content Include="app\static\app\scripts\graph.js" />
-    <Content Include="app\static\app\scripts\microphone_temp.js" />
     <Content Include="app\static\app\scripts\microphone.js" />
     <None Include="bundleconfig.json" />
     <Content Include="backend\classifiers\svm.pkl" />

@@ -72,6 +72,9 @@ html,
 body {
   height: 100%;
 }
+#form {
+  display: none;
+}
 .navbar-nav .active {
   font-weight: 800;
 }

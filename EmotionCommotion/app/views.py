@@ -45,10 +45,11 @@ def blob(request):
     tmp_file = os.path.join('', path)
     mydata = scipy.io.wavfile.read(tmp_file)
 
-    if request.POST == {}: 
-        mydata = mydata[1]
-    else:
-        mydata = mydata[1][:,0]
+    mydata = mydata[1][:,0]
+
+    if os.path.isfile(tmp_file):
+        os.remove(tmp_file)
+
 
     audiofile = get_audiofile("test.wav",data=mydata,flag=False)
     features = [amplitude,energy,f0,silence_ratio,zerocrossing,cepstrum,mfcc]
@@ -71,7 +72,6 @@ def blob(request):
             'mean(zerocrossing(zerocrossing))'],axis=1)
 
 
-    #agg_vals = agg_vals[0:54]
     agg_vals = np.append(agg_vals[0:18],agg_vals[20:])
     agg_vals = agg_vals.reshape(1,-1)
     min_max_scaler = preprocessing.MinMaxScaler()
@@ -79,19 +79,10 @@ def blob(request):
     agg_vals_scaled = min_max_scaler.transform(agg_vals)
     print(agg_vals_scaled)
     
-   # for a,i in enumerate(training.columns):
-   #     print(a,i)
-   # for a,i in enumerate(agg_vals_scaled):
-   #     print(a,"%.2f" % i)
-        
     
     svm = joblib.load('backend/classifiers/svm.pkl') 
     result = svm.predict(agg_vals_scaled)
 
-    #if os.path.isfile(tmp_file):
-    #    os.remove(tmp_file)
-
     return HttpResponse(json.dumps({'emotion': result[0]}), content_type="application/json")
-    #return render(request, 'app/index.html', {'data' : result})
 
    
