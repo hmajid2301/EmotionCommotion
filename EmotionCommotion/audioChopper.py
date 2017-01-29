@@ -64,11 +64,9 @@ def map_emmotion_number(emmotion_number):
         else:
                 return "Sad"
 
-#Wave_write.setparams(tuple)
-#The tuple should be (nchannels, sampwidth, framerate, nframes, comptype, compname), with values valid for the set*() methods. Sets all parameters.
-
 def open_output_file(count, emmotion_number):
         wave_write = wave.open(AUDIOPATH + 'out_' + str(count) + "_" +  map_emmotion_number(emmotion_number)  + ".wav" , 'wb')
+        #The tuple should be (nchannels, sampwidth, framerate, nframes, comptype, compname)
         wave_write.setparams((2, 2, 44100, 0, 'NONE', 'not compressed'))
         return wave_write
 
