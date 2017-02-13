@@ -77,7 +77,7 @@ def blob(request):
     min_max_scaler = preprocessing.MinMaxScaler()
     min_max_scaler.fit(training)
     agg_vals_scaled = min_max_scaler.transform(agg_vals)
-    print(agg_vals_scaled)
+    #print(agg_vals_scaled)
     
     
     svm = joblib.load('backend/classifiers/svm.pkl') 

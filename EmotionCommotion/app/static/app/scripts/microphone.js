@@ -1,4 +1,6 @@
 ﻿var emotion;
+var interval = null;
+var frameNum = 0;
 
 var wavesurfer = WaveSurfer.create({
     container: '#waveform',
@@ -11,45 +13,29 @@ microphone.init({
     wavesurfer: wavesurfer
 });
 
-
 function GetEmotion() {
-
-    switch (emotion) {
-
-        case 'ang':
-            return 0;
-            break;
-
-        case 'sad':
-            return 1;
-            break;
-
-        case 'neu':
-            return 2;
-            break;
-
-        case 'hap':
-            return 3;
-            break;
-
-        default:
-            return -1;
-            break
-    }
+    return emotion;
 }
 
 
 $("#microphone").click(function () {
+    console.log("Microphone Clicked")
+
     $("#microphone").hide()
     $("#emojis").hide()
     $("#waveform").show()
     $("#stop").show()
     toggleRecording(this)
     microphone.start()
+    interval = setInterval(loop, 2000)
+
 });
 
 
 $("#stop").click(function () {
+    console.log("Stop Clicked")
+
+    clearInterval(interval);
     $("#microphone").show()
     $("#waveform").hide()
     $("#stop").hide()
@@ -59,11 +45,14 @@ $("#stop").click(function () {
 
 function doneEncoding(blob) {
     var data = new FormData();
+    frameNum++;
 
     data.append("fname", "test.wav");
-    data.append("recording", "recording");
     data.append("enctype", "multipart/form-data");
     data.append("data", blob);
+    data.append("frame-number", frameNum);
+    console.log(frameNum);
+
 
     $.ajax({
         url: "/blob",
@@ -82,8 +71,9 @@ function doneEncoding(blob) {
 }
 
 
-
-
-
-
+function loop() {
+    console.log("Stopping")
+    toggleRecording(document.getElementById("microphone"))
+    setTimeout(function () { console.log("waiting");}, 200)
+}
 
