@@ -1,6 +1,7 @@
 import scipy.io.wavfile as wav   # Reads wav file
-import wave
 import sys
+import csv
+import ntpath
 
 import numpy as np
 import pandas as pd
@@ -10,7 +11,9 @@ import sys
 from types import *
 import json
 
-#use soxi -D out.wav, to find length of output in seconds
+#Use soxi -D file_name.wav, to find length of output in seconds
+
+#If you get a 'chunk data' error, try loading your audio into audacity and exporting as windows 16bit floating point WAV
 
 VALID = 0
 TRIPLE_ERROR = 1
@@ -33,32 +36,16 @@ def map_emmotion_number(emmotion_number):
 	else:
 		return "Sad"
 
-def open_output_file(count, emmotion_number, AUDIOPATH):
-	filename = AUDIOPATH + 'out_' + str(count) + "_" + map_emmotion_number(emmotion_number) + ".wav"
-	print("\nOpening new output file: " + filename + "\n")
-	wave_write = wave.open(filename, 'wb')
-	wave_write.setparams((2, 2, 44100, 0, 'NONE', 'not compressed'))
-	#The tuple should be (nchannels, sampwidth, framerate, nframes, comptype, compname)
-	return wave_write
-
 def validity_test(triples):
 	if (len(triples) == 0):
 		return EMPTY_LIST_ERROR 
 	for t in range(0,len(triples)):
 		this_triple = triples[t]
 		if (len(this_triple) != 3):
-			print(this_triple)
 			return START_TIME_ERROR
 		if not (this_triple[2] in range(0,4)):
 			return INVALID_EMMOTION_ERROR
 	return VALID
-
-def analyse_intervals(triples):
-	first_triple = triples[0]
-	overall_start_time = first_triple[0]
-	last_triple = triples[len(triples)-1]
-	overall_finish_time = last_triple[1]
-	return overall_start_time, overall_finish_time
 
 def audioChopper(filepath,triples):
 	'''
@@ -67,8 +54,6 @@ def audioChopper(filepath,triples):
 	Emmotions are represented by a number in the range 0 to 3.
 	Example: audioChopper("~/audio/clip_1.wav", [[1,3,0],[4,8,3],[13,20,1]])
 	'''
-
-	AUDIOPATH = os.path.dirname(filepath) + '/'
 
 	print("\nINPUT TRIPLES (Start seconds, finish seconds, emotion number):")
 	print(triples)
@@ -88,34 +73,27 @@ def audioChopper(filepath,triples):
 		print("Error: Invalid emmotion number given")
 		return
 
-	[overall_start_time, overall_finish_time] = analyse_intervals(triples)
-
-	input_file = open(filepath, 'rb')
-	[sample_rate, audio] = wav.read(input_file)
+	#input_file = open(filepath, 'rb')
+	[sample_rate, audio] = wav.read(filepath)
+	print("sample rate = " + str(sample_rate))
+	sample_rate = sample_rate
 	
-	sample_rate = sample_rate*4	
-
-	count = 0
-	output_file = open_output_file(count, triples[count][2], AUDIOPATH) 
-	
-	for i in range(overall_start_time, overall_finish_time+1):
-		print("Considering second: " + str(i))
-		if(triples[count][1] < i):
-			output_file.close()
-			if(count != len(triples)+1):
-				count = count + 1
-				output_file = open_output_file(count, triples[count][2], AUDIOPATH)
-			else:
-				break;
-		if(triples[count][0] <= i):
-			print("Writing frames from " + str(i) + "s to " + str(i+1) + "s")
-			
-			#a second worth of frames
-			frame_range = range(i*sample_rate, ((i+1)*sample_rate))
-			frames = audio[frame_range]
-			output_file.writeframes(frames)
-
-	input_file.close()
+	#len(audio)/sample_rate=length of audio in seconds	
+	for i in range(len(triples)):
+		t = triples[i]
+		start = t[0]*sample_rate
+		finish = (t[1]+1)*sample_rate
+		samples = audio[start:finish]
+		emmotion = map_emmotion_number(t[2])
+		output_name = emmotion + "_" + str(i) + "_" + ntpath.basename(filepath)
+		wav.write(output_name, sample_rate, samples)
+		print("Saved interval from sample " + str(start) + " to sample " + str(finish) + " at " + output_name)
+		
+		fields = [output_name,emmotion]
+		csv_name = 'emmotion_labels.csv'
+		fd = open(csv_name,'a')
+		fd.write(output_name+","+emmotion+"\n")
+		print("Appened to output csv file: " + csv_name)
 
 filepath = sys.argv[1]
 triples = json.loads(sys.argv[2])
