@@ -2,6 +2,7 @@ import scipy.io.wavfile as wav   # Reads wav file
 
 
 IEMOCAP_LOCATION = "../../../../local"
+SCALER_LOCATION  = "deeplearning/clean/scaler.sav"
 
 import numpy as np
 import pandas as pd
@@ -10,6 +11,10 @@ from sklearn import preprocessing
 from glob import glob
 import sys
 from types import *
+from sklearn.decomposition import PCA
+from scipy import signal
+
+
 
 def get_frames(audiofile):
     frame_size = audiofile['frame_size']
@@ -94,3 +99,11 @@ def extractAndSave(funct,labels,IEMOCAP_LOCATION,verbose=1):
     #df.columns = ['session',funct.__name__+"max-max", funct.__name__+"mean-max",funct.__name__+"max-mean", funct.__name__+"max-var", funct.__name__+"mean-mean", funct.__name__+"mean-var"]
     df = df.sort_values(by='session')
     df.to_csv('../features/' + funct.__name__ + '.csv',index=False)
+
+def preprocess_frame(frame):
+    scalerfile = SCALER_LOCATION
+    scaler = pickle.load(open(scalerfile, 'rb'))
+    scaled_frame = scaler.transform(frame)
+    spectogram = signal.spectrogram(scaled_frame,nperseg=128)[2]
+    pca_spectogram = np.array(pca.fit_transform(spectogram))
+    return pca_spectogram
