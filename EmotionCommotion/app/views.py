@@ -11,7 +11,7 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.conf import settings
 from sklearn.externals import joblib
-import scipy.io.wavfile 
+import scipy.io.wavfile
 import numpy as np
 import os, json, sys
 from sklearn import preprocessing
@@ -38,9 +38,9 @@ def home(request):
 
 
 @csrf_exempt
-def blob(request): 
+def blob(request):
 
-    data = request.FILES['data'] 
+    data = request.FILES['data']
     path = default_storage.save('tmp/test.wav', ContentFile(data.read()))
     tmp_file = os.path.join('', path)
     mydata = scipy.io.wavfile.read(tmp_file)
@@ -54,7 +54,7 @@ def blob(request):
     audiofile = get_audiofile("test.wav",data=mydata,flag=False)
     features = [amplitude,energy,f0,silence_ratio,zerocrossing,cepstrum,mfcc]
     frames = get_frames(audiofile)
-    
+
     agg_vals = []
     for feature in features:
         vals = []
@@ -62,7 +62,7 @@ def blob(request):
             vals.append(feature(frame, audiofile))
         vals = np.array(vals)
         agg_vals = np.concatenate((agg_vals,aggregate(vals)), axis=0)
-    
+
     training = pd.read_csv('backend/data/allFeatures.csv')
     training.drop('session',axis=1,inplace=True)
     training = training.replace([np.inf, -np.inf], np.nan)
@@ -78,11 +78,9 @@ def blob(request):
     min_max_scaler.fit(training)
     agg_vals_scaled = min_max_scaler.transform(agg_vals)
     #print(agg_vals_scaled)
-    
-    
-    svm = joblib.load('backend/classifiers/svm.pkl') 
+
+
+    svm = joblib.load('backend/classifiers/svm.pkl')
     result = svm.predict(agg_vals_scaled)
 
-    return HttpResponse(json.dumps({'emotion': result[0]}), content_type="application/json")
-
-   
+    return HttpResponse(json.dumps({'emotion': result}), content_type="application/json")

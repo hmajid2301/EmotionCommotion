@@ -27,7 +27,7 @@ $("#microphone").click(function () {
     $("#stop").show()
     toggleRecording(this)
     microphone.start()
-    interval = setInterval(loop, 2000)
+    interval = setInterval(loop, 1000)
 
 });
 
@@ -63,6 +63,7 @@ function doneEncoding(blob) {
         success: function (a) {
             emotion = a.emotion
             $("#emojis").show()
+            console.log(a)
         },
         error: function (e) {
             console.log(e)
@@ -76,4 +77,3 @@ function loop() {
     toggleRecording(document.getElementById("microphone"))
     setTimeout(function () { console.log("waiting");}, 200)
 }
-
