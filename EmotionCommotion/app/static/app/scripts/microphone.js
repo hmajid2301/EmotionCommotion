@@ -27,7 +27,7 @@ $("#microphone").click(function () {
     $("#stop").show()
     toggleRecording(this)
     microphone.start()
-    interval = setInterval(loop, 2000)
+    interval = setInterval(loop, 500)
 
 });
 
@@ -43,37 +43,40 @@ $("#stop").click(function () {
     microphone.stop()
 });
 
+lastblob=null;
 function doneEncoding(blob) {
-    var data = new FormData();
+    if (frameNum > 0) {
+        var data = new FormData();
+    
+        data.append("enctype", "multipart/form-data");
+        data.append("data", [lastblob, blob]);
+        data.append("frame-number", frameNum);
+        console.log(frameNum);
+        
+        $.ajax({
+            url: "/blob",
+            type: "post",
+            data: data,
+            processData: false,
+            contentType: false,
+            success: function (a) {
+                emotion = a.emotion
+                $("#emojis").show()
+            },
+            error: function (e) {
+                console.log(e)
+            }
+        });
+    }
     frameNum++;
-
-    data.append("fname", "test.wav");
-    data.append("enctype", "multipart/form-data");
-    data.append("data", blob);
-    data.append("frame-number", frameNum);
-    console.log(frameNum);
-
-
-    $.ajax({
-        url: "/blob",
-        type: "post",
-        data: data,
-        processData: false,
-        contentType: false,
-        success: function (a) {
-            emotion = a.emotion
-            $("#emojis").show()
-        },
-        error: function (e) {
-            console.log(e)
-        }
-    });
+    lastblob = blob;
 }
 
 
 function loop() {
     console.log("Stopping")
     toggleRecording(document.getElementById("microphone"))
-    setTimeout(function () { console.log("waiting");}, 200)
+    console.log("Starting")
+    toggleRecording(document.getElementById("microphone"))
 }
 
