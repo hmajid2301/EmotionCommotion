@@ -16,6 +16,8 @@ import numpy as np
 import os, json, sys
 from sklearn import preprocessing
 import pandas as pd1
+from keras.models import load_model
+import pickle
 
 sys.path.append("./")
 import matplotlib.pyplot as plt
@@ -23,6 +25,9 @@ import matplotlib.pyplot as plt
 from .datagrabber import *
 from .allExtractors import *
 
+SCALAR_LOCATION = 'backend/deeplearning/scaler.sav'
+
+cnn = load_model('backend/deeplearning/cnn_quick.h5')
 
 def home(request):
     """Renders the home page."""
@@ -40,18 +45,38 @@ def home(request):
 @csrf_exempt
 def blob(request):
 
-    data = request.FILES['data']
-    path = default_storage.save('tmp/test.wav', ContentFile(data.read()))
+    #lastblob = request.FILES['last-blob']
+
+    frame = request.FILES['frame']
+
+    path = default_storage.save('tmp/test.wav', ContentFile(frame.read()))
+
+    blob = request.FILES['blob']
+
+    #path2 = default_storage.save('tmp/blob.wav', ContentFile(blob.read()))
+
     tmp_file = os.path.join('', path)
+    #tmp_file2 = os.path.join('', path2)
+
     mydata = scipy.io.wavfile.read(tmp_file)
 
     mydata = mydata[1][:,0]
 
     if os.path.isfile(tmp_file):
-        os.remove(tmp_file)
+        #os.remove(tmp_file)
+        pass
+
+
 
 
     audiofile = get_audiofile("test.wav",data=mydata,flag=False)
+
+    result = svmPredict(audiofile)
+
+
+    return HttpResponse(json.dumps({'emotion': result[0]}), content_type="application/json")
+
+def svmPredict(audiofile):
     features = [amplitude,energy,f0,silence_ratio,zerocrossing,cepstrum,mfcc]
     frames = get_frames(audiofile)
 
@@ -82,5 +107,10 @@ def blob(request):
 
     svm = joblib.load('backend/classifiers/svm.pkl')
     result = svm.predict(agg_vals_scaled)
+    return result
 
-    return HttpResponse(json.dumps({'emotion': result}), content_type="application/json")
+def cnnPredict(audiofile):
+    print(cnn)
+    scaler = pickle.load(open(SCALAR_LOCATION,'rb'))
+    print(scaler)
+    return result
