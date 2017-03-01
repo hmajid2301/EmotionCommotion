@@ -26,7 +26,6 @@ from .datagrabber import *
 from .allExtractors import *
 
 SCALAR_LOCATION = 'backend/deeplearning/scaler.sav'
-
 cnn = load_model('backend/deeplearning/cnn_quick.h5')
 
 def home(request):
@@ -45,26 +44,15 @@ def home(request):
 @csrf_exempt
 def blob(request):
 
-    #lastblob = request.FILES['last-blob']
+    frame = request.FILES['blob']
+    frameNum = request.POST['frame-number']
+    path = default_storage.save('tmp/frame' + frameNum + '.wav', ContentFile(frame.read()))
 
-    frame = request.FILES['frame']
-
-    path = default_storage.save('tmp/test.wav', ContentFile(frame.read()))
-
-    blob = request.FILES['blob']
-
-    #path2 = default_storage.save('tmp/blob.wav', ContentFile(blob.read()))
-
-    tmp_file = os.path.join('', path)
-    #tmp_file2 = os.path.join('', path2)
-
-    mydata = scipy.io.wavfile.read(tmp_file)
-
+    mydata = scipy.io.wavfile.read(path)
     mydata = mydata[1][:,0]
 
-    if os.path.isfile(tmp_file):
-        #os.remove(tmp_file)
-        pass
+    if os.path.isfile(path):
+        os.remove(path)
 
 
 
