@@ -54,13 +54,8 @@ def blob(request):
     if os.path.isfile(path):
         os.remove(path)
 
-
-
-
     audiofile = get_audiofile("test.wav",data=mydata,flag=False)
-
     result = svmPredict(audiofile)
-
 
     return HttpResponse(json.dumps({'emotion': result[0]}), content_type="application/json")
 
