@@ -45,7 +45,7 @@ def aggregate(vals):
         agg_vals = np.concatenate((agg_vals,agg_funcs[i](vals, axis=0)), axis=0)
     return agg_vals
 
-def get_audiofile(filename, data=None,flag=True,frame_size=256):
+def get_audiofile(filename, data=None,flag=True,frame_size=32000):
     audiofile = {}
     sample_rate = 32000
     if (flag):

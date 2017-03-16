@@ -32,13 +32,13 @@ def meanAcc(estimator, X, y):
 # Scale features
 min_max_scaler = preprocessing.MinMaxScaler()
 X_scaled = min_max_scaler.fit_transform(X)
-           
+
 
 X_train = X_scaled[:3548]
 X_test = X_scaled[3548:]
 y_train = y[:3548]
 y_test = y[3548:]
-                    
+
 gnb = GaussianNB()
 
 gnb.fit(X_train, y_train)

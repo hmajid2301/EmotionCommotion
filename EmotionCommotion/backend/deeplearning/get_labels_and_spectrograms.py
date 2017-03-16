@@ -2,6 +2,7 @@ import sys
 import os
 import pandas as pd
 sys.path.insert(0, '../')
+from predictor import *
 from datagrabber import get_frames, get_audiofile
 from glob import glob
 import numpy as np
@@ -34,14 +35,8 @@ for session in range(1,6):
             label = labels.loc[name].label
             for frame in frames:
                 X[j] = frame
-                if label == "neu":
-                    y[j] = np.array([1,0,0,0]).reshape(1,4)
-                elif label == "hap":
-                    y[j] = np.array([0,1,0,0]).reshape(1,4)
-                elif label == "sad":
-                    y[j] = np.array([0,0,1,0]).reshape(1,4)
-                else:
-                    y[j] = np.array([0,0,0,1]).reshape(1,4)
+                # Get binary array from label
+                y[j] = label_to_barray(label)
                 j+=1
         print(j)
 
