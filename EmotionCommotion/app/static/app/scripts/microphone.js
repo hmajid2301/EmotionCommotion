@@ -72,7 +72,6 @@ function doneEncoding(blob) {
 }
 
 
-
 function loop() {
     audioRecorder.getBuffers(gotBuffers);
 }

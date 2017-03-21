@@ -16,8 +16,6 @@
     </div>
 
 
-    <a id="save" href="#"></a>
-    <input type="checkbox" checked data-toggle="toggle" id="emoji-toggle" data-on="Graph" data-off="Emoji" data-onstyle="success" data-offstyle="danger" />
     <div id="graph"></div>
 
     <div id="emojis">
@@ -28,6 +26,11 @@
     </div>
 
 
+    <form action="/blob">
+        <input type="file" name="blob" accept="audio/wav">
+        <input type="hidden" name="frame-number" value="100">
+        <input id="submit" type="submit">
+    </form>
 
 </div>
 
