@@ -21,10 +21,10 @@ pool_size = (2, 2)
 # convolution kernel size
 kernel_size = (3, 3)
 
-X_train = np.load('./X_train_whitened.npy')
-X_test = np.load('./X_test_whitened.npy')
-Y_train = np.load('./y_train.npy')
-Y_test = np.load('./y_test.npy')
+X_train = np.load('../../../../local/whitened_data/X_train_whitened.npy')
+X_test = np.load('../../../../local/whitened_data/X_test_whitened.npy')
+Y_train = np.load('../../../../local/whitened_data/y_train.npy')
+Y_test = np.load('../../../../local/whitened_data/y_test.npy')
 
 
 
