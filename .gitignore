@@ -32,6 +32,7 @@ bld/
 [Bb]uild[Ll]og.*
 
 local/
+EmotionCommotion/backend/deeplearning/emotionproject
 
 # NUNIT
 *.VisualState.xml
