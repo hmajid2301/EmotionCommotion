@@ -65,21 +65,23 @@ model.compile(loss='categorical_crossentropy',
               optimizer='adadelta',
               metrics=['categorical_accuracy'])
 
-model.fit(X_test, Y_test, batch_size=batch_size, nb_epoch=nb_epoch,
+model.fit(X_train, Y_train, batch_size=batch_size, nb_epoch=nb_epoch,
           verbose=1, validation_data=(X_test, Y_test))
 score = model.evaluate(X_test, Y_test, verbose=0)
 
-preds = model.predict_proba(X_test, batch_size=32, verbose=1)
-np.save('preds_10_epoch.npy',preds)
-
-# from keras import backend as K
-#
-# get_8th_layer_output = K.function([model.layers[0].input,K.learning_phase()],
-#                                   [model.layers[7].output])
-# layer_output = get_8th_layer_output([X_test[0:1],0])[0]
-
+train_preds = model.predict_proba(X_test, batch_size=32, verbose=1)
+np.save('train_preds_10_epoch.npy',train_preds)
+test_preds = model.predict_proba(X_test, batch_size=32, verbose=1)
+np.save('test_preds_10_epoch.npy',test_preds)
 
 print('Test score:', score[0])
 print('Test accuracy:', score[1])
 
 model.save('cnn_10.h5')
+
+from keras import backend as K
+
+get_8th_layer_output = K.function([model.layers[0].input,K.learning_phase()],
+                                  [model.layers[7].output])
+layer_output = get_8th_layer_output([X_test,0])[0]
+np.save('cnn_output.npy',layer_output)
