@@ -48,7 +48,8 @@ def blob(request):
 
     frame = request.FILES['blob']
     frameNum = request.POST['frame-number']
-    path = default_storage.save('tmp/frame' + frameNum + '.wav', ContentFile(frame.read()))
+    filename = 'frame' + frameNum + '.wav'
+    path = default_storage.save('tmp/' + filename, ContentFile(frame.read()))
 
     mydata = scipy.io.wavfile.read(path)
     mydata = mydata[1][:,0]
@@ -59,13 +60,15 @@ def blob(request):
 
 
 
-    audiofile = get_audiofile("test.wav",data=mydata,flag=False,frame_size=16000)
+    audiofile = get_audiofile(filename,data=mydata,flag=False,frame_size=16000)
 
     result = cnnPredict(audiofile)
     # Get index of largest probability
     index = np.argmax(result)
     # Get string label from index
     label = index_to_label(index)
+
+    print(label)
 
 
     return HttpResponse(json.dumps({'emotion': label}), content_type="application/json")

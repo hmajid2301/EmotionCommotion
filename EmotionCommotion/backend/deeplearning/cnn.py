@@ -1,6 +1,5 @@
 from __future__ import print_function
 import numpy as np
-np.random.seed(1337)  # for reproducibility
 
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation, Flatten
@@ -10,7 +9,7 @@ from keras import backend as K
 
 batch_size = 256
 nb_classes = 4
-nb_epoch = 1
+nb_epoch = 10
 
 # input image dimensions
 img_rows, img_cols = 65, 40
@@ -57,6 +56,7 @@ model.add(Dropout(0.5))
 model.add(Flatten())
 model.add(Dense(128))
 model.add(Activation('relu'))
+
 model.add(Dropout(0.75))
 model.add(Dense(nb_classes))
 model.add(Activation('softmax'))
@@ -65,14 +65,21 @@ model.compile(loss='categorical_crossentropy',
               optimizer='adadelta',
               metrics=['categorical_accuracy'])
 
-model.fit(X_train, Y_train, batch_size=batch_size, nb_epoch=nb_epoch,
+model.fit(X_test, Y_test, batch_size=batch_size, nb_epoch=nb_epoch,
           verbose=1, validation_data=(X_test, Y_test))
 score = model.evaluate(X_test, Y_test, verbose=0)
 
 preds = model.predict_proba(X_test, batch_size=32, verbose=1)
-np.save('preds.npy',preds)
+np.save('preds_10_epoch.npy',preds)
+
+# from keras import backend as K
+#
+# get_8th_layer_output = K.function([model.layers[0].input,K.learning_phase()],
+#                                   [model.layers[7].output])
+# layer_output = get_8th_layer_output([X_test[0:1],0])[0]
+
 
 print('Test score:', score[0])
 print('Test accuracy:', score[1])
 
-model.save('cnn_quick.h5')
+model.save('cnn_10.h5')

@@ -1,0 +1,28 @@
+X_train shape: (30242, 65, 40, 1)
+30242 train samples
+7839 test samples
+Train on 7839 samples, validate on 7839 samples
+Epoch 1/10
+7839/7839 [==============================] - 163s - loss: 1.3572 - categorical_accuracy: 0.3529 - val_loss: 1.2766 - val_categorical_accuracy: 0.4268
+Epoch 2/10
+7839/7839 [==============================] - 180s - loss: 1.2818 - categorical_accuracy: 0.4074 - val_loss: 1.2055 - val_categorical_accuracy: 0.4836
+Epoch 3/10
+7839/7839 [==============================] - 163s - loss: 1.2543 - categorical_accuracy: 0.4359 - val_loss: 1.1736 - val_categorical_accuracy: 0.5080
+Epoch 4/10
+7839/7839 [==============================] - 163s - loss: 1.2181 - categorical_accuracy: 0.4646 - val_loss: 1.1413 - val_categorical_accuracy: 0.5293
+Epoch 5/10
+7839/7839 [==============================] - 163s - loss: 1.1922 - categorical_accuracy: 0.4788 - val_loss: 1.1106 - val_categorical_accuracy: 0.5510
+Epoch 6/10
+7839/7839 [==============================] - 162s - loss: 1.1743 - categorical_accuracy: 0.4946 - val_loss: 1.0871 - val_categorical_accuracy: 0.5599
+Epoch 7/10
+7839/7839 [==============================] - 162s - loss: 1.1480 - categorical_accuracy: 0.5064 - val_loss: 1.0721 - val_categorical_accuracy: 0.5572
+Epoch 8/10
+7839/7839 [==============================] - 162s - loss: 1.1394 - categorical_accuracy: 0.5152 - val_loss: 1.0436 - val_categorical_accuracy: 0.5767
+Epoch 9/10
+7839/7839 [==============================] - 161s - loss: 1.1140 - categorical_accuracy: 0.5281 - val_loss: 1.0204 - val_categorical_accuracy: 0.5866
+Epoch 10/10
+7839/7839 [==============================] - 162s - loss: 1.1089 - categorical_accuracy: 0.5392 - val_loss: 1.0132 - val_categorical_accuracy: 0.5894
+7839/7839 [==============================] - 68s     
+Test score: 1.01320933144
+Test accuracy: 0.589360887846
+

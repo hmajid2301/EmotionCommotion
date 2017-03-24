@@ -4,7 +4,10 @@ from keras.models import load_model
 import pickle
 import sys
 sys.path.insert(0, './backend/')
+sys.path.insert(0, './app/')
+
 from datagrabber import *
+from allExtractors import *
 
 SCALAR_LOCATION = 'backend/deeplearning/scaler.sav'
 
@@ -19,7 +22,7 @@ def index_to_label(index):
     elif index == 2:
         label = 'sad'
     else:
-        index = 'ang'
+        label = 'ang'
     return label
 
 def label_to_barray(label):
