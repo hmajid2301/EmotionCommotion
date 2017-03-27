@@ -1,5 +1,4 @@
-﻿$("#graph").show()
-var svg = d3.select("#graph")
+﻿var svg = d3.select("#graph")
 	.append("svg")
 	.append("g")
 
@@ -196,5 +195,20 @@ function randombetween(min, max) {
 	return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
+(function ($) {
+	$.each(['show', 'hide'], function (i, ev) {
+		var el = $.fn[ev];
+		$.fn[ev] = function () {
+			this.trigger(ev);
+			return el.apply(this, arguments);
+		};
+	});
+})(jQuery);
+
+function update() {
+	console.log("HELLO!");
+}
+
 //$('#graph').on('show', change(newData()));
+$('#graph').on('show', update);
 setInterval(function () { change(newData()); }, 2500);

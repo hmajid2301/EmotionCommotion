@@ -2,37 +2,23 @@ import scipy.io.wavfile as wav   # Reads wav file
 
 
 IEMOCAP_LOCATION = "../../../../local"
-SCALER_LOCATION  = "deeplearning/scaler.sav"
 
 import numpy as np
 import pandas as pd
 import os
-from sklearn import preprocessing
 from glob import glob
 import sys
 from types import *
-from sklearn.decomposition import PCA
-from scipy import signal
-import pickle
-
-#scalerfile = SCALER_LOCATION
-#scaler = pickle.load(open(scalerfile, 'rb'))
 
 def get_frames(audiofile):
     frame_size = audiofile['frame_size']
     frame_overlap = audiofile['frame_overlap']
-    specto_tresh = audiofile['specto_thres']
     audio = audiofile['audio']
     frames = []
     i = 0
     while ((i+1)*(frame_size - frame_overlap) < len(audio)):
-        frame = np.array(audio[i*(frame_size - frame_overlap):(i+2)*(frame_size - frame_overlap)])
-        if len(frame) != frame_size:
-            frame = np.pad(frame, (0, frame_size - len(frame)%frame_size), 'constant')
-        #Ensure there is a value above threshold
-        #mx = np.amax(abs(frame))
-        #if mx > specto_tresh:
-        frames.append(frame)
+        start_index = (i*(frame_size - frame_overlap))
+        frames.append(audio[start_index:start_index + frame_size])
         i += 1
     return frames
 
@@ -45,22 +31,24 @@ def aggregate(vals):
         agg_vals = np.concatenate((agg_vals,agg_funcs[i](vals, axis=0)), axis=0)
     return agg_vals
 
-def get_audiofile(filename, data=None,flag=True,frame_size=32000):
+def get_audiofile(filename, data=None,flag=True):
     audiofile = {}
     sample_rate = 32000
+    
+
     if (flag):
         [sample_rate, audio] = wav.read(filename)
     else:
         audio = data
 
+        
     audiofile['sample_rate'] = sample_rate
-    audiofile['frame_size'] = frame_size
+    audiofile['frame_size'] = 2048
     audiofile['filename'] = filename
     audiofile['overlap_ratio'] = 0.5
     audiofile['frame_overlap'] = int(audiofile['frame_size'] * audiofile['overlap_ratio'])
     audiofile['audio'] = audio
     audiofile['threshold'] = max(audio) * 0.03
-    audiofile['specto_thres'] = max(audio) * 0.1
     return audiofile
 
 def extractAndSave(funct,labels,IEMOCAP_LOCATION,verbose=1):
@@ -90,7 +78,7 @@ def extractAndSave(funct,labels,IEMOCAP_LOCATION,verbose=1):
                     vals.append(funct(frame, audiofile))
                 agg_vals = aggregate(vals)
                 dic[name] = agg_vals
-
+    
     # Save results
     df = pd.DataFrame.from_dict(dic,orient='index').reset_index()
     columns = ['session']
@@ -101,9 +89,3 @@ def extractAndSave(funct,labels,IEMOCAP_LOCATION,verbose=1):
     #df.columns = ['session',funct.__name__+"max-max", funct.__name__+"mean-max",funct.__name__+"max-mean", funct.__name__+"max-var", funct.__name__+"mean-mean", funct.__name__+"mean-var"]
     df = df.sort_values(by='session')
     df.to_csv('../features/' + funct.__name__ + '.csv',index=False)
-
-def preprocess_frame(frame):
-    scaled_frame = scaler.transform(frame)
-    spectogram = signal.spectrogram(scaled_frame,nperseg=128)[2]
-    pca_spectogram = np.array(pca.fit_transform(spectogram))
-    return pca_spectogram
