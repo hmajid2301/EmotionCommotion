@@ -37,9 +37,9 @@ function gotBuffers(buffers) {
 }
 
 
-
 function toggleRecording(e) {
     if (e.classList.contains("recording")) {
+        // stop recording
         audioRecorder.stop();
         e.classList.remove("recording");
         audioRecorder.getBuffers(gotBuffers);
