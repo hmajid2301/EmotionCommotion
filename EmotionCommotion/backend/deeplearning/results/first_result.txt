@@ -1,0 +1,47 @@
+Epoch 979/1000
+31s - loss: 9.3183 - acc: 0.4219
+Epoch 980/1000
+32s - loss: 8.8146 - acc: 0.4531
+Epoch 981/1000
+31s - loss: 16.1181 - acc: 0.0000e+00
+Epoch 982/1000
+31s - loss: 10.8293 - acc: 0.3281
+Epoch 983/1000
+31s - loss: 5.5406 - acc: 0.6562
+Epoch 984/1000
+31s - loss: 14.6070 - acc: 0.0938
+Epoch 985/1000
+31s - loss: 6.2961 - acc: 0.6094
+Epoch 986/1000
+32s - loss: 10.8293 - acc: 0.3281
+Epoch 987/1000
+31s - loss: 7.0517 - acc: 0.5625
+Epoch 988/1000
+31s - loss: 12.0886 - acc: 0.2500
+Epoch 989/1000
+31s - loss: 9.3183 - acc: 0.4219
+Epoch 990/1000
+31s - loss: 8.3109 - acc: 0.4844
+Epoch 991/1000
+31s - loss: 12.8441 - acc: 0.2031
+Epoch 992/1000
+31s - loss: 11.0812 - acc: 0.3125
+Epoch 993/1000
+31s - loss: 10.8293 - acc: 0.3281
+Epoch 994/1000
+31s - loss: 13.3478 - acc: 0.1719
+Epoch 995/1000
+31s - loss: 10.8293 - acc: 0.3281
+Epoch 996/1000
+31s - loss: 14.1033 - acc: 0.1250
+Epoch 997/1000
+32s - loss: 11.3330 - acc: 0.2969
+Epoch 998/1000
+35s - loss: 6.0443 - acc: 0.6250
+Epoch 999/1000
+32s - loss: 7.0517 - acc: 0.5625
+Epoch 1000/1000
+34s - loss: 13.0960 - acc: 0.1875
+Test score: 11.3322346577
+Test accuracy: 0.296924708378
+
