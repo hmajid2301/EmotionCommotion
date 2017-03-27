@@ -68,7 +68,8 @@ def blob(request):
     # Get string label from index
     label = index_to_label(index)
 
-    print(label)
-
-
-    return HttpResponse(json.dumps({'emotion': label}), content_type="application/json")
+    return HttpResponse(json.dumps({'neu': format(result[0][0], '.2f'), 
+                                    'hap': format(result[0][1], '.2f'), 
+                                    'sad': format(result[0][2], '.2f'), 
+                                    'ang': format(result[0][3], '.2f')})
+                                    , content_type="application/json")
