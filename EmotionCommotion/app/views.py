@@ -56,9 +56,6 @@ def blob(request):
     if os.path.isfile(path):
         os.remove(path)
 
-
-
-
     audiofile = get_audiofile("test.wav",data=mydata,flag=False,frame_size=16000)
 
     result = cnnPredict(audiofile)
@@ -67,5 +64,10 @@ def blob(request):
     # Get string label from index
     label = index_to_label(index)
 
-
-    return HttpResponse(json.dumps({'emotion': label}), content_type="application/json")
+    print("ang - ")
+    print(result[0][3])
+    return HttpResponse(json.dumps({'neu': format(result[0][0], '.2f'), 
+                                    'hap': format(result[0][1], '.2f'), 
+                                    'sad': format(result[0][2], '.2f'), 
+                                    'ang': format(result[0][3], '.2f')})
+                                    , content_type="application/json")

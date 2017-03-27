@@ -59,8 +59,7 @@ function doneEncoding(blob) {
             processData: false,
             contentType: false,
             success: function (a) {
-                emotion = a.emotion
-                $("#emojis").show()
+                $("#graph").show()
             },
             error: function (e) {
                 console.log(e)

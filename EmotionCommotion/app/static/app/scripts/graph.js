@@ -1,4 +1,5 @@
-﻿var svg = d3.select("#graph")
+﻿$("#graph").show()
+var svg = d3.select("#graph")
 	.append("svg")
 	.append("g")
 
@@ -41,6 +42,17 @@ var color = d3.scale.ordinal()
 	.range(["#20c11b", "#f4eb30" , "#1989d3", "#d33917"]);
 
 
+//function newData() {
+//	result = GetEmotion()
+//	console.log(result.neu)
+//	return [
+//			{label:"Neutral", value: result.neu*100}, 
+//			{label:"Happy", value: result.hap*100}, 
+//			{label:"Sadness", value: result.sad*100},
+//			{label:"Angry", value: result.ang*100}
+//	];
+//}
+
 function newData() {
 
 	ran = [Math.floor((Math.random() * 10) + 1),
@@ -48,14 +60,14 @@ function newData() {
 		   Math.floor((Math.random() * 10) + 1),
 		   Math.floor((Math.random() * 10) + 1)]
 
-	sum = ran.reduce(function(a, b) { return a + b; }, 0);
+	sum = ran.reduce(function (a, b) { return a + b; }, 0);
 
 
 	return [
-			{label:"Neutral", value: parseInt((ran[0]/sum)*100)}, 
-			{label:"Happy", value: parseInt((ran[1]/sum)*100)}, 
-			{label:"Sadness", value: parseInt((ran[2]/sum)*100)},
-			{label:"Angry", value: parseInt((ran[3]/sum)*100)}
+			{ label: "Neutral", value: parseInt((ran[0] / sum) * 100) },
+			{ label: "Happy", value: parseInt((ran[1] / sum) * 100) },
+			{ label: "Sadness", value: parseInt((ran[2] / sum) * 100) },
+			{ label: "Angry", value: parseInt((ran[3] / sum) * 100) }
 	];
 }
 	
@@ -180,63 +192,9 @@ function change(data) {
 		.remove();
 };
 
-
-$('#emoji-toggle').change(function () {
-	if ($(this).prop('checked') == false) {
-		$("#emojis").show()
-		$("#graph").hide()
-	}
-	else {
-		$("#graph").show()
-		$("#emojis").hide()
-	}
-})
-
-
-
-function UpdateEmoji() {
-
-    index = GetEmotion()
-
-    $("#angry,#happy,#sad,#neutral").css({ width: "0px" });
-    switch (index) {
-
-        case 0:
-            $("#angry").animate({
-                width: "30%"
-            });
-            break;
-        case 1:
-            $("#sad").animate({
-                width: "30%"
-            });
-            break;
-        case 2:
-            $("#neutral").animate({
-                width: "30%"
-            });
-            break;
-        case 3:
-            $("#happy").animate({
-                width: "30%"
-            });
-            break;
-
-    }
-
+function randombetween(min, max) {
+	return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-
-(function ($) {
-    $.each(['show', 'hide'], function (i, ev) {
-        var el = $.fn[ev];
-        $.fn[ev] = function () {
-            this.trigger(ev);
-            return el.apply(this, arguments);
-        };
-    });
-})(jQuery);
-
-$('#emojis').on('show', UpdateEmoji);
-
-setInterval(function() { change(newData()); }, 2500);
+//$('#graph').on('show', change(newData()));
+setInterval(function () { change(newData()); }, 2500);
