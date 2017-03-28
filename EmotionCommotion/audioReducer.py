@@ -12,7 +12,7 @@ from types import *
 import json
 
 #AUDIOPATH ON EMOTCOMM: "/dcs/project/emotcomm/local/wild_dataset/chopped_and_labelled/"
-MIN_CLIP_LENGTH = 5 #min length of output clips in seconds
+MIN_CLIP_LENGTH = 10 #min length of output clips in seconds
 
 def save_clip(start, finish, emmotion, counter, audio, sample_rate):
 	samples = audio[start:finish]
