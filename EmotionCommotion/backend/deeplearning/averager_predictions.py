@@ -3,8 +3,13 @@ from scipy import stats
 from sklearn.metrics import accuracy_score
 import pandas as pd
 from sklearn import datasets, linear_model
+from sklearn.metrics import confusion_matrix
+import sys
+sys.path.append('../')
+sys.path.append('../../app/')
+from predictors import index_to_label
 
-preds = np.load("preds_10_epoch.npy")
+preds = np.load("test_preds_5_epoch_no_pca.npy")
 num_frames = np.load("session5_num_frames.npy")#[30242:]
 clip_labels = np.load("clip_labels.npy")
 
@@ -50,8 +55,14 @@ def mode_predictions(preds, num_frames):
     return y
 #
 y1 = mode_predictions(preds, num_frames)
-print "MODE"
-print accuracy_score(y1,clip_labels[3548:])
+print("MODE")
+print(accuracy_score(y1,clip_labels[3548:]))
+
+y1_labels = np.array(list(map(lambda x: index_to_label(np.argmax(x)),y1)))
+labels = np.array(list(map(lambda x: index_to_label(np.argmax(x)),clip_labels[3548:])))
+
+cnf_matrix = confusion_matrix(y1_labels, labels)
+print(cnf_matrix)
 
 
 ########
@@ -78,8 +89,8 @@ def mean_predictions(preds, num_frames):
 ########
 
 y2 = mean_predictions(preds, num_frames)
-print "MEAN"
-print accuracy_score(y2,clip_labels[3548:])
+print("MEAN")
+print(accuracy_score(y2,clip_labels[3548:]))
 
 
 ########
@@ -129,8 +140,8 @@ def mixed_predictions(preds, num_frames):
 ########
 
 y3 = mixed_predictions(preds, num_frames)
-print "MIXED"
-print accuracy_score(y3,clip_labels[3548:])
+print("MIXED")
+print(accuracy_score(y3,clip_labels[3548:]))
 ind_score =  1/float(len(num_frames))
 print (0.559447983015 - 0.547770700637) / ind_score #how many more mode gets right than mean (11)
 
@@ -171,13 +182,13 @@ def mode_of_classifiers(pred_list, num_frames):
 
 
 y4 = prod_predictions(preds, num_frames)
-print "PRODUCT"
-print accuracy_score(y4,clip_labels[3548:])
-print (0.561571125265 - 0.559447983015) / ind_score
+print("PRODUCT")
+print(accuracy_score(y4,clip_labels[3548:]))
+print((0.561571125265 - 0.559447983015) / ind_score)
 comb = np.array((y1,y2,y4))
 y_comb = mode_of_classifiers(comb, num_frames)
-print "COMBINED"
-print accuracy_score(y_comb,clip_labels[3548:])
+print("COMBINED")
+print(accuracy_score(y_comb,clip_labels[3548:]))
 
 # print len(y)
 #

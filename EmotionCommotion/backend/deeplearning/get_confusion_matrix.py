@@ -5,12 +5,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix
 
-cnn = load_model('cnn_quick.h5')
+cnn = load_model('cnn_5_no_pca.h5')
 
-X_test = np.load('../../../../local/whitened_data/X_test_whitened.npy')
+X_test = np.load('../../../../local/whitened_data/X_test_no_pca.npy')
 y_test = np.load('../../../../local/whitened_data/y_test.npy')
 
-soft_preds = cnn.predict(X_test.reshape(7839,65,40,1))
+soft_preds = cnn.predict(X_test.reshape(7839,65,142,1))
 
 def plot_confusion_matrix(cm, title='Confusion matrix - Naive Bayes', cmap=plt.cm.Greens):
     plt.imshow(cm, interpolation='nearest', cmap=cmap)
@@ -29,7 +29,7 @@ def plot_confusion_matrix(cm, title='Confusion matrix - Naive Bayes', cmap=plt.c
 hard_preds = np.zeros(soft_preds.shape[0])
 hard_y = np.argmax(y_test, axis=1)
 i = 0
-for pred in preds:
+for pred in soft_preds:
     hard_preds[i] = np.argmax(pred)
 
     # if label == 0:
@@ -43,3 +43,4 @@ for pred in preds:
     i = i + 1
 
 cnf_matrix = confusion_matrix(hard_y, hard_preds)
+print(cnf_matrix)
