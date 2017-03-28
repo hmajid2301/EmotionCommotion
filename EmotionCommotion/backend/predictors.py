@@ -5,15 +5,14 @@ import pickle
 import sys
 sys.path.insert(0, './backend/')
 sys.path.insert(0, './app/')
-sys.path.insert(0, '../app/')
 
 from datagrabber import *
 from allExtractors import *
 
 SCALAR_LOCATION = 'backend/deeplearning/scaler.sav'
 
-#cnn_scaler = pickle.load(open(SCALAR_LOCATION,'rb'),encoding='latin1') # encoding for python 2 pickle
-#cnn = load_model('backend/deeplearning/cnn_15.h5')
+cnn = load_model('backend/deeplearning/cnn_quick.h5')
+cnn_scaler = pickle.load(open(SCALAR_LOCATION,'rb'),encoding='latin1') # encoding for python 2 pickle
 
 def index_to_label(index):
     if index == 0:
@@ -85,21 +84,15 @@ def svmPredict(audiofile):
     return result
 
 def cnnPredict(audiofile):
-    print("Predicting!")
     # Preprocess the audiofile
     frames = get_frames(audiofile)
-    print("Got dem frames")
     scaled = cnn_scaler.transform(frames[0].reshape(1,-1))
-    print("Scaled")
     pca = PCA(n_components=40,whiten=True)
-    print("pca")
     specto = np.array(signal.spectrogram(scaled,nperseg=128)[2]).reshape(65,142)
-    print("specto")
     whitened_specto = pca.fit_transform(specto).reshape(1,65,40,1)
-    print("white")
     # Get prediction
     result = cnn.predict(whitened_specto,verbose=0)
-    print("result")
+
     print(result)
 
     return result

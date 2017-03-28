@@ -3,7 +3,7 @@ import numpy as np
 import aubio as aub
 import sys
 sys.path.append('backend/sourceFiles/')
-#import thinkdsp as td
+import thinkdsp as td
 
 def zerocrossing(frame, audiofile):
     n = 0
@@ -29,16 +29,16 @@ def cepstrum(frame, filename):
     audio = np.log2(audio)
     audio = np.fft.ifft(audio)
     return [np.amax(audio), np.average(audio), np.var(audio)]
-
+            
 def amplitude(frame, audiofile):
     return [np.amax(frame), np.average(frame),np.var(frame)]
-
-
+            
+            
 
 
 def mfcc(frame, audiofile):
     coefficientsCount = 12
-
+    
     sampleRate = audiofile['sample_rate']
     frame_size = audiofile['frame_size']
     m = aub.mfcc(frame_size*4, 40, coefficientsCount, sampleRate)
@@ -46,10 +46,10 @@ def mfcc(frame, audiofile):
     if len(frame) != 128:
         frame = np.pad(frame,(0,frame_size-len(frame)),'constant',constant_values=0)
     spec = p(frame.astype(np.float32))
-
+    
     mfcc_out = m(spec)
     return mfcc_out
-
+    
 #assuming for now that thinkdsp and clip is in the same directory
 def f0(frame, audiofile):
     threshold=0.5

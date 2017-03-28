@@ -27,7 +27,7 @@ $("#microphone").click(function () {
     $("#stop").show()
     toggleRecording(this)
     microphone.start()
-    interval = setInterval(loop, 3000)
+    interval = setInterval(loop, 500)
 });
 
 

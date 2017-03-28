@@ -2,9 +2,7 @@ import sys
 import os
 import pandas as pd
 sys.path.insert(0, '../')
-sys.path.insert(0, '../../app/')
-
-from predictors import index_to_label,label_to_barray,index_to_barray
+from predictor import *
 from datagrabber import get_frames, get_audiofile
 from glob import glob
 import numpy as np
@@ -51,33 +49,12 @@ y_train =y[0:30242]
 y_test =y[30242:]
 
 scaler = preprocessing.StandardScaler().fit(X_train)
-
-print("Scaling train...")
 X_train_preprocessed = scaler.transform(X_train)
-print("Scaling test...")
 X_test_preprocessed = scaler.transform(X_test)
 
 scalerfile = SCALER_LOCATION
 pickle.dump(scaler, open(scalerfile, 'wb'))
 
-print("Getting spectograms...")
-
-del X
-del y
-del X_train
-del X_test
-
-X_train_spectos = np.array(list(map(lambda a: signal.spectrogram(a,nperseg=128)[2],X_train_preprocessed)))
-X_test_spectos = np.array(list(map(lambda a: signal.spectrogram(a,nperseg=128)[2],X_test_preprocessed)))
-
-print("Saving...")
-
-np.save('../../../../local/whitened_data/X_train_no_pca.npy',X_train_spectos)
-np.save('../../../../local/whitened_data/X_test_no_pca.npy',X_test_spectos)
-np.save('../../../../local/whitened_data/y_train.npy',y_train)
-np.save('../../../../local/whitened_data/y_test.npy',y_test)
-
-'''
 
 pca = PCA(n_components=40,whiten=True)
 
@@ -88,4 +65,3 @@ np.save('../../../../local/whitened_data/X_train_whitened.npy',X_train_whitened)
 np.save('../../../../local/whitened_data/X_test_whitened.npy',X_test_whitened)
 np.save('../../../../local/whitened_data/y_train.npy',y_train)
 np.save('../../../../local/whitened_data/y_test.npy',y_test)
-'''
