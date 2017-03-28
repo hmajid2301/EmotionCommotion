@@ -12,8 +12,8 @@ from allExtractors import *
 
 SCALAR_LOCATION = 'backend/deeplearning/scaler.sav'
 
-#cnn_scaler = pickle.load(open(SCALAR_LOCATION,'rb'),encoding='latin1') # encoding for python 2 pickle
-#cnn = load_model('backend/deeplearning/cnn_15.h5')
+cnn_scaler = pickle.load(open(SCALAR_LOCATION,'rb'),encoding='latin1') # encoding for python 2 pickle
+cnn = load_model('backend/deeplearning/cnn_15.h5')
 
 def index_to_label(index):
     if index == 0:
