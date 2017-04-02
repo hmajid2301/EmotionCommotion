@@ -60,6 +60,8 @@ function doneEncoding(blob) {
             contentType: false,
             success: function (a) {
                 $("#graph").show()
+                console.log(a);
+                emotion = a;
             },
             error: function (e) {
                 console.log(e)

@@ -42,34 +42,34 @@ var color = d3.scale.ordinal()
 	.range(["#20c11b", "#f4eb30" , "#1989d3", "#d33917"]);
 
 
-//function newData() {
-//	result = GetEmotion()
-//	console.log(result.neu)
-//	return [
-//			{label:"Neutral", value: result.neu*100}, 
-//			{label:"Happy", value: result.hap*100}, 
-//			{label:"Sadness", value: result.sad*100},
-//			{label:"Angry", value: result.ang*100}
-//	];
-//}
-
 function newData() {
-
-	ran = [Math.floor((Math.random() * 10) + 1),
-		   Math.floor((Math.random() * 10) + 1),
-		   Math.floor((Math.random() * 10) + 1),
-		   Math.floor((Math.random() * 10) + 1)]
-
-	sum = ran.reduce(function (a, b) { return a + b; }, 0);
-
-
+	result = GetEmotion()
+	console.log(result.neu)
 	return [
-			{ label: "Neutral", value: parseInt((ran[0] / sum) * 100) },
-			{ label: "Happy", value: parseInt((ran[1] / sum) * 100) },
-			{ label: "Sadness", value: parseInt((ran[2] / sum) * 100) },
-			{ label: "Angry", value: parseInt((ran[3] / sum) * 100) }
+			{label:"Neutral", value: result.neu*100},
+			{label:"Happy", value: result.hap*100},
+			{label:"Sadness", value: result.sad*100},
+			{label:"Angry", value: result.ang*100}
 	];
 }
+
+// function newData() {
+//
+// 	ran = [Math.floor((Math.random() * 10) + 1),
+// 		   Math.floor((Math.random() * 10) + 1),
+// 		   Math.floor((Math.random() * 10) + 1),
+// 		   Math.floor((Math.random() * 10) + 1)]
+//
+// 	sum = ran.reduce(function (a, b) { return a + b; }, 0);
+//
+//
+// 	return [
+// 			{ label: "Neutral", value: parseInt((ran[0] / sum) * 100) },
+// 			{ label: "Happy", value: parseInt((ran[1] / sum) * 100) },
+// 			{ label: "Sadness", value: parseInt((ran[2] / sum) * 100) },
+// 			{ label: "Angry", value: parseInt((ran[3] / sum) * 100) }
+// 	];
+// }
 	
 function change(data) {
 
