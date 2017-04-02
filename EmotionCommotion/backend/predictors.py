@@ -16,12 +16,10 @@ os.environ['KMP_DUPLICATE_LIB_OK']='True'
 import tensorflow as tf
 global graph
 
-
-
 SCALAR_LOCATION = 'backend/deeplearning/scaler.sav'
 
 cnn_scaler = pickle.load(open(SCALAR_LOCATION,'rb'),encoding='latin1') # encoding for python 2 pickle
-cnn = load_model('backend/deeplearning/cnn_15.h5')
+cnn = load_model('backend/deeplearning/cnn_1_60.h5')
 graph = tf.get_default_graph()
 
 def index_to_label(index):
@@ -94,25 +92,16 @@ def svmPredict(audiofile):
     return result
 
 def cnnPredict(audiofile):
-    print("Predicting!")
     # Preprocess the audiofile
     frames = get_frames(audiofile)
-    print("Got dem frames")
     scaled = cnn_scaler.transform(frames[0].reshape(1,-1))
-    print("Scaled")
-    pca = PCA(n_components=40,whiten=True)
-    print("pca")
+    pca = PCA(n_components=60,whiten=True)
     specto = np.array(signal.spectrogram(scaled,nperseg=128)[2]).reshape(65,142)
-    print("specto")
-    fit = pca.fit(specto)
-    whitened_specto = pca.fit_transform(specto).reshape(1,65,40,1)
-    print("white")
-    # Get prediction
-
+    whitened_specto = pca.fit_transform(specto).reshape(1,65,60,1)
+    # Fixed threading problem: https://github.com/fchollet/keras/issues/2397
     with graph.as_default():
-
+        # Get prediction
         result = cnn.predict(whitened_specto,verbose=0)
-        print("result")
         print(result)
 
         return result

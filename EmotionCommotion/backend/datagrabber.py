@@ -63,7 +63,7 @@ def get_audiofile(filename, data=None,flag=True,frame_size=32000):
     audiofile['specto_thres'] = max(audio) * 0.1
     return audiofile
 
-def extractAndSave(funct,labels,IEMOCAP_LOCATION,verbose=1):
+def extractAndSave(funct,labels,IEMOCAP_LOCATION,verbose=1,aggregate=True):
     '''
     Expects a function of the form func(filename)
     Applies a feature extraction function to all wav files
@@ -73,6 +73,7 @@ def extractAndSave(funct,labels,IEMOCAP_LOCATION,verbose=1):
 
     # Fill a dict with values
     dic = {}
+    vals = []
     for session in range(1,6):
         if verbose > 0:
             print('\n' + "Extracting from session: " + str(session) + '\n')
@@ -85,22 +86,31 @@ def extractAndSave(funct,labels,IEMOCAP_LOCATION,verbose=1):
                 name = filename.split('/')[-1][:-4]
                 audiofile = get_audiofile(filename)
                 frames = get_frames(audiofile)
-                vals = []
-                for frame in frames:
-                    vals.append(funct(frame, audiofile))
-                agg_vals = aggregate(vals)
-                dic[name] = agg_vals
+                if aggregate:
+                    vals = []
+                    for frame in frames:
+                        vals.append(funct(frame, audiofile))
+                    agg_vals = aggregate(vals)
+                    dic[name] = agg_vals
+                else:
+                    for frame in frames:
+                        vals.append(funct(frame, audiofile))
+
 
     # Save results
-    df = pd.DataFrame.from_dict(dic,orient='index').reset_index()
-    columns = ['session']
-    for i in range(0, len(agg_func_names)):
-        for j in range(0, len(labels)):
-            columns.append(agg_func_names[i]+'('+labels[j]+'('+funct.__name__+'))')
-    df.columns = columns
-    #df.columns = ['session',funct.__name__+"max-max", funct.__name__+"mean-max",funct.__name__+"max-mean", funct.__name__+"max-var", funct.__name__+"mean-mean", funct.__name__+"mean-var"]
-    df = df.sort_values(by='session')
-    df.to_csv('../features/' + funct.__name__ + '.csv',index=False)
+    if aggregate:
+        df = pd.DataFrame.from_dict(dic,orient='index').reset_index()
+        columns = ['session']
+        for i in range(0, len(agg_func_names)):
+            for j in range(0, len(labels)):
+                columns.append(agg_func_names[i]+'('+labels[j]+'('+funct.__name__+'))')
+        df.columns = columns
+        #df.columns = ['session',funct.__name__+"max-max", funct.__name__+"mean-max",funct.__name__+"max-mean", funct.__name__+"max-var", funct.__name__+"mean-mean", funct.__name__+"mean-var"]
+        df = df.sort_values(by='session')
+        df.to_csv('../features/' + funct.__name__ + '.csv',index=False)
+    else:
+        vals = np.array(vals)
+        np.save('../features/' + funct.__name__ + '_framewise.npy',vals)
 
 def preprocess_frame(frame):
     scaled_frame = scaler.transform(frame)

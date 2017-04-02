@@ -85,7 +85,9 @@ pca = PCA(n_components=60,whiten=True)
 X_train_whitened = np.array(list(map(lambda a: pca.fit_transform(signal.spectrogram(a,nperseg=128)[2]),X_train_preprocessed)))
 X_test_whitened = np.array(list(map(lambda a: pca.fit_transform(signal.spectrogram(a,nperseg=128)[2]),X_test_preprocessed)))
 
-np.save('../../../../local/whitened_data/X_train_whitened.npy',X_train_whitened)
-np.save('../../../../local/whitened_data/X_test_whitened.npy',X_test_whitened)
+print("Saving...")
+
+np.save('../../../../local/whitened_data/X_train_whitened_60.npy',X_train_whitened)
+np.save('../../../../local/whitened_data/X_test_whitened_60.npy',X_test_whitened)
 np.save('../../../../local/whitened_data/y_train.npy',y_train)
 np.save('../../../../local/whitened_data/y_test.npy',y_test)
