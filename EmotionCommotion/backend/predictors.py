@@ -10,10 +10,19 @@ sys.path.insert(0, '../app/')
 from datagrabber import *
 from allExtractors import *
 
+import os
+os.environ['KMP_DUPLICATE_LIB_OK']='True'
+
+import tensorflow as tf
+global graph
+
+
+
 SCALAR_LOCATION = 'backend/deeplearning/scaler.sav'
 
 cnn_scaler = pickle.load(open(SCALAR_LOCATION,'rb'),encoding='latin1') # encoding for python 2 pickle
 cnn = load_model('backend/deeplearning/cnn_15.h5')
+graph = tf.get_default_graph()
 
 def index_to_label(index):
     if index == 0:
@@ -95,11 +104,15 @@ def cnnPredict(audiofile):
     print("pca")
     specto = np.array(signal.spectrogram(scaled,nperseg=128)[2]).reshape(65,142)
     print("specto")
+    fit = pca.fit(specto)
     whitened_specto = pca.fit_transform(specto).reshape(1,65,40,1)
     print("white")
     # Get prediction
-    result = cnn.predict(whitened_specto,verbose=0)
-    print("result")
-    print(result)
 
-    return result
+    with graph.as_default():
+
+        result = cnn.predict(whitened_specto,verbose=0)
+        print("result")
+        print(result)
+
+        return result
