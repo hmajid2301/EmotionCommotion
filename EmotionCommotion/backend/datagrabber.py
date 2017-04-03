@@ -84,7 +84,7 @@ def extractAndSave(funct,labels,IEMOCAP_LOCATION,verbose=1,aggregate=True):
                 sys.stdout.flush()
             for filename in glob(IEMOCAP_LOCATION + '/IEMOCAP_full_release/Session' + str(session) + '/sentences/wav/' + directory + '/*.wav'):
                 name = filename.split('/')[-1][:-4]
-                audiofile = get_audiofile(filename)
+                audiofile = get_audiofile(filename,frame_size=16000)
                 frames = get_frames(audiofile)
                 if aggregate:
                     vals = []
@@ -110,7 +110,10 @@ def extractAndSave(funct,labels,IEMOCAP_LOCATION,verbose=1,aggregate=True):
         df.to_csv('../features/' + funct.__name__ + '.csv',index=False)
     else:
         vals = np.array(vals)
-        np.save('../features/' + funct.__name__ + '_framewise.npy',vals)
+        vals_train = vals[0:30242]
+        vals_test = vals[30242:]
+        np.save('../features/' + funct.__name__ + '_framewise_train.npy',vals_train)
+        np.save('../features/' + funct.__name__ + '_framewise_test.npy',vals_test)
 
 def preprocess_frame(frame):
     scaled_frame = scaler.transform(frame)

@@ -8,7 +8,8 @@ Created on Sat Nov 12 12:04:22 2016
 #from importlib.machinery import SourceFileLoader
 
 import sys
-sys.path.append('/dcs/project/emotcomm/EmotionCommotion/EmotionCommotion/backend/sourceFiles/')
+sys.path.append('../sourceFiles/')
+sys.path.append('../')
 import thinkplot as tp
 import thinkdsp as td
 from datagrabber import extractAndSave
@@ -49,4 +50,4 @@ def f0(frame, audiofile):
 
 #f0('C:/Users/Tom/Documents/GitHub/local/IEMOCAP_full_release/Session1/sentences/wav/Ses01F_impro02/Ses01F_impro02_F001.wav',0.5)
 
-extractAndSave(f0,['f0'],IEMOCAP_LOCATION,2)
+extractAndSave(f0,['f0'],IEMOCAP_LOCATION,2,False)

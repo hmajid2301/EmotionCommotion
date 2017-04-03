@@ -1,6 +1,8 @@
 import scipy.io.wavfile as wav   # Reads wav file
 import pandas as pd
 import numpy as np
+import sys
+sys.path.append('../')
 
 from datagrabber import extractAndSave
 
@@ -15,4 +17,4 @@ def cepstrum(frame, filename):
     audio = audio.real
     return [np.amax(audio), np.average(audio), np.var(audio)]
 
-extractAndSave(cepstrum,["max", "mean", "var"],IEMOCAP_LOCATION,2)
+extractAndSave(cepstrum,["max", "mean", "var"],IEMOCAP_LOCATION,2,False)

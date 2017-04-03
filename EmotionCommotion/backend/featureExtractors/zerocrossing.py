@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import sys
+sys.path.append('../')
 from datagrabber import extractAndSave
 
 IEMOCAP_LOCATION = "../../../../local"
@@ -11,4 +13,4 @@ def zerocrossing(frame, audiofile):
             n += 1                          #it's so ambiguous i feel the need to write a comment
     return [n]
 
-extractAndSave(zerocrossing, ['zerocrossing'],IEMOCAP_LOCATION,2)
+extractAndSave(zerocrossing, ['zerocrossing'],IEMOCAP_LOCATION,2,False)

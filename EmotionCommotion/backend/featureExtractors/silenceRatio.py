@@ -11,6 +11,9 @@ import pandas as pd
 import numpy as np
 import os
 import glob
+import sys
+sys.path.append('../')
+
 from datagrabber import extractAndSave
 
 # In[2]
@@ -24,4 +27,4 @@ def silence_ratio(frame, audiofile):
     ratio = 1 - (len(thresholded_frame) / len(frame))
     return [ratio]
 
-extractAndSave(silence_ratio,["silence_ratio"],IEMOCAP_LOCATION,2)
+extractAndSave(silence_ratio,["silence_ratio"],IEMOCAP_LOCATION,2,False)
