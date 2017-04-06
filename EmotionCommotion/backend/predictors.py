@@ -16,11 +16,11 @@ os.environ['KMP_DUPLICATE_LIB_OK']='True'
 import tensorflow as tf
 global graph
 
-SCALAR_LOCATION = 'backend/deeplearning/scaler.sav'
-
-cnn_scaler = pickle.load(open(SCALAR_LOCATION,'rb'),encoding='latin1') # encoding for python 2 pickle
-cnn = load_model('backend/deeplearning/cnn_1_60.h5')
-graph = tf.get_default_graph()
+# SCALAR_LOCATION = 'backend/deeplearning/scaler.sav'
+#
+# cnn_scaler = pickle.load(open(SCALAR_LOCATION,'rb'),encoding='latin1') # encoding for python 2 pickle
+# cnn = load_model('backend/deeplearning/cnn_1_60.h5')
+# graph = tf.get_default_graph()
 
 def index_to_label(index):
     if index == 0:
@@ -34,11 +34,11 @@ def index_to_label(index):
     return label
 
 def label_to_barray(label):
-    if label == "neu":
+    if label == "neu" or label=="Neutral":
         barray = np.array([1,0,0,0]).reshape(1,4)
-    elif label == "hap":
+    elif label == "hap" or label=="Happy":
         barray = np.array([0,1,0,0]).reshape(1,4)
-    elif label == "sad":
+    elif label == "sad" or label== "Sad":
         barray = np.array([0,0,1,0]).reshape(1,4)
     else:
         barray = np.array([0,0,0,1]).reshape(1,4)
