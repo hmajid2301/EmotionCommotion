@@ -22,15 +22,15 @@ graph = tf.get_default_graph()
 
 IEMOCAP_LOCATION = '../../../data'
 #For every file
+columns = 'neu_vote,hap_vote,sad_vote,ang_vote,neu_2nd,hap_2nd,sad_2nd,ang_2nd,neu_3rd,hap_3rd,sad_3rd,ang_3rd,neu_min,hap_min,sad_min,ang_min,neu_mean,hap_mean,sad_mean,ang_mean,neu_var,hap_var,sad_var,ang_var,neu_q1,hap_q1,sad_q1,ang_q1,neu_q2,hap_q2,sad_q2,ang_q2,neu_max,hap_max,sad_max,ang_max,neu_min,hap_min,sad_min,ang_min'
 
-def aggregate_cnn_IEMOCAP(IEMOCAP_LOCATION,verbose=2,aggregate=True):
+def aggregate_cnn_IEMOCAP(verbose=2,aggregate=True):
     '''
     Expects a function of the form func(filename)
     Applies a feature extraction function to all wav files
     in the IMEOCAP database, and saves the results
     in the feaures directory.
     '''
-    columns = 'neu_vote,hap_vote,sad_vote,ang_vote,neu_mean,hap_mean,sad_mean,ang_mean,neu_var,hap_var,sad_var,ang_var,neu_q1,hap_q1,sad_q1,ang_q1,neu_q2,hap_q2,sad_q2,ang_q2,neu_max,hap_max,sad_max,ang_max,neu_min,hap_min,sad_min,ang_min'
     # Fill a dict with values
     dic = {}
     vals = []
@@ -51,6 +51,7 @@ def aggregate_cnn_IEMOCAP(IEMOCAP_LOCATION,verbose=2,aggregate=True):
                 frame_agg_predictions = aggregate_frame_preditions(frame_predictions)
                 #Save with label?
                 vals.append(frame_agg_predictions)
+                
     np.savetxt("IEMOCAP_frame_agg.csv", np.asarray(vals), delimiter=",", header = columns)
 
 def aggregate_cnn_wild(verbose=2,aggregate=True):
@@ -60,11 +61,8 @@ def aggregate_cnn_wild(verbose=2,aggregate=True):
     in the IMEOCAP database, and saves the results
     in the feaures directory.
     '''
-    columns = 'neu_vote,hap_vote,sad_vote,ang_vote,neu_mean,hap_mean,sad_mean,ang_mean,neu_var,hap_var,sad_var,ang_var,neu_q1,hap_q1,sad_q1,ang_q1,neu_q2,hap_q2,sad_q2,ang_q2,neu_max,hap_max,sad_max,ang_max,neu_min,hap_min,sad_min,ang_min'
-    # Fill a dict with values
-    dic = {}
     vals = []
-    files = glob(IEMOCAP_LOCATION + '/*.wav')
+    files = glob('./wild_dataset/10_to_20_seconds/*.wav')
     num_files = len(files)
     i = 0
     for filename in files:
@@ -84,10 +82,12 @@ def aggregate_cnn_wild(verbose=2,aggregate=True):
 
 def aggregate_frame_preditions(frame_predictions):
     #Calculate sum for each emotion
-    max_index = np.argmax(frame_predictions, axis = 1)
+    positions =  np.argsort(frame_predictions)
     modal_matrix = np.array([[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]])
-    #labels = [4,3,2,1]
-    frame_sums = np.sum(modal_matrix[max_index], axis=0)
+    sum_max = np.sum(modal_matrix[positions[:,0]], axis=0)
+    sum_2nd = np.sum(modal_matrix[positions[:,1]], axis=0)
+    sum_3rd = np.sum(modal_matrix[positions[:,2]], axis=0)
+    sum_min = np.sum(modal_matrix[positions[:,3]], axis=0)
     #Calculate mean for each emotion
     frame_means = np.mean(frame_predictions, axis = 0)
     #Calculate variance for each emotion
@@ -97,7 +97,8 @@ def aggregate_frame_preditions(frame_predictions):
     frame_max = np.max(frame_predictions, axis=0)
     frame_min = np.max(frame_predictions, axis=0)
     #Concatenate results
-    frame_agg_predictions = np.concatenate([frame_sums,frame_means, frame_vars, frame_q1, frame_q2, frame_max, frame_min])
+    frame_agg_predictions = np.concatenate([sum_max, sum_2nd, sum_3rd, sum_min,frame_means, frame_vars, frame_q1, frame_q2, frame_max, frame_min])
+    return frame_agg_predictions
 
 def cnn_frame_predict(frame):
     scaled = cnn_scaler.transform(frame.reshape(1,-1))
@@ -113,6 +114,7 @@ def cnn_frame_predict(frame):
         return result
 
 aggregate_cnn_wild()
+aggregate_cnn_IEMOCAP()
 
 
 
