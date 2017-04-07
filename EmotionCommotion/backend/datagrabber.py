@@ -119,3 +119,96 @@ def preprocess_frame(frame):
     spectogram = signal.spectrogram(scaled_frame,nperseg=128)[2]
     pca_spectogram = np.array(pca.fit_transform(spectogram))
     return pca_spectogram
+def extractAndSaveYoutubeData(funct,labels,data_location,verbose=1,aggregate_vals=True):
+    '''
+    Expects a function of the form func(filename)
+    Applies a feature extraction function to all wav files
+    in the youtube database, and saves the results
+    in the feaures directory.
+    '''
+
+    # Fill a dict with values
+    dic = {}
+    vals = []
+    num_files = len(glob(data_location + '/*.wav'))
+    i = 0
+    for filename in glob(data_location + '/*.wav'):
+        if verbose > 1:
+            sys.stdout.write("\r%d%%" % ((i/num_files)*100))
+            sys.stdout.flush()
+        name = filename.split('/')[-1][:-4]
+        audiofile = get_audiofile(filename,frame_size=16000)
+        frames = get_frames(audiofile)
+        if aggregate_vals:
+            vals = []
+            for frame in frames:
+                vals.append(funct(frame, audiofile))
+            agg_vals = aggregate(vals)
+            dic[name] = agg_vals
+        else:
+            for frame in frames:
+                vals.append(funct(frame, audiofile))
+        i = i+1
+    # Save results
+    if aggregate_vals:
+        df = pd.DataFrame.from_dict(dic,orient='index').reset_index()
+        columns = ['session']
+        for i in range(0, len(agg_func_names)):
+            for j in range(0, len(labels)):
+                columns.append(agg_func_names[i]+'('+labels[j]+'('+funct.__name__+'))')
+        df.columns = columns
+        #df.columns = ['session',funct.__name__+"max-max", funct.__name__+"mean-max",funct.__name__+"max-mean", funct.__name__+"max-var", funct.__name__+"mean-mean", funct.__name__+"mean-var"]
+        df = df.sort_values(by='session')
+        df.to_csv('../features/youtube_' + funct.__name__ + '.csv',index=False)
+    else:
+        vals = np.array(vals)
+        vals_train = vals[0:30242]
+        vals_test = vals[30242:]
+        np.save('../features/youtube_' + funct.__name__ + '_framewise_train.npy',vals_train)
+        np.save('../features/youtube_' + funct.__name__ + '_framewise_test.npy',vals_test)def extractAndSaveYoutubeData(funct,labels,data_location,verbose=1,aggregate_vals=True):
+    '''
+    Expects a function of the form func(filename)
+    Applies a feature extraction function to all wav files
+    in the youtube database, and saves the results
+    in the feaures directory.
+    '''
+
+    # Fill a dict with values
+    dic = {}
+    vals = []
+    num_files = len(glob(data_location + '/*.wav'))
+    i = 0
+    for filename in glob(data_location + '/*.wav'):
+        if verbose > 1:
+            sys.stdout.write("\r%d%%" % ((i/num_files)*100))
+            sys.stdout.flush()
+        name = filename.split('/')[-1][:-4]
+        audiofile = get_audiofile(filename,frame_size=16000)
+        frames = get_frames(audiofile)
+        if aggregate_vals:
+            vals = []
+            for frame in frames:
+                vals.append(funct(frame, audiofile))
+            agg_vals = aggregate(vals)
+            dic[name] = agg_vals
+        else:
+            for frame in frames:
+                vals.append(funct(frame, audiofile))
+        i = i+1
+    # Save results
+    if aggregate_vals:
+        df = pd.DataFrame.from_dict(dic,orient='index').reset_index()
+        columns = ['session']
+        for i in range(0, len(agg_func_names)):
+            for j in range(0, len(labels)):
+                columns.append(agg_func_names[i]+'('+labels[j]+'('+funct.__name__+'))')
+        df.columns = columns
+        #df.columns = ['session',funct.__name__+"max-max", funct.__name__+"mean-max",funct.__name__+"max-mean", funct.__name__+"max-var", funct.__name__+"mean-mean", funct.__name__+"mean-var"]
+        df = df.sort_values(by='session')
+        df.to_csv('../features/youtube_' + funct.__name__ + '.csv',index=False)
+    else:
+        vals = np.array(vals)
+        vals_train = vals[0:30242]
+        vals_test = vals[30242:]
+        np.save('../features/youtube_' + funct.__name__ + '_framewise_train.npy',vals_train)
+        np.save('../features/youtube_' + funct.__name__ + '_framewise_test.npy',vals_test)
