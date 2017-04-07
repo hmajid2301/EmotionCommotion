@@ -23,6 +23,8 @@ def get_frames(audiofile):
     frame_overlap = audiofile['frame_overlap']
     specto_tresh = audiofile['specto_thres']
     audio = audiofile['audio']
+    if len(audio.shape) == 2 and audio.shape[1] == 2:
+        audio = audio[:,0]
     frames = []
     i = 0
     while ((i+1)*(frame_size - frame_overlap) < len(audio)):
@@ -59,8 +61,8 @@ def get_audiofile(filename, data=None,flag=True,frame_size=32000):
     audiofile['overlap_ratio'] = 0.5
     audiofile['frame_overlap'] = int(audiofile['frame_size'] * audiofile['overlap_ratio'])
     audiofile['audio'] = audio
-    audiofile['threshold'] = max(audio) * 0.03
-    audiofile['specto_thres'] = max(audio) * 0.1
+    audiofile['threshold'] = np.max(audio) * 0.03
+    audiofile['specto_thres'] = np.max(audio) * 0.1
     return audiofile
 
 def extractAndSave(funct,labels,IEMOCAP_LOCATION,verbose=1,aggregate=True):
@@ -84,7 +86,7 @@ def extractAndSave(funct,labels,IEMOCAP_LOCATION,verbose=1,aggregate=True):
                 sys.stdout.flush()
             for filename in glob(IEMOCAP_LOCATION + '/IEMOCAP_full_release/Session' + str(session) + '/sentences/wav/' + directory + '/*.wav'):
                 name = filename.split('/')[-1][:-4]
-                audiofile = get_audiofile(filename,frame_size=16000)
+                audiofile = get_audiofile(filename)
                 frames = get_frames(audiofile)
                 if aggregate:
                     vals = []
@@ -110,10 +112,7 @@ def extractAndSave(funct,labels,IEMOCAP_LOCATION,verbose=1,aggregate=True):
         df.to_csv('../features/' + funct.__name__ + '.csv',index=False)
     else:
         vals = np.array(vals)
-        vals_train = vals[0:30242]
-        vals_test = vals[30242:]
-        np.save('../features/' + funct.__name__ + '_framewise_train.npy',vals_train)
-        np.save('../features/' + funct.__name__ + '_framewise_test.npy',vals_test)
+        np.save('../features/' + funct.__name__ + '_framewise.npy',vals)
 
 def preprocess_frame(frame):
     scaled_frame = scaler.transform(frame)
