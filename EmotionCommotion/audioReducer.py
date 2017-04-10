@@ -61,6 +61,7 @@ def audioReducer(audiopath):
 			start = sample_position * sample_rate
 			finish = audio_length * sample_rate
 			save_clip(start, finish, emmotion, counter, audio, sample_rate)
+			counter = counter + 1
 			
 		else:
 			print("Skipping non-wavfile: " + fullpath + "\n")
