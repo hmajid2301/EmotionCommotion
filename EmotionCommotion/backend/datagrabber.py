@@ -23,7 +23,7 @@ def get_frames(audiofile):
     frame_overlap = audiofile['frame_overlap']
     specto_tresh = audiofile['specto_thres']
     audio = audiofile['audio']
-    if len(audio.shape) == 2 and audio.shape[1] == 2:
+    if len(audio.shape) > 1 and audio.shape[1] > 1:
         audio = audio[:,0]
     frames = []
     i = 0
