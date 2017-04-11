@@ -7,14 +7,19 @@ from classifiers import *
 # Mode constants
 SESSION_5 = 0
 WILD = 1
-SLACKER = 2 
+STACKER = 2 
 # Model constants
 SVM = 0
 RANDOM_FOREST = 1
 LOGISTIC_REGRESSION = 2
 
+# Returns training and test data from the IEMOCAP dataset
+# Training data is from the sessions 1-4
+# Test data is from session 5
 def train_test_IEMOCAP():
+    # Read in the aggregated features provided by the cnn on the IEMOCAP database
     X = pd.read_csv('./IEMOCAP_frame_agg.csv')
+    # Read in the labels for each file in the IEMOCAP database
     y = pd.read_csv('../../data/allLabels.csv')
     #Ensure they match up together
     X.sort_values(by='session')
@@ -31,12 +36,19 @@ def train_test_IEMOCAP():
     y_test = y[3548:]
     return [X_train, X_test, y_train, y_test, filenames]
 
+# Training data is from the IEMOCAP dataset
+# Test data is from the wild dataset
 def train_test_wild():
+    # Read in the aggregated features provided by the cnn on the IEMOCAP database
     X_train = pd.read_csv('./IEMOCAP_frame_agg.csv')
+    # Read in the labels for each file in the IEMOCAP database
     y_train = pd.read_csv('../../data/allLabels.csv')
+    # Read in the aggregated features provided by the cnn on the wild database
     X_test = pd.read_csv('./wild_frame_agg.csv')
+    # Read in the labels for each file in the wild database
     y_test = pd.read_csv('./wild_dataset/wild_dataset/emotion_labels.csv')
     filenames = X_train['session']
+    #Ensure they match up together
     X_train.sort_values(by='session')
     y_train.sort_values(by='session')
     X_test.sort_values(by='session')
@@ -48,15 +60,17 @@ def train_test_wild():
     y_test = np.ravel(y_test.drop(['session'],axis=1))
     return [X_train, X_test, y_train, y_test, filenames]
 
-def slacker_split_train(X_train, y_train):
+# Split the IEMOCAP training sets in two
+def stacker_split_train(X_train, y_train):
     X_train_a = X_train[:1755]
     X_train_b = X_train[1755:]
     y_train_a = y_train[:1755]
     y_train_b = y_train[1755:]
     return [X_train_a, X_train_b, y_train_a, y_train_b]
 
-def slacker(X_train, y_train, filenames):
-    [X_train_a, X_train_b, y_train_a, y_train_b] = slacker_split_train(X_train, y_train)
+# Generate and save probability predictions for use in a stacker model
+def stacker(X_train, y_train, X_test, filenames):
+    [X_train_a, X_train_b, y_train_a, y_train_b] = stacker_split_train(X_train, y_train)
     model_a = get_model(SVM, X_train_a, y_train_a)
     model_b = get_model(SVM, X_train_b, y_train_b)
     model_both = get_model(SVM, X_train, y_train)
@@ -68,6 +82,7 @@ def slacker(X_train, y_train, filenames):
     df.to_csv(path_or_buf='svm_proba2.csv', sep=',')
     return model_both
 
+# Return a model fitted with the training data provided
 def get_model(model_type, X_train, y_train):
     if model_type == SVM:
         model = svm_combined_predictor(X_train, y_train)
@@ -77,8 +92,11 @@ def get_model(model_type, X_train, y_train):
         model = logistic_combined_predictor(X_train, y_train)
     return model
 
+# Determine model type to use based on input args
 def get_model_type(model_arg):
     model_arg = model_arg.lower()
+    #Default
+    mode = SVM
     if model_arg == "svm" or model_arg == "s":
         model = SVM
     elif model_arg == "random_forest" or model_arg == "rf":
@@ -87,10 +105,24 @@ def get_model_type(model_arg):
         model = LOGISTIC_REGRESSION
     return model
 
+# Determine mode to use based on input args
+def get_mode_type(mode_arg):
+    model_arg = mode_arg.lower()
+    #Default
+    mode = SESSION_5
+    if mode_arg == "s5":
+        mode = SESSION_5
+    elif mode_arg == "w":
+        mode = WILD
+    elif mode_arg == "st":
+        mode = STACKER
+    return mode
+
 def main(args):
-    mode = WILD
+    # Determine model and mode based on user inputs
+    mode = get_mode_type(args.mode)
     model_type = get_model_type(args.model)
-    cm_filename = "svm_test.png"
+    cm_filename = args.cm
     if mode == SESSION_5:
         [X_train, X_test, y_train, y_test, filenames] = train_test_IEMOCAP()
         [X_train, X_test] = preprossess_attributes(X_train, X_test)
@@ -99,10 +131,10 @@ def main(args):
         [X_train, X_test, y_train, y_test, filenames] = train_test_wild()
         [X_train, X_test] = preprossess_attributes(X_train, X_test)
         model = get_model(model_type, X_train, y_train)
-    elif mode == SLACKER:
+    elif mode == STACKER:
         [X_train, X_test, y_train, y_test, filenames] = train_test_IEMOCAP()
         [X_train, X_test] = preprossess_attributes(X_train, X_test)
-        model = slacker(X_train, y_train, filenames)
+        model = stacker(X_train, y_train, X_test, filenames)
         
     preds = model.predict(X_test)
     calculate_accuracy(y_test, preds, plot=True, save_as=cm_filename)
@@ -111,7 +143,7 @@ import argparse
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Process some integers.')
     parser.add_argument("model",help="'svm','s' -> Support Vector Machine, 'random_forest','rf' -> Random Forest, 'logistic_regression', 'rf' -> Logistic Regression")
-    parser.add_argument("mode",help="'s5' -> Test on IEMOCAP Session 5, 'w' -> Test on wild dataset, 'sl' -> Save slacker training csv")
+    parser.add_argument("mode",help="'s5' -> Test on IEMOCAP Session 5, 'w' -> Test on wild dataset, 'st' -> Save stacker training csv")
     parser.add_argument("cm",help="Filename of confusion matrix to be saved")
     
 
