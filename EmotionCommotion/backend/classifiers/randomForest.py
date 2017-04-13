@@ -28,8 +28,8 @@ def meanAcc(estimator, X, y):
     Returns the mean accuracy of predictions, weighted inversely proportionally to the number
     of samples in each class.
     '''
-    preds = estimator.predict(X)
-    cnf_matrix = confusion_matrix(y, preds)
+    predictions = estimator.predict(X)
+    cnf_matrix = confusion_matrix(y, predictions)
     cm_normalized = cnf_matrix.astype('float') / cnf_matrix.sum(axis=1)[:, np.newaxis]
     return cm_normalized.trace()/4
 
@@ -72,14 +72,13 @@ y_test = y[3548:]
 # X_test = lda.transform(X_test)
 
 # Parameters to try for grid search
-param_grid = {'max_features': ['auto'],
-              'max_depth': [2,4, 8,16],
-              'min_samples_leaf': [0.01, 0.05,0.1,0.2], 
+param_grid = {'max_depth': [8,16,32,64],
+              'min_samples_leaf': [0.001, 0.005,0.01,0.02], 
               'max_features': [1.0, 0.3, 0.1] 
               }
     
 
-est = RandomForestClassifier(n_estimators=200)
+est = RandomForestClassifier(n_estimators=3000)
 # Run gridsearch
 gs_cv = GridSearchCV(est, param_grid, n_jobs=-1,verbose=10,scoring=meanAcc).fit(X_train, y_train)
 
@@ -88,9 +87,9 @@ print('Best hyperparameters: %r' % gs_cv.best_params_)
 
                     
 # Make predictions on test set
-preds = gs_cv.predict(X_test)
+predictions = gs_cv.predict(X_test)
 
-cnf_matrix = confusion_matrix(y_test, preds)
+cnf_matrix = confusion_matrix(y_test, predictions)
 cm_normalized = cnf_matrix.astype('float') / cnf_matrix.sum(axis=1)[:, np.newaxis]
 
 print("Accuracy: ", cm_normalized.trace()/4)  # Average accuracy accross all 4 emotions
@@ -125,4 +124,8 @@ def plot_confusion_matrix(cm, title='RF Confusion matrix', cmap=plt.cm.Greens,fo
 plot_confusion_matrix(cm_normalized)
 plt.show()
 plot.grid_search(gs_cv.grid_scores_, change=('max_depth', 'min_samples_leaf'), subset={'max_features': 1.0})
+plt.show()
+plot.grid_search(gs_cv.grid_scores_, change=('max_depth', 'min_samples_leaf'), subset={'max_features': 0.3})
+plt.show()
+plot.grid_search(gs_cv.grid_scores_, change=('max_depth', 'min_samples_leaf'), subset={'max_features': 0.1})
 plt.show()

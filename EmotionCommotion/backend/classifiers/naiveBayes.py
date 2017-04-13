@@ -9,6 +9,8 @@ from sklearn.naive_bayes import GaussianNB
 import matplotlib.pyplot as plt
 import itertools
 
+TRAIN_END = 3548
+
 X = pd.read_csv('../data/allFeatures.csv')
 
 y = pd.read_csv('../data/allLabels.csv')
@@ -25,8 +27,8 @@ X = X.fillna(0)
 
 
 def meanAcc(estimator, X, y):
-    preds = estimator.predict(X)
-    cnf_matrix = confusion_matrix(y, preds)
+    predictions = estimator.predict(X)
+    cnf_matrix = confusion_matrix(y, predictions)
     cm_normalized = cnf_matrix.astype('float') / cnf_matrix.sum(axis=1)[:, np.newaxis]
     return cm_normalized.trace()/4
 
@@ -35,18 +37,16 @@ min_max_scaler = preprocessing.MinMaxScaler()
 X_scaled = min_max_scaler.fit_transform(X)
 
 
-X_train = X_scaled[:3548]
-X_test = X_scaled[3548:]
-y_train = y[:3548]
-y_test = y[3548:]
+X_train = X_scaled[:TRAIN_END]
+X_test = X_scaled[TRAIN_END:]
+y_train = y[:TRAIN_END]
+y_test = y[TRAIN_END:]
 
 gnb = GaussianNB()
-
 gnb.fit(X_train, y_train)
+predictions = gnb.predict(X_test)
 
-preds = gnb.fit(X_train, y_train).predict(X_test)
-
-cnf_matrix = confusion_matrix(y_test, preds)
+cnf_matrix = confusion_matrix(y_test, predictions)
 cm_normalized = cnf_matrix.astype('float') / cnf_matrix.sum(axis=1)[:, np.newaxis]
 
 print("Accuracy: ", cm_normalized.trace()/4)  # Average accuracy accross all 4 emotions

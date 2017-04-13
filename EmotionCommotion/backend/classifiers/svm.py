@@ -20,26 +20,11 @@ from sklearn.model_selection import GroupKFold
 import itertools
 from sklearn.externals import joblib
 
-from statsmodels.stats.outliers_influence import variance_inflation_factor
-
-def calculate_vif_(X):
-
-    '''X - pandas dataframe'''
-    thresh = 5.0
-    variables = list(range(X.shape[1]))
-
-    for i in np.arange(0, len(variables)):
-        vif = [variance_inflation_factor(X[variables].values, ix) for ix in range(X[variables].shape[1])]
-        maxloc = vif.index(max(vif))
-        if max(vif) > thresh:
-            print('dropping \'' + X[variables].columns[maxloc] + '\' at index: ' + str(maxloc))
-            del variables[maxloc]
-
-    print('Remaining variables:')
-    print(X.columns[variables])
-    return X[variables]
-
-
+SESSION_1_END = 942
+SESSION_2_END = 1755
+SESSION_3_END = 2755
+SESSION_4_END = 3548
+TRAIN_END = 3548
 
 
 X = pd.read_csv('../data/allFeatures.csv')
@@ -61,33 +46,11 @@ X = X.fillna(0)
 
 
 def meanAcc(estimator, X, y):
-    preds = estimator.predict(X)
-    cnf_matrix = confusion_matrix(y, preds)
+    predictions = estimator.predict(X)
+    cnf_matrix = confusion_matrix(y, predictions)
     cm_normalized = cnf_matrix.astype('float') / cnf_matrix.sum(axis=1)[:, np.newaxis]
     return cm_normalized.trace()/4
 
-# In[2]
-
-#lda = LinearDiscriminantAnalysis(n_components=12)
-#new_X = calculate_vif_(pd.DataFrame(X))
-#X = lda.fit(new_X, y).transform(new_X)
-
-# Scale features
-'''
-X = X.drop([ 'var(mfcccoeff0(mfcc))',
- 'var(mfcccoeff1(mfcc))',
- 'var(mfcccoeff2(mfcc))',
- 'var(mfcccoeff3(mfcc))',
- 'var(mfcccoeff4(mfcc))',
- 'var(mfcccoeff5(mfcc))',
- 'var(mfcccoeff6(mfcc))',
- 'var(mfcccoeff7(mfcc))',
- 'var(mfcccoeff8(mfcc))',
- 'var(mfcccoeff9(mfcc))',
- 'var(mfcccoeff10(mfcc))',
- 'var(mfcccoeff11(mfcc))'],
-axis=1)
-'''
 
 X = X.drop(['max(zerocrossing(zerocrossing))',
             'mean(zerocrossing(zerocrossing))'],axis=1)
@@ -96,29 +59,26 @@ min_max_scaler = preprocessing.MinMaxScaler()
 X_scaled = min_max_scaler.fit_transform(X)
            
 
-X_train = X_scaled[:3548]
-X_test = X_scaled[3548:]
-y_train = y[:3548]
-y_test = y[3548:]
+X_train = X_scaled[:TRAIN_END]
+X_test = X_scaled[TRAIN_END:]
+y_train = y[:TRAIN_END]
+y_test = y[TRAIN_END:]
 
-groups =(   [1 for _ in range(0,942)] +
-            [2 for _ in range(942,1755)] + 
-            [3 for _ in range(1755,2755)] + 
-            [4 for _ in range(2755,3548)] 
+groups =(   [1 for _ in range(0,SESSION_1_END)] +
+            [2 for _ in range(SESSION_1_END,SESSION_2_END)] + 
+            [3 for _ in range(SESSION_2_END,SESSION_3_END)] + 
+            [4 for _ in range(SESSION_3_END,SESSION_4_END)] 
         )
 
 gkf = GroupKFold(n_splits=4)
 fold_iter = gkf.split(X_train, y_train, groups=groups)
 
-tuned_parameters = [{'C': [50,100,200,500,1000]}]
-tuned_parameters = [{'C': [53,103,203]}]
-
-svm = GridSearchCV(SVC(class_weight='balanced'), tuned_parameters, cv=fold_iter,verbose=10,scoring=meanAcc, n_jobs = -1)
+param_grid = [{'C': [3,5,10,20,30,40,50],'gamma':[0.01,0.03,0.05,0.1,0.2,0.3]}]
+svm = GridSearchCV(SVC(class_weight='balanced'), param_grid, cv=fold_iter,verbose=10,scoring=meanAcc, n_jobs = -1)
 svm.fit(X_train, y_train)
+predictions = svm.predict(X_test)
 
-preds = svm.predict(X_test)
-
-cnf_matrix = confusion_matrix(y_test, preds)
+cnf_matrix = confusion_matrix(y_test, predictions)
 cm_normalized = cnf_matrix.astype('float') / cnf_matrix.sum(axis=1)[:, np.newaxis]
 cm_normalized = cm_normalized.round(3) * 100
 
