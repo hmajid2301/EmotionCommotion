@@ -76,9 +76,10 @@ param_grid = {'max_depth': [8,16,32,64],
               'min_samples_leaf': [0.001, 0.005,0.01,0.02], 
               'max_features': [1.0, 0.3, 0.1] 
               }
-    
+param_grid = {'max_depth': [None]          }
 
-est = RandomForestClassifier(n_estimators=3000)
+
+est = RandomForestClassifier()
 # Run gridsearch
 gs_cv = GridSearchCV(est, param_grid, n_jobs=-1,verbose=10,scoring=meanAcc).fit(X_train, y_train)
 
@@ -118,14 +119,14 @@ def plot_confusion_matrix(cm, title='RF Confusion matrix', cmap=plt.cm.Greens,fo
     plt.ylabel('True label',fontsize=fontsize)
     plt.xlabel('Predicted label',fontsize=fontsize)
     plt.gcf().subplots_adjust(bottom=0.25,left=0.25)
-    plt.savefig("../results/RFCM.png",transparent=True,figsize=(20,20),dpi=120)
+    plt.savefig("../results/rf_cm_before_grid.png",transparent=True,figsize=(20,20),dpi=120)
 
 
 plot_confusion_matrix(cm_normalized)
 plt.show()
-plot.grid_search(gs_cv.grid_scores_, change=('max_depth', 'min_samples_leaf'), subset={'max_features': 1.0})
-plt.show()
-plot.grid_search(gs_cv.grid_scores_, change=('max_depth', 'min_samples_leaf'), subset={'max_features': 0.3})
-plt.show()
-plot.grid_search(gs_cv.grid_scores_, change=('max_depth', 'min_samples_leaf'), subset={'max_features': 0.1})
-plt.show()
+# plot.grid_search(gs_cv.grid_scores_, change=('max_depth', 'min_samples_leaf'), subset={'max_features': 1.0})
+# plt.show()
+# plot.grid_search(gs_cv.grid_scores_, change=('max_depth', 'min_samples_leaf'), subset={'max_features': 0.3})
+# plt.show()
+# plot.grid_search(gs_cv.grid_scores_, change=('max_depth', 'min_samples_leaf'), subset={'max_features': 0.1})
+# plt.show()

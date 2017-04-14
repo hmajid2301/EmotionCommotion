@@ -30,6 +30,7 @@ font = {'family' : 'normal',
 
 matplotlib.rc('font', **font)
 
+print("Total time:" + str(sum(results.values())))
 
 plt.bar(range(len(results)), results.values(), align='center')
 plt.xticks(range(len(results)), results.keys())
