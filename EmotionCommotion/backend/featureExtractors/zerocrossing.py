@@ -3,8 +3,10 @@
 import sys
 sys.path.append('../')
 from datagrabber import extractAndSave
+from datagrabber import extractAndSave,extractAndSaveYoutubeData
 
 IEMOCAP_LOCATION = "../../../../local"
+YOUTUBE_LOCATION = "../../../../local/wild_dataset/10_to_20_seconds"
 
 def zerocrossing(frame, audiofile):
     n = 0
@@ -13,4 +15,5 @@ def zerocrossing(frame, audiofile):
             n += 1                          #it's so ambiguous i feel the need to write a comment
     return [n]
 
-extractAndSave(zerocrossing, ['zerocrossing'],IEMOCAP_LOCATION,2,False)
+#extractAndSave(zerocrossing, ['zerocrossing'],IEMOCAP_LOCATION,2,False)
+extractAndSaveYoutubeData(zerocrossing,["zerocrossing"],YOUTUBE_LOCATION,2)

@@ -14,10 +14,12 @@ import glob
 import sys
 sys.path.append('../')
 
-from datagrabber import extractAndSave
+from datagrabber import extractAndSave,extractAndSaveYoutubeData
 
 # In[2]
 IEMOCAP_LOCATION = "../../../../local"
+YOUTUBE_LOCATION = "../../../../local/wild_dataset/10_to_20_seconds"
+
 
 last_filename = "filename"
 
@@ -27,4 +29,5 @@ def silence_ratio(frame, audiofile):
     ratio = 1 - (len(thresholded_frame) / len(frame))
     return [ratio]
 
-extractAndSave(silence_ratio,["silence_ratio"],IEMOCAP_LOCATION,2,False)
+#extractAndSave(silence_ratio,["silence_ratio"],IEMOCAP_LOCATION,2,False)
+extractAndSaveYoutubeData(silence_ratio,["silence_ratio"],YOUTUBE_LOCATION,2)

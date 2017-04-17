@@ -9,10 +9,14 @@ import numpy as np
 import aubio as  aub
 import sys
 sys.path.append('../')
+import math
 
-from datagrabber import extractAndSave
+from datagrabber import extractAndSave,extractAndSaveYoutubeData
 
 IEMOCAP_LOCATION = "../../../../local"
+YOUTUBE_LOCATION = "../../../../local/wild_dataset/10_to_20_seconds"
+
+
 coefficientsCount = 12
 labels = ['mfcccoeff%s' % str(i) for i in range(coefficientsCount)]
 
@@ -22,16 +26,20 @@ def mfcc(frame, audiofile):
 
     sampleRate = audiofile['sample_rate']
     frame_size = audiofile['frame_size']
-    m = aub.mfcc(frame_size*4, 40, coefficientsCount, sampleRate)
-    p = aub.pvoc(frame_size*4, int(frame_size))
-    if len(frame) != 128:
+
+    fftsize = pow(2, int(math.log(frame_size, 2) + 0.5)) # Round to nearest power of 2
+
+
+    m = aub.mfcc(fftsize, 40, coefficientsCount, sampleRate)
+    p = aub.pvoc(fftsize, int(frame_size))
+    if len(frame) != 16000:
         frame = np.pad(frame,(0,frame_size-len(frame)),'constant',constant_values=0)
     spec = p(frame.astype(np.float32))
 
     mfcc_out = m(spec)
     return mfcc_out
 
-    
+
 
 # 1. Frame the signal into short frames.
 # 2. For each frame calculate the periodogram estimate of the power spectrum.
@@ -42,5 +50,5 @@ def mfcc(frame, audiofile):
 
 #http://practicalcryptography.com/miscellaneous/machine-learning/guide-mel-frequency-cepstral-coefficients-mfccs/#computing-the-mel-filterbank
 
-extractAndSave(mfcc,labels,IEMOCAP_LOCATION,2,False)
-
+#extractAndSave(mfcc,labels,IEMOCAP_LOCATION,2,False)
+extractAndSaveYoutubeData(mfcc,["mfcc"],YOUTUBE_LOCATION,2)

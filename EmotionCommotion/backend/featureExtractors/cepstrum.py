@@ -4,9 +4,10 @@ import numpy as np
 import sys
 sys.path.append('../')
 
-from datagrabber import extractAndSave
+from datagrabber import extractAndSave,extractAndSaveYoutubeData
 
 IEMOCAP_LOCATION = "../../../../local"
+YOUTUBE_LOCATION = "../../../../local/wild_dataset/10_to_20_seconds"
 
 def cepstrum(frame, filename):
     audio = np.fft.fft(frame)
@@ -17,4 +18,5 @@ def cepstrum(frame, filename):
     audio = audio.real
     return [np.amax(audio), np.average(audio), np.var(audio)]
 
-extractAndSave(cepstrum,["max", "mean", "var"],IEMOCAP_LOCATION,2,False)
+#extractAndSave(cepstrum,["max", "mean", "var"],IEMOCAP_LOCATION,2,False)
+extractAndSaveYoutubeData(cepstrum,["max", "mean","var"],YOUTUBE_LOCATION,2)

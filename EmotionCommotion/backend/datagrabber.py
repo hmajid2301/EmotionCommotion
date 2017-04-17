@@ -1,3 +1,4 @@
+from __future__ import division
 import scipy.io.wavfile as wav   # Reads wav file
 
 
@@ -126,7 +127,6 @@ def extractAndSaveYoutubeData(funct,labels,data_location,verbose=1,aggregate_val
     in the youtube database, and saves the results
     in the feaures directory.
     '''
-
     # Fill a dict with values
     dic = {}
     vals = []
@@ -150,6 +150,7 @@ def extractAndSaveYoutubeData(funct,labels,data_location,verbose=1,aggregate_val
                 vals.append(funct(frame, audiofile))
         i = i+1
     # Save results
+    print("")
     if aggregate_vals:
         df = pd.DataFrame.from_dict(dic,orient='index').reset_index()
         columns = ['session']

@@ -12,9 +12,11 @@ sys.path.append('../sourceFiles/')
 sys.path.append('../')
 import thinkplot as tp
 import thinkdsp as td
-from datagrabber import extractAndSave
+from datagrabber import extractAndSave,extractAndSaveYoutubeData
 
 IEMOCAP_LOCATION = "../../../../local"
+YOUTUBE_LOCATION = "../../../../local/wild_dataset/10_to_20_seconds"
+
 
 threshold=0.5
 #assuming for now that thinkdsp and clip is in the same directory
@@ -50,4 +52,5 @@ def f0(frame, audiofile):
 
 #f0('C:/Users/Tom/Documents/GitHub/local/IEMOCAP_full_release/Session1/sentences/wav/Ses01F_impro02/Ses01F_impro02_F001.wav',0.5)
 
-extractAndSave(f0,['f0'],IEMOCAP_LOCATION,2,False)
+#extractAndSave(f0,['f0'],IEMOCAP_LOCATION,2,False)
+extractAndSaveYoutubeData(f0,["f0"],YOUTUBE_LOCATION,2)
