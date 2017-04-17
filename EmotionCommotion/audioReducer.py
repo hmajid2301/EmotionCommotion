@@ -29,7 +29,7 @@ def save_clip(start, finish, emmotion, counter, audio, sample_rate):
 
 def audioReducer(audiopath):
 	print("\n")
-	print("WARNING: `audioReducer.py' has been written to postprocess the output of `audioChopper.py'. Otherwise ensure that 1. filenames begin *_ 2. include only emotion * 3. are in .wav format. [Where * is happy, sad, neutral or angry]")
+	print("WARNING: `audioReducer.py' has been written to postprocess the output of `audioChopper.py'. Otherwise ensure that 1. filenames begin *_ 2. include only emotion * 3. are in .wav format [Where * is Happy, Sad, Neutral or Angry]")
 	print("\n")
 	print("Processing audio at: " + audiopath)
 	print("\n")
