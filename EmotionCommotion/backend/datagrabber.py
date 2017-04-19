@@ -157,6 +157,7 @@ def extractAndSaveYoutubeData(funct,labels,data_location,verbose=1,aggregate_val
         for i in range(0, len(agg_func_names)):
             for j in range(0, len(labels)):
                 columns.append(agg_func_names[i]+'('+labels[j]+'('+funct.__name__+'))')
+
         df.columns = columns
         #df.columns = ['session',funct.__name__+"max-max", funct.__name__+"mean-max",funct.__name__+"max-mean", funct.__name__+"max-var", funct.__name__+"mean-mean", funct.__name__+"mean-var"]
         df = df.sort_values(by='session')

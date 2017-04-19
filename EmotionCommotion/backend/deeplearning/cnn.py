@@ -24,10 +24,10 @@ pool_size = (2, 2)
 # convolution kernel size
 kernel_size = (3, 3)
 
-X_train = np.load('../../../../../local/whitened_data/X_train_whitened_40.npy')
-X_test = np.load('../../../../../local/whitened_data/X_test_whitened_40.npy')
-Y_train = np.load('../../../../../local/whitened_data/y_train.npy')
-Y_test = np.load('../../../../../local/whitened_data/y_test.npy')
+X_train = np.load('../../../../local/whitened_data/X_train_whitened.npy')
+X_test = np.load('../../../../local/whitened_data/X_test_whitened.npy')
+Y_train = np.load('../../../../local/whitened_data/y_train.npy')
+Y_test = np.load('../../../../local/whitened_data/y_test.npy')
 
 
 
@@ -97,7 +97,7 @@ def plot_confusion_matrix(cm, title='CNN Confusion matrix', cmap=plt.cm.Greens,f
     plt.imshow(cm, interpolation='nearest', cmap=cmap)
     plt.title(title,fontsize=fontsize+3)
     cbar = plt.colorbar()
-    cbar.ax.tick_params(labelsize=fontsize) 
+    cbar.ax.tick_params(labelsize=fontsize)
 
     tick_marks = np.arange(len(['Angry','Happy','Neutral','Sad']))
     plt.xticks(tick_marks, ['Angry','Happy','Neutral','Sad'], rotation=45,fontsize=fontsize)
@@ -117,7 +117,7 @@ def plot_confusion_matrix(cm, title='CNN Confusion matrix', cmap=plt.cm.Greens,f
 
 plot_confusion_matrix(cm_normalized,fontsize=14)
 plt.show()
-    
+
 
 # get_8th_layer_output = K.function([model.layers[0].input,K.learning_phase()],
 #                                   [model.layers[8].output])

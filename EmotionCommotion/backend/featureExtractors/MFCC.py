@@ -51,4 +51,4 @@ def mfcc(frame, audiofile):
 #http://practicalcryptography.com/miscellaneous/machine-learning/guide-mel-frequency-cepstral-coefficients-mfccs/#computing-the-mel-filterbank
 
 #extractAndSave(mfcc,labels,IEMOCAP_LOCATION,2,False)
-extractAndSaveYoutubeData(mfcc,["mfcc"],YOUTUBE_LOCATION,2)
+extractAndSaveYoutubeData(mfcc,labels,YOUTUBE_LOCATION,2)
