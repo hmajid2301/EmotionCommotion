@@ -16,7 +16,6 @@ from sklearn.decomposition import PCA
 from scipy import signal
 import pickle
 
-#scalerfile = SCALER_LOCATION
 scaler = pickle.load(open(SCALER_LOCATION, 'rb'))
 
 def get_frames(audiofile,standardize_frame=False):

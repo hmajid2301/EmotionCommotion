@@ -14,6 +14,7 @@ import itertools
 batch_size = 256
 nb_classes = 4
 nb_epoch = 5
+test_index = 30242
 
 # input image dimensions
 img_rows, img_cols = 65, 40
@@ -24,10 +25,10 @@ pool_size = (2, 2)
 # convolution kernel size
 kernel_size = (3, 3)
 
-X_train = np.load('../../../../local/whitened_data/X_train_whitened.npy')
-X_test = np.load('../../../../local/whitened_data/X_test_whitened.npy')
-Y_train = np.load('../../../../local/whitened_data/y_train.npy')
-Y_test = np.load('../../../../local/whitened_data/y_test.npy')
+X_train = np.load('../../../../local/whitened_data/iemo_X_whitened_40.npy')
+X_test = np.load('../../../../local/whitened_data/yt_X_whitened_40.npy')
+Y_train = np.load('../../../../local/whitened_data/iemo_y.npy')
+Y_test = np.load('../../../../local/whitened_data/yt_y.npy')
 
 
 
@@ -76,14 +77,14 @@ model.fit(X_train, Y_train, batch_size=batch_size, nb_epoch=nb_epoch,
 score = model.evaluate(X_test, Y_test, verbose=0)
 
 train_predictions = model.predict_proba(X_train, batch_size=32, verbose=1)
-np.save('train_predictions_10_epoch_40.npy',train_predictions)
+#np.save('train_predictions_10_epoch_40.npy',train_predictions)
 test_predictions = model.predict_proba(X_test, batch_size=32, verbose=1)
-np.save('test_predictions_10_epoch_40.npy',test_predictions)
+#np.save('test_predictions_10_epoch_40.npy',test_predictions)
 
 print('Test score:', score[0])
 print('Test accuracy:', score[1])
 
-model.save('cnn_10_40.h5')
+model.save('cnn_5_40.h5')
 
 predictions = model.predict(X_test, batch_size=32, verbose=1)
 
