@@ -85,7 +85,7 @@ cm_normalized = cnf_matrix.astype('float') / cnf_matrix.sum(axis=1)[:, np.newaxi
 cm_normalized = cm_normalized.round(3) * 100
 print("NB test accuracy: ", cm_normalized.trace()/4)  # Average accuracy accross all 4 emotions
 
-plot_confusion_matrix(cm_normalized,fontsize=14,title='SVM Confusion Matrix',
+plot_confusion_matrix(cm_normalized,fontsize=14,title='NB Confusion Matrix',
                       filename='../results/yt_gnb_cm.png')
 # SVM
 
