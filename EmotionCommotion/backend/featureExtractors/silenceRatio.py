@@ -29,5 +29,5 @@ def silence_ratio(frame, audiofile):
     ratio = 1 - (len(thresholded_frame) / len(frame))
     return [ratio]
 
-#extractAndSave(silence_ratio,["silence_ratio"],IEMOCAP_LOCATION,2,False)
-extractAndSaveYoutubeData(silence_ratio,["silence_ratio"],YOUTUBE_LOCATION,2)
+extractAndSave(silence_ratio,["silence_ratio"],IEMOCAP_LOCATION,2,True,True)
+extractAndSaveYoutubeData(silence_ratio,["silence_ratio"],YOUTUBE_LOCATION,2,True,True)

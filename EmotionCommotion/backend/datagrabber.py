@@ -3,7 +3,7 @@ import scipy.io.wavfile as wav   # Reads wav file
 
 
 IEMOCAP_LOCATION = "../../../../local"
-SCALER_LOCATION  = "deeplearning/scaler.sav"
+SCALER_LOCATION  = "../frame_scaler.sav"
 
 import numpy as np
 import pandas as pd
@@ -17,9 +17,9 @@ from scipy import signal
 import pickle
 
 #scalerfile = SCALER_LOCATION
-#scaler = pickle.load(open(scalerfile, 'rb'))
+scaler = pickle.load(open(SCALER_LOCATION, 'rb'))
 
-def get_frames(audiofile):
+def get_frames(audiofile,standardize_frame=False):
     frame_size = audiofile['frame_size']
     frame_overlap = audiofile['frame_overlap']
     specto_tresh = audiofile['specto_thres']
@@ -35,7 +35,9 @@ def get_frames(audiofile):
         #Ensure there is a value above threshold
         #mx = np.amax(abs(frame))
         #if mx > specto_tresh:
-        frames.append(frame)
+        if standardize_frame:
+            frame = scaler.transform(frame.reshape(1,-1))
+        frames.append(frame[0])
         i += 1
     return frames
 
@@ -48,7 +50,7 @@ def aggregate(vals):
         agg_vals = np.concatenate((agg_vals,agg_funcs[i](vals, axis=0)), axis=0)
     return agg_vals
 
-def get_audiofile(filename, data=None,flag=True,frame_size=32000):
+def get_audiofile(filename, data=None,flag=True,frame_size=16000):
     audiofile = {}
     sample_rate = 32000
     if (flag):
@@ -66,7 +68,7 @@ def get_audiofile(filename, data=None,flag=True,frame_size=32000):
     audiofile['specto_thres'] = np.max(audio) * 0.1
     return audiofile
 
-def extractAndSave(funct,labels,IEMOCAP_LOCATION,verbose=1,aggregate=True):
+def extractAndSave(funct,labels,IEMOCAP_LOCATION,verbose=1,aggregate_vals=True,standardize_frame=False):
     '''
     Expects a function of the form func(filename)
     Applies a feature extraction function to all wav files
@@ -88,8 +90,8 @@ def extractAndSave(funct,labels,IEMOCAP_LOCATION,verbose=1,aggregate=True):
             for filename in glob(IEMOCAP_LOCATION + '/IEMOCAP_full_release/Session' + str(session) + '/sentences/wav/' + directory + '/*.wav'):
                 name = filename.split('/')[-1][:-4]
                 audiofile = get_audiofile(filename)
-                frames = get_frames(audiofile)
-                if aggregate:
+                frames = get_frames(audiofile,standardize_frame)
+                if aggregate_vals:
                     vals = []
                     for frame in frames:
                         vals.append(funct(frame, audiofile))
@@ -101,7 +103,7 @@ def extractAndSave(funct,labels,IEMOCAP_LOCATION,verbose=1,aggregate=True):
 
 
     # Save results
-    if aggregate:
+    if aggregate_vals:
         df = pd.DataFrame.from_dict(dic,orient='index').reset_index()
         columns = ['session']
         for i in range(0, len(agg_func_names)):
@@ -110,7 +112,7 @@ def extractAndSave(funct,labels,IEMOCAP_LOCATION,verbose=1,aggregate=True):
         df.columns = columns
         #df.columns = ['session',funct.__name__+"max-max", funct.__name__+"mean-max",funct.__name__+"max-mean", funct.__name__+"max-var", funct.__name__+"mean-mean", funct.__name__+"mean-var"]
         df = df.sort_values(by='session')
-        df.to_csv('../features/' + funct.__name__ + '.csv',index=False)
+        df.to_csv('../features/' + funct.__name__ + '_standardized.csv',index=False)
     else:
         vals = np.array(vals)
         np.save('../features/' + funct.__name__ + '_framewise.npy',vals)
@@ -120,7 +122,7 @@ def preprocess_frame(frame):
     spectogram = signal.spectrogram(scaled_frame,nperseg=128)[2]
     pca_spectogram = np.array(pca.fit_transform(spectogram))
     return pca_spectogram
-def extractAndSaveYoutubeData(funct,labels,data_location,verbose=1,aggregate_vals=True):
+def extractAndSaveYoutubeData(funct,labels,data_location,verbose=1,aggregate_vals=True,standardize_frame=False):
     '''
     Expects a function of the form func(filename)
     Applies a feature extraction function to all wav files
@@ -138,7 +140,7 @@ def extractAndSaveYoutubeData(funct,labels,data_location,verbose=1,aggregate_val
             sys.stdout.flush()
         name = filename.split('/')[-1][:-4]
         audiofile = get_audiofile(filename,frame_size=16000)
-        frames = get_frames(audiofile)
+        frames = get_frames(audiofile,standardize_frame)
         if aggregate_vals:
             vals = []
             for frame in frames:
@@ -161,7 +163,7 @@ def extractAndSaveYoutubeData(funct,labels,data_location,verbose=1,aggregate_val
         df.columns = columns
         #df.columns = ['session',funct.__name__+"max-max", funct.__name__+"mean-max",funct.__name__+"max-mean", funct.__name__+"max-var", funct.__name__+"mean-mean", funct.__name__+"mean-var"]
         df = df.sort_values(by='session')
-        df.to_csv('../features/youtube_' + funct.__name__ + '.csv',index=False)
+        df.to_csv('../features/youtube_' + funct.__name__ + '_standardized.csv',index=False)
     else:
         vals = np.array(vals)
         vals_train = vals[0:30242]

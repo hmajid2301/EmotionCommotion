@@ -15,5 +15,5 @@ def zerocrossing(frame, audiofile):
             n += 1                          #it's so ambiguous i feel the need to write a comment
     return [n]
 
-#extractAndSave(zerocrossing, ['zerocrossing'],IEMOCAP_LOCATION,2,False)
-extractAndSaveYoutubeData(zerocrossing,["zerocrossing"],YOUTUBE_LOCATION,2)
+extractAndSave(zerocrossing, ['zerocrossing'],IEMOCAP_LOCATION,2,True,True)
+extractAndSaveYoutubeData(zerocrossing,["zerocrossing"],YOUTUBE_LOCATION,2,True,True)

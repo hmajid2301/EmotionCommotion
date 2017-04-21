@@ -54,5 +54,5 @@ def f0(frame, audiofile):
 
 #f0('C:/Users/Tom/Documents/GitHub/local/IEMOCAP_full_release/Session1/sentences/wav/Ses01F_impro02/Ses01F_impro02_F001.wav',0.5)
 
-#extractAndSave(f0,['f0'],IEMOCAP_LOCATION,2,False)
-extractAndSaveYoutubeData(f0,["f0"],YOUTUBE_LOCATION,2)
+#extractAndSave(f0,['f0'],IEMOCAP_LOCATION,2,True,True)
+extractAndSaveYoutubeData(f0,["f0"],YOUTUBE_LOCATION,2,True,True)

@@ -11,10 +11,12 @@ import glob
 sessions = pd.read_csv('./data/allLabels.csv')
 
 
-df = pd.read_csv('./features/amplitude.csv')
-for filename in glob.glob('./features/*.csv'):
+df = pd.read_csv('./features/iemocap_standardized/amplitude_standardized.csv')
+for filename in glob.glob('./features/iemocap_standardized/*.csv'):
     new_feature = pd.read_csv(filename)
     df = pd.merge(df,new_feature)
 
 df = pd.merge(sessions,df).drop(['time','label'],axis=1)
-df.to_csv('./data/allFeatures.csv',index=False)
+df = df.sort_index(axis=1)
+
+df.to_csv('./data/allFeatures_standardized.csv',index=False)

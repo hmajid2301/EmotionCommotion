@@ -13,5 +13,5 @@ YOUTUBE_LOCATION = "../../../../local/wild_dataset/10_to_20_seconds"
 def amplitude(frame,filename):
     return [np.amax(frame), np.average(frame),np.var(frame)]
 
-#extractAndSave(amplitude,["max", "mean","var"],IEMOCAP_LOCATION,2,False)
-extractAndSaveYoutubeData(amplitude,["max", "mean","var"],YOUTUBE_LOCATION,2)
+extractAndSave(amplitude,["max", "mean","var"],IEMOCAP_LOCATION,2,True,True)
+extractAndSaveYoutubeData(amplitude,["max", "mean","var"],YOUTUBE_LOCATION,2,True,True)

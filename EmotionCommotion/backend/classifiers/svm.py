@@ -8,7 +8,6 @@ Created on Fri Nov 11 14:56:53 2016
 @author: olly
 """
 
-# In[1]
 import pandas as pd
 from sklearn.model_selection import GridSearchCV
 
@@ -57,7 +56,7 @@ X = X.drop(['max(zerocrossing(zerocrossing))',
 
 min_max_scaler = preprocessing.MinMaxScaler()
 X_scaled = min_max_scaler.fit_transform(X)
-           
+
 
 X_train = X_scaled[:TRAIN_END]
 X_test = X_scaled[TRAIN_END:]
@@ -65,15 +64,16 @@ y_train = y[:TRAIN_END]
 y_test = y[TRAIN_END:]
 
 groups =(   [1 for _ in range(0,SESSION_1_END)] +
-            [2 for _ in range(SESSION_1_END,SESSION_2_END)] + 
-            [3 for _ in range(SESSION_2_END,SESSION_3_END)] + 
-            [4 for _ in range(SESSION_3_END,SESSION_4_END)] 
+            [2 for _ in range(SESSION_1_END,SESSION_2_END)] +
+            [3 for _ in range(SESSION_2_END,SESSION_3_END)] +
+            [4 for _ in range(SESSION_3_END,SESSION_4_END)]
         )
 
 gkf = GroupKFold(n_splits=4)
 fold_iter = gkf.split(X_train, y_train, groups=groups)
 
 param_grid = [{'C': [3,5,10,20,30,40,50],'gamma':[0.01,0.03,0.05,0.1,0.2,0.3]}]
+
 svm = GridSearchCV(SVC(class_weight='balanced'), param_grid, cv=fold_iter,verbose=10,scoring=meanAcc, n_jobs = -1)
 svm.fit(X_train, y_train)
 predictions = svm.predict(X_test)
@@ -86,7 +86,7 @@ cm_normalized = cm_normalized.round(3) * 100
 print('Best hyperparameters: %r' % svm.best_params_)
 
 print("Accuracy: ", cm_normalized.trace()/4)  # Average accuracy accross all 4 emotions
-joblib.dump(svm.best_estimator_, 'svm.pkl') 
+joblib.dump(svm.best_estimator_, 'svm.pkl')
 
 
 
@@ -98,7 +98,7 @@ def plot_confusion_matrix(cm, title='SVM Confusion matrix', cmap=plt.cm.Greens,f
     plt.imshow(cm, interpolation='nearest', cmap=cmap)
     plt.title(title,fontsize=fontsize+3)
     cbar = plt.colorbar()
-    cbar.ax.tick_params(labelsize=fontsize) 
+    cbar.ax.tick_params(labelsize=fontsize)
 
     tick_marks = np.arange(len(['Angry','Happy','Neutral','Sad']))
     plt.xticks(tick_marks, ['Angry','Happy','Neutral','Sad'], rotation=45,fontsize=fontsize)
@@ -113,9 +113,7 @@ def plot_confusion_matrix(cm, title='SVM Confusion matrix', cmap=plt.cm.Greens,f
     plt.ylabel('True label',fontsize=fontsize)
     plt.xlabel('Predicted label',fontsize=fontsize)
     plt.gcf().subplots_adjust(bottom=0.25,left=0.25)
-    plt.savefig("../results/SVMCM.png",transparent=True,figsize=(20,20),dpi=120)
+    #plt.savefig("../results/SVMCM.png",transparent=True,figsize=(20,20),dpi=120)
 
 
 plot_confusion_matrix(cm_normalized,fontsize=14)
-
-    

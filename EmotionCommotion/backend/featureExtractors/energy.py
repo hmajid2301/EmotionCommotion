@@ -18,5 +18,5 @@ YOUTUBE_LOCATION = "../../../../local/wild_dataset/10_to_20_seconds"
 def energy(frame, audiofile):
     return [sum(np.apply_along_axis(lambda x: x**2,0,frame))]
 
-#extractAndSave(energy,['energy'],IEMOCAP_LOCATION,2,False)
-extractAndSaveYoutubeData(energy,["energy"],YOUTUBE_LOCATION,2)
+extractAndSave(energy,['energy'],IEMOCAP_LOCATION,2,True,True)
+extractAndSaveYoutubeData(energy,["energy"],YOUTUBE_LOCATION,2,True,True)
