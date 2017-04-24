@@ -18,5 +18,6 @@ def cepstrum(frame, filename):
     audio = audio.real
     return [np.amax(audio), np.average(audio), np.var(audio)]
 
+# Extract cepstrum from IEMOCAP and YouTube datasets
 extractAndSave(cepstrum,["max", "mean", "var"],IEMOCAP_LOCATION,2,True,True)
 extractAndSaveYoutubeData(cepstrum,["max", "mean","var"],YOUTUBE_LOCATION,2,True,True)

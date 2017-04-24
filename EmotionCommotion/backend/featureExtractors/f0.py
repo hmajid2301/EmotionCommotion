@@ -27,7 +27,6 @@ def f0(frame, audiofile):
     clip = td.Wave(frame)
     spectrum = clip.make_spectrum()
 
-    #sorted_by_Hz = sorted(spectrum.peaks(), key=lambda tup: tup[1])
     # to find F0 we can sort by Hz, unfortunately we have small readings at 0.0Hz
     # and other small frequencies which make finding the true F0 hard
 
@@ -52,7 +51,6 @@ def f0(frame, audiofile):
     else:
         return [sorted_by_Hz[0][1]]
 
-#f0('C:/Users/Tom/Documents/GitHub/local/IEMOCAP_full_release/Session1/sentences/wav/Ses01F_impro02/Ses01F_impro02_F001.wav',0.5)
-
-#extractAndSave(f0,['f0'],IEMOCAP_LOCATION,2,True,True)
+# Extract f0 from IEMOCAP and YouTube datasets
+extractAndSave(f0,['f0'],IEMOCAP_LOCATION,2,True,True)
 extractAndSaveYoutubeData(f0,["f0"],YOUTUBE_LOCATION,2,True,True)

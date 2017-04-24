@@ -11,11 +11,13 @@ import pickle
 
 IEMOCAP_LOCATION = "../../../local"
 SCALER_LOCATION  = "frame_scaler.sav"
-
 verbose = 2
+
+# Initialise matrix
 allframes = np.zeros((100000,16000))
 
 j = 0
+# Get all frames from all sessions in IEMOCAP dataset
 for session in range(1,6):
     if verbose > 0:
         print('\n' + "Extracting from session: " + str(session) + '\n')
@@ -31,7 +33,11 @@ for session in range(1,6):
                 allframes[j] = f
                 j += 1
 
+# Resize matrix
 allframes = allframes[0:j]
 
+# Fit scalar to frames
 scaler = preprocessing.StandardScaler().fit(allframes)
+
+# Save scalar
 pickle.dump(scaler, open(SCALER_LOCATION, 'wb'))

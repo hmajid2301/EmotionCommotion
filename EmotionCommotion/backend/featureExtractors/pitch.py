@@ -20,7 +20,7 @@ YOUTUBE_LOCATION = "../../../../local/wild_dataset/10_to_20_seconds"
 def pitch(frame, audiofile):
     clip = td.Wave(frame)
     spectrum = clip.make_spectrum()
-    return spectrum.peaks()[0][1]
+    return [spectrum.peaks()[0][1]]
 
 #extractAndSave(pitch,['pitch'],IEMOCAP_LOCATION,2,False)
 extractAndSaveYoutubeData(pitch,["pitch"],YOUTUBE_LOCATION,2)
