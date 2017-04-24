@@ -12,15 +12,35 @@ Created on Fri Nov 11 14:56:53 2016
 import pandas as pd
 from sklearn.model_selection import GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
-
 from sklearn import preprocessing
 from sklearn.metrics import confusion_matrix
 import numpy as np
 import matplotlib.pyplot as plt
 import itertools
-
 from sklearn_evaluation import plot
 
+# 3548 is the first sample from session 5
+TRAIN_END = 3548
+
+
+# Load features
+X = pd.read_csv('../data/allFeatures.csv')
+
+# Load labels
+y = pd.read_csv('../data/allLabels.csv')
+
+# Ensure all sessions are the same
+assert sum(X['session'] != y['session']) == 0
+
+# Drop session name from features
+X = X.drop('session',axis=1)
+
+# Remove session name and time from labels
+y = np.ravel(y.drop(['session','time'],axis=1))
+
+# Replace nans and infitities with 0s
+X = X.replace([np.inf, -np.inf], np.nan)
+X = X.fillna(0)
 
 # Scoring metric
 def meanAcc(estimator, X, y):
@@ -28,9 +48,13 @@ def meanAcc(estimator, X, y):
     Returns the mean accuracy of predictions, weighted inversely proportionally to the number
     of samples in each class.
     '''
+    # Use estimator to make predictions
     predictions = estimator.predict(X)
+    # Compute confusion matrix
     cnf_matrix = confusion_matrix(y, predictions)
+    # Normalize confusion matrix
     cm_normalized = cnf_matrix.astype('float') / cnf_matrix.sum(axis=1)[:, np.newaxis]
+    # Return mean accuracy
     return cm_normalized.trace()/4
 
 # Groups for cross validation. Each group is a different speaker
@@ -40,65 +64,18 @@ groups =(   [1 for _ in range(0,942)] +
             [4 for _ in range(2755,3548)]
         )
 
-X = pd.read_csv('../data/allFeatures.csv')
-y = pd.read_csv('../data/allLabels.csv')
-
-assert sum(X['session'] != y['session']) == 0 # Ensure all sessions are the same
-
-y = np.ravel(y.drop(['session','time'],axis=1))
-
-X = X.replace([np.inf, -np.inf], np.nan)
-
-X = X.fillna(0)
-
-X = X.drop('session',axis=1)
-
-
 
 # Transform all features to be in the range 0-1
 min_max_scaler = preprocessing.MinMaxScaler()
 X_scaled = min_max_scaler.fit_transform(X)
 
 
+# Split into training and testing
+X_train = X[:TRAIN_END]
+X_test = X[TRAIN_END:]
+y_train = y[:TRAIN_END]
+y_test = y[TRAIN_END:]
 
-# 3548 is the first sample from session 5
-X_train = X[:3548]
-X_test = X[3548:]
-y_train = y[:3548]
-y_test = y[3548:]import pandas as pd
-from sklearn import preprocessing
-from sklearn.svm import SVC
-from sklearn.metrics import confusion_matrix
-import numpy as np
-import itertools
-from sklearn.ensemble import RandomForestClassifier
-
-def meanAcc(estimator, X, y):
-    predictions = estimator.predict(X)
-    cnf_matrix = confusion_matrix(y, predictions)
-    cm_normalized = cnf_matrix.astype('float') / cnf_matrix.sum(axis=1)[:, np.newaxis]
-    return cm_normalized.trace()/4
-
-
-X_train = pd.read_csv('../data/allFeatures.csv')
-X_test = pd.read_csv('../data/allYoutubeFeatures.csv')
-
-y_train = pd.read_csv('../data/allLabels.csv')
-y_test = pd.read_csv('../data/emmotion_labels.csv')
-
-assert sum(X_train['session'] != y_train['session']) == 0 # Ensure all sessions are the same
-assert sum(X_test['session'] != y_test['session']) == 0 # Ensure all sessions are the same
-
-X_train = X_train.drop('session',axis=1)
-X_test = X_test.drop('session',axis=1)
-
-y_train = np.ravel(y_train.drop(['time','session'],axis=1))
-y_test = np.ravel(y_test.drop(['session'],axis=1))
-
-X_train = X_train.replace([np.inf, -np.inf], np.nan)
-X_train = X_train.fillna(0)
-X_test = X_test.replace([np.inf, -np.inf], np.nan)
-X_test = X_test.fillna(0)
 
 X_train = X_train.drop(['max(zerocrossing(zerocrossing))',
             'mean(zerocrossing(zerocrossing))'],axis=1)
@@ -108,23 +85,6 @@ X_test = X_test.drop(['max(zerocrossing(zerocrossing))',
 min_max_scaler = preprocessing.MinMaxScaler()
 X_train_scaled = min_max_scaler.fit_transform(X_train)
 X_test_scaled = min_max_scaler.transform(X_test)
-
-svm = SVC(class_weight='balanced',C=50,gamma=0.03)
-svm.fit(X_train_scaled,y_train)
-
-train_predicions = svm.predict(X_train_scaled)
-test_predictions = svm.predict(X_test_scaled)
-
-cnf_matrix = confusion_matrix(y_train, train_predicions)
-cm_normalized = cnf_matrix.astype('float') / cnf_matrix.sum(axis=1)[:, np.newaxis]
-cm_normalized = cm_normalized.round(3) * 100
-print("Svm train accuracy: ", cm_normalized.trace()/4)  # Average accuracy accross all 4 emotions
-
-cnf_matrix = confusion_matrix(y_test, test_predictions)
-cm_normalized = cnf_matrix.astype('float') / cnf_matrix.sum(axis=1)[:, np.newaxis]
-cm_normalized = cm_normalized.round(3) * 100
-print("Svm test accuracy: ", cm_normalized.trace()/4)  # Average accuracy accross all 4 emotions
-
 
 
 rf = RandomForestClassifier(n_estimators=1000,max_depth=18,max_features=0.3,min_samples_leaf=0.005)
