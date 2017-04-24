@@ -7,36 +7,8 @@ import itertools
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.naive_bayes import GaussianNB
 import matplotlib.pyplot as plt
+from classifiers import *
 
-def meanAcc(estimator, X, y):
-    predictions = estimator.predict(X)
-    cnf_matrix = confusion_matrix(y, predictions)
-    cm_normalized = cnf_matrix.astype('float') / cnf_matrix.sum(axis=1)[:, np.newaxis]
-    return cm_normalized.trace()/4
-
-def plot_confusion_matrix(cm, title='CNN Confusion matrix', cmap=plt.cm.Greens,
-                          fontsize=14,filename="confusion_matrix.png"):
-    plt.figure(figsize=(4.5,4.5))
-
-    plt.imshow(cm, interpolation='nearest', cmap=cmap)
-    plt.title(title,fontsize=fontsize+3)
-    cbar = plt.colorbar()
-    cbar.ax.tick_params(labelsize=fontsize)
-
-    tick_marks = np.arange(len(['Angry','Happy','Neutral','Sad']))
-    plt.xticks(tick_marks, ['Angry','Happy','Neutral','Sad'], rotation=45,fontsize=fontsize)
-    plt.yticks(tick_marks, ['Angry','Happy','Neutral','Sad'],fontsize=fontsize)
-    thresh = cm.max() / 1.5
-    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
-        plt.text(j, i, str(cm[i, j]) + "%",
-                 horizontalalignment="center",
-                 color="white" if cm[i, j] > thresh else "black",
-                    fontsize=fontsize)
-    plt.tight_layout()
-    plt.ylabel('True label',fontsize=fontsize)
-    plt.xlabel('Predicted label',fontsize=fontsize)
-    plt.gcf().subplots_adjust(bottom=0.25,left=0.25)
-    plt.savefig(filename,transparent=True,figsize=(20,20),dpi=120)
 
 
 X_train = pd.read_csv('../data/allFeatures_standardized.csv')
@@ -68,63 +40,19 @@ min_max_scaler = preprocessing.MinMaxScaler()
 X_train_scaled = min_max_scaler.fit_transform(X_train)
 X_test_scaled = min_max_scaler.transform(X_test)
 
-# Naive Bayes
-gnb = GaussianNB()
-gnb.fit(X_train_scaled,y_train)
+clf_funcs = [get_gnb, get_svm, get_rf]
+clf_names = ['gnb', 'svm', 'rf']
 
-train_predicions = gnb.predict(X_train_scaled)
-test_predictions = gnb.predict(X_test_scaled)
+for i in range(0,len(clf_funcs)):
+	clf = clf_funcs[i]()
+	clf_name = clf_names[i]
+	clf.fit(X_train_scaled,y_train)
+	train_predicions = clf.predict(X_train_scaled)
+	test_predictions = clf.predict(X_test_scaled)
 
-cnf_matrix = confusion_matrix(y_train, train_predicions)
-cm_normalized = cnf_matrix.astype('float') / cnf_matrix.sum(axis=1)[:, np.newaxis]
-cm_normalized = cm_normalized.round(3) * 100
-print("NB train accuracy: ", cm_normalized.trace()/4)  # Average accuracy accross all 4 emotions
+	# accuracy = save_confusion_matrix(y_train, train_predicions, 'confusion_matrices/' + clf_name + "_IEMOCAP.png")
+	# print(clf_name + " train accuracy: ", accuracy)  # Average accuracy accross all 4 emotions
 
-cnf_matrix = confusion_matrix(y_test, test_predictions)
-cm_normalized = cnf_matrix.astype('float') / cnf_matrix.sum(axis=1)[:, np.newaxis]
-cm_normalized = cm_normalized.round(3) * 100
-print("NB test accuracy: ", cm_normalized.trace()/4)  # Average accuracy accross all 4 emotions
 
-plot_confusion_matrix(cm_normalized,fontsize=14,title='NB Confusion Matrix',
-                      filename='../results/yt_gnb_cm.png')
-# SVM
-
-svm = SVC(class_weight='balanced',C=50,gamma=0.03)
-svm.fit(X_train_scaled,y_train)
-
-train_predicions = svm.predict(X_train_scaled)
-test_predictions = svm.predict(X_test_scaled)
-
-cnf_matrix = confusion_matrix(y_train, train_predicions)
-cm_normalized = cnf_matrix.astype('float') / cnf_matrix.sum(axis=1)[:, np.newaxis]
-cm_normalized = cm_normalized.round(3) * 100
-print("Svm train accuracy: ", cm_normalized.trace()/4)  # Average accuracy accross all 4 emotions
-
-cnf_matrix = confusion_matrix(y_test, test_predictions)
-cm_normalized = cnf_matrix.astype('float') / cnf_matrix.sum(axis=1)[:, np.newaxis]
-cm_normalized = cm_normalized.round(3) * 100
-print("Svm test accuracy: ", cm_normalized.trace()/4)  # Average accuracy accross all 4 emotions
-
-plot_confusion_matrix(cm_normalized,fontsize=14,title='SVM Confusion Matrix',
-                      filename='../results/yt_svm_cm.png')
-
-# Random Forest
-
-rf = RandomForestClassifier(n_estimators=2000,max_depth=18,max_features=0.3,min_samples_leaf=0.005)
-rf.fit(X_train_scaled,y_train)
-
-train_predicions = rf.predict(X_train_scaled)
-test_predictions = rf.predict(X_test_scaled)
-
-cnf_matrix = confusion_matrix(y_train, train_predicions)
-cm_normalized = cnf_matrix.astype('float') / cnf_matrix.sum(axis=1)[:, np.newaxis]
-cm_normalized = cm_normalized.round(3) * 100
-print("rf train accuracy: ", cm_normalized.trace()/4)  # Average accuracy accross all 4 emotions
-
-cnf_matrix = confusion_matrix(y_test, test_predictions)
-cm_normalized = cnf_matrix.astype('float') / cnf_matrix.sum(axis=1)[:, np.newaxis]
-cm_normalized = cm_normalized.round(3) * 100
-print("rf test accuracy: ", cm_normalized.trace()/4)  # Average accuracy accross all 4 emotions
-
-plot_confusion_matrix(cm_normalized,fontsize=14,title='RF Confusion Matrix',
-                      filename='../results/yt_rf_cm.png')
+	accuracy = save_confusion_matrix(y_test, test_predictions, 'confusion_matrices/' + clf_name + "_YouTube.png")
+	print(clf_name + " test accuracy: ", accuracy)  # Average accuracy accross all 4 emotions
