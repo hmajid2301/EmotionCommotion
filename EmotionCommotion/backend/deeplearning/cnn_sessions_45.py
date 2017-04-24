@@ -24,6 +24,7 @@ batch_size = 256
 nb_classes = 4
 nb_epoch = 5
 test_index = 30242
+split_index = 23489
 
 # input image dimensions
 img_rows, img_cols = 65, 40
@@ -34,10 +35,10 @@ pool_size = (2, 2)
 # convolution kernel size
 kernel_size = (3, 3)
 
-X_train = np.load('../../../../local/whitened_data/iemo_X_whitened_40.npy')
-X_test = np.load('../../../../local/whitened_data/yt_X_whitened_40.npy')
-Y_train = np.load('../../../../local/whitened_data/iemo_y.npy')
-Y_test = np.load('../../../../local/whitened_data/yt_y.npy')
+X_train = np.load('../../../../local/whitened_data/iemo_X_whitened_40.npy')[split_index:]
+X_test = np.load('../../../../local/whitened_data/iemo_X_whitened_40.npy')[0:split_index]
+Y_train = np.load('../../../../local/whitened_data/iemo_y.npy')[split_index:]
+Y_test = np.load('../../../../local/whitened_data/iemo_y.npy')[0:split_index:]
 
 class_weights = get_class_weights(Y_train)
 
@@ -94,17 +95,13 @@ test_predictions = model.predict_proba(X_test, batch_size=32, verbose=1)
 print('Test score:', score[0])
 print('Test accuracy:', score[1])
 
-model.save('yt_5_40.h5')
+model.save('yt_5_40_sessions45.h5')
 
 predictions = model.predict(X_test, batch_size=32, verbose=1)
 
 cnf_matrix = confusion_matrix(np.argmax(Y_test,axis=1), np.argmax(predictions,axis=1))
 cm_normalized = cnf_matrix.astype('float') / cnf_matrix.sum(axis=1)[:, np.newaxis]
 cm_normalized = cm_normalized.round(3) * 100
-
-yt_frame_preds = model.predict_proba(X_train, batch_size=32, verbose=1)
-np.save('yt_frame_preds_5_epoch_40.npy',yt_frame_preds)
-
 
 def plot_confusion_matrix(cm, title='CNN Confusion matrix', cmap=plt.cm.Greens,fontsize=14):
     plt.figure(figsize=(4.5,4.5))
@@ -127,7 +124,7 @@ def plot_confusion_matrix(cm, title='CNN Confusion matrix', cmap=plt.cm.Greens,f
     plt.ylabel('True label',fontsize=fontsize)
     plt.xlabel('Predicted label',fontsize=fontsize)
     plt.gcf().subplots_adjust(bottom=0.25,left=0.25)
-    plt.savefig("NNCM.png",transparent=True,figsize=(20,20),dpi=120)
+    plt.savefig("NNCM_sessions45.png",transparent=True,figsize=(20,20),dpi=120)
 
 
 plot_confusion_matrix(cm_normalized,fontsize=14)
