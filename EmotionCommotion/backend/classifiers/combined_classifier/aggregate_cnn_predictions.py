@@ -18,7 +18,7 @@ global graph
 SCALAR_LOCATION = '../../../backend/deeplearning/scaler.sav'
 
 cnn_scaler = pickle.load(open(SCALAR_LOCATION,'rb'),encoding='latin1') # encoding for python 2 pickle
-cnn = load_model('../cnns/all_data_cnn.h5')
+cnn = load_model('../cnns/sessions123_cnn.h5')
 graph = tf.get_default_graph()
 
 IEMOCAP_LOCATION = '../../../data'
@@ -37,7 +37,7 @@ def aggregate_cnn_IEMOCAP(verbose=2,aggregate=True):
     dic = {}
     vals = []
     filenames = []
-    for session in range(1,6):
+    for session in range(4,6):
         if verbose > 0:
             print('\n' + "Extracting from session: " + str(session) + '\n')
             numdir = len(os.listdir(IEMOCAP_LOCATION + '/IEMOCAP_full_release/Session' + str(session) + '/sentences/wav/'))
@@ -58,7 +58,7 @@ def aggregate_cnn_IEMOCAP(verbose=2,aggregate=True):
     dtype = [('Filename','object'), ('Col1','float32'), ('Col2','float32'), ('Col3','float32'), ('Col4','float32'), ('Col5','float32'), ('Col6','float32'), ('Col7','float32'), ('Col8','float32'), ('Col9','float32'), ('Col10','float32'), ('Col11','float32'), ('Col12','float32'), ('Col13','float32'), ('Col14','float32'), ('Col15','float32'), ('Col16','float32'), ('Col17','float32'), ('Col18','float32'), ('Col19','float32'), ('Col20','float32'), ('Col21','float32'), ('Col22','float32'), ('Col23','float32'), ('Col24','float32'), ('Col25','float32'), ('Col26','float32'), ('Col27','float32'), ('Col28','float32'), ('Col29','float32'), ('Col30','float32'), ('Col31','float32'), ('Col32','float32'), ('Col33','float32'), ('Col34','float32'), ('Col35','float32'), ('Col36','float32'), ('Col37','float32'), ('Col38','float32'), ('Col39','float32'), ('Col40','float32')]
     # values = numpy.zeros(20, dtype=dtype)
     df = pd.DataFrame(vals, index=filenames)
-    df.to_csv(path_or_buf='IEMOCAP_frame_agg.csv', sep=',')      
+    df.to_csv(path_or_buf='IEMOCAP_frame_agg_45.csv', sep=',')
     #np.savetxt("IEMOCAP_frame_agg.csv", np.asarray(vals), delimiter=",", header = columns)
 
 def aggregate_cnn_wild(verbose=2,aggregate=True):
@@ -69,7 +69,7 @@ def aggregate_cnn_wild(verbose=2,aggregate=True):
     in the feaures directory.
     '''
     vals = []
-    files = glob('./wild_dataset/10_to_20_seconds/*.wav')
+    files = glob('../../../../../local/wild_dataset/10_to_20_seconds/*.wav')
     num_files = len(files)
     i = 0
     filenames = []
@@ -118,15 +118,14 @@ def aggregate_frame_preditions(frame_predictions):
 
 def cnn_frame_predict(frame):
     scaled = cnn_scaler.transform(frame.reshape(1,-1))
-    pca = PCA(n_components=60,whiten=True)
+    pca = PCA(n_components=40,whiten=True)
     specto = np.array(signal.spectrogram(scaled,nperseg=128)[2]).reshape(65,142)
-    whitened_specto = pca.fit_transform(specto).reshape(1,65,60,1)
+    whitened_specto = pca.fit_transform(specto).reshape(1,65,40,1)
     # Fixed threading problem: https://github.com/fchollet/keras/issues/2397
     with graph.as_default():
         # Get prediction
         result = cnn.predict(whitened_specto,verbose=0)
-        #print(result)
-
+        result = result.reshape(4)
         return result
 
 #aggregate_cnn_wild()
