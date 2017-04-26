@@ -8,13 +8,15 @@ import time
 import matplotlib.pyplot as plt
 import matplotlib
 
+# List of feature extractor functions
 extractors = [ext.amplitude,ext.cepstrum,ext.energy,ext.f0,ext.mfcc_with_rounding,ext.silence_ratio,ext.zerocrossing]
 
-
+# Read a 10 second clip for testing
 audiofile = get_audiofile('10_sec_clip.wav')
 frames = get_frames(audiofile)
 results = {}
 
+# Extract each feature and store time
 for funct in extractors:
 	start = time.time()
 	vals = []
@@ -25,13 +27,15 @@ for funct in extractors:
 
 	results[funct.__name__] = end - start
 
-font = {'family' : 'normal',
-		'size'   : 18}
-
-matplotlib.rc('font', **font)
-
+# Print total extraction time
 print("Total time:" + str(sum(results.values())))
 
+# Figure aesthetics
+font = {'family' : 'normal',
+		'size'   : 18}
+matplotlib.rc('font', **font)
+
+# Plot extraction times
 plt.bar(range(len(results)), results.values(), align='center')
 plt.xticks(range(len(results)), results.keys())
 plt.ylabel('Extraction time (seconds)')
