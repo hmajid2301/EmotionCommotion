@@ -26,7 +26,7 @@ var radius = Math.min(width, height) / 2;
 var pie = d3.layout.pie()
 	.sort(null)
 	.value(function(d) {
-		return d.valuend standardized manner.;
+		return d.value;
 	});
 
 //set up radius, allow us to create a doughnut pie chart if we make the inner radius smaller
