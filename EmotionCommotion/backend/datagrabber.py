@@ -12,7 +12,7 @@ from scipy import signal
 import pickle
 
 IEMOCAP_LOCATION = "../../../../local"
-SCALER_LOCATION  = "../frame_scaler.sav"
+SCALER_LOCATION  = "../../frame_scaler.sav"
 
 # Load pre-trained scaler
 scaler = pickle.load(open(SCALER_LOCATION, 'rb'))
