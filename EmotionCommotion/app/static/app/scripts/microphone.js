@@ -7,7 +7,13 @@
 // interval - causes audio functions to loop until user ends recording
 // frameNum - number of frames sent to server
 //***********************************************************************************
-var emotion;
+var emotion = {
+    neu: 100,
+    hap: 0,
+    sad: 0,
+    ang, 0
+};
+
 var interval = null;
 var frameNum = 0;
 
