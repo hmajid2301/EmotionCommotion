@@ -11,11 +11,11 @@ from sklearn.decomposition import PCA
 from scipy import signal
 import pickle
 
-IEMOCAP_LOCATION = "../../../../local"
+IEMOCAP_LOCATION = "../../../../../local"
 SCALER_LOCATION  = "../../frame_scaler.sav"
 
 # Load pre-trained scaler
-scaler = pickle.load(open(SCALER_LOCATION, 'rb'))
+scaler = pickle.load(open(SCALER_LOCATION, 'rb'),encoding='latin1')
 
 # Aggregation functions
 agg_funcs = [np.amax,np.average,np.var]
@@ -32,8 +32,10 @@ def get_frames(audiofile,standardize_frame=False):
     frame_overlap = audiofile['frame_overlap']
     specto_tresh = audiofile['specto_thres']
     audio = audiofile['audio']
+
     if len(audio.shape) > 1 and audio.shape[1] > 1:
         audio = audio[:,0]
+
     frames = []
     i = 0
     while ((i+1)*(frame_size - frame_overlap) < len(audio)):
@@ -45,7 +47,7 @@ def get_frames(audiofile,standardize_frame=False):
         if standardize_frame:
             # Use scaler to standardize frame
             frame = scaler.transform(frame.reshape(1,-1))
-        frames.append(frame[0])
+        frames.append(frame)
         i += 1
     return frames
 
