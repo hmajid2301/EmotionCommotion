@@ -41,7 +41,7 @@ $("#microphone").click(function () {
     $("#stop").show()
     toggleRecording(this)
     microphone.start()
-    interval = setInterval(loop, 1000)
+    interval = setInterval(loop, 2000)
 });
 
 
@@ -63,7 +63,7 @@ $("#stop").click(function () {
 });
 
 
-//done encoding called every 1 second 
+//done encoding called every 1 second
 //ajax call
 function doneEncoding(blob) {
 
@@ -99,7 +99,7 @@ function doneEncoding(blob) {
 }
 
 
-//loop calls doneEncoding but first get blob data 
+//loop calls doneEncoding but first get blob data
 function loop() {
     audioRecorder.getBuffers(gotBuffers);
 }
