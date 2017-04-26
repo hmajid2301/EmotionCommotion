@@ -43,21 +43,6 @@ def mfcc(frame, audiofile):
     sampleRate = audiofile['sample_rate']
     frame_size = audiofile['frame_size']
 
-    m = aub.mfcc(frame_size*4, 40, coefficientsCount, sampleRate)
-    p = aub.pvoc(frame_size*4, int(frame_size))
-    if len(frame) != 128:
-        frame = np.pad(frame,(0,frame_size-len(frame)),'constant',constant_values=0)
-    spec = p(frame.astype(np.float32))
-
-    mfcc_out = m(spec)
-    return mfcc_out
-
-def mfcc_with_rounding(frame, audiofile):
-    coefficientsCount = 12
-
-    sampleRate = audiofile['sample_rate']
-    frame_size = audiofile['frame_size']
-
     fftsize = pow(2, int(math.log(frame_size, 2) + 0.5)) # Round to nearest power of 2
 
     m = aub.mfcc(fftsize, 40, coefficientsCount, sampleRate)

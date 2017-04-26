@@ -48,6 +48,12 @@ def blob(request):
 
     frame = request.FILES['blob']
     frameNum = request.POST['frame-number']
+    if (frameNum == "1"):
+        print("Resetting summed probs")
+        summed_path = 'backend/summed_probs.npy'
+        tot_frames = 'backend/tot_frames.txt'
+        np.savetxt(summed_path, np.array([[0,0,0,0]]))
+        open(tot_frames, 'w').write('%d' % 0)
     filename = 'frame' + frameNum + '.wav'
     path = default_storage.save('tmp/' + filename, ContentFile(frame.read()))
 
@@ -60,9 +66,9 @@ def blob(request):
 
 
 
-    audiofile = get_audiofile(filename,data=mydata,flag=False,frame_size=16000)
+    audiofile = get_audiofile(filename,data=mydata,read_file=False,frame_size=16000)
 
-    result = cnnPredict(audiofile)
+    result = svmPredict(audiofile)
     # Get index of largest probability
     index = np.argmax(result)
     # Get string label from index

@@ -17,11 +17,12 @@ df = pd.read_csv('./features/iemocap_standardized/amplitude_standardized.csv')
 for filename in glob.glob('./features/iemocap_standardized/*.csv'):
     new_feature = pd.read_csv(filename)
     df = pd.merge(df,new_feature)
+    print(filename)
 
 # Merge features with lables to ensure all features and lables and paired,
 # then drop label.
 df = pd.merge(sessions,df).drop(['time','label'],axis=1)
-df = df.sort_index(axis=1)
+#df = df.sort_index(axis=1)
 
 # Save csv
 df.to_csv('./data/allFeatures_standardized.csv',index=False)
