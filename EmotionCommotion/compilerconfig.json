@@ -2,5 +2,9 @@
   {
     "outputFile": "app/static/app/content/site.css",
     "inputFile": "app/static/app/content/site.less"
+  },
+  {
+    "outputFile": "app/static/app/content/site.css",
+    "inputFile": "app/static/app/content/less/site.less"
   }
 ]

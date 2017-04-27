@@ -138,7 +138,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\static\app\content\less\library.less" />
+    <Content Include="app\static\app\content\less\site.css">
+      <SubType>Content</SubType>
+      <DependentUpon>app\static\app\content\less\site.less</DependentUpon>
+    </Content>
     <Content Include="app\static\app\content\less\site.less" />
+    <Content Include="app\static\app\content\site.min.css" />
     <Content Include="app\static\app\content\vendor\bootstrap.min.css" />
     <Content Include="app\static\app\scripts\recording\recorder.js" />
     <Content Include="app\static\app\scripts\recording\recorderWorker.js" />
@@ -251,7 +256,6 @@
     <None Include="obj\Debug\web.debug.config" />
     <Content Include="runtime.txt" />
     <None Include="compilerconfig.json" />
-    <Content Include="app\static\app\content\site.min.css" />
     <Content Include="app\static\app\images\emojis\angry.svg" />
     <Content Include="app\static\app\images\emojis\sad.svg" />
     <Content Include="app\static\app\images\emojis\sceptic.svg" />
