@@ -8,7 +8,7 @@ Install Python 3.5
 `sudo apt-get install python3.5`
 1. Get to "EmotionCommotion/EmotionCommotion/" (where manage.py exists)
 2. Run `pip install -r requirements.txt`
-3. Switch Keras backend to Theano from tensorflow 
+3. Switch Keras backend to Theano from Tensorflow (Guide: https://keras.io/backend/)
 4. Run `python manage.py runserver`
 5. Usually runs on localhost:8000, in your web browser
 
