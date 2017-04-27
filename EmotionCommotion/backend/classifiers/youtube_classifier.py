@@ -50,9 +50,5 @@ for i in range(0,len(clf_funcs)):
 	train_predicions = clf.predict(X_train_scaled)
 	test_predictions = clf.predict(X_test_scaled)
 
-	# accuracy = save_confusion_matrix(y_train, train_predicions, 'confusion_matrices/' + clf_name + "_IEMOCAP.png")
-	# print(clf_name + " train accuracy: ", accuracy)  # Average accuracy accross all 4 emotions
-
-
 	accuracy = save_confusion_matrix(y_test, test_predictions, 'confusion_matrices/' + clf_name + "_YouTube.png")
 	print(clf_name + " test accuracy: ", accuracy)  # Average accuracy accross all 4 emotions

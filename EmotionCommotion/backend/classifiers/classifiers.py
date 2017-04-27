@@ -43,7 +43,7 @@ def save_confusion_matrix(y_test, test_predictions, filename='tmp.png'):
 	cm_normalized = cnf_matrix.astype('float') / cnf_matrix.sum(axis=1)[:, np.newaxis]
 	cm_normalized = cm_normalized.round(3) * 100
 
-	plot_confusion_matrix(cm_normalized,fontsize=14,title='Ensemble Confusion Matrix',
+	plot_confusion_matrix(cm_normalized,fontsize=14,title='Confusion Matrix',
                       filename=filename)
 	return cm_normalized.trace()/4 # Average accuracy accross all 4 emotions
 
