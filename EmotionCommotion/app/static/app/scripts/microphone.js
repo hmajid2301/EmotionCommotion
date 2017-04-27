@@ -92,7 +92,8 @@ function doneEncoding(blob) {
         data.append("enctype", "multipart/form-data");
         data.append("blob", blob);
         data.append("frame-number", frameNum);
-        console.log("Sending Framenum ", frameNum)
+
+
         //ajax call
         //POST to blob
         $.ajax({

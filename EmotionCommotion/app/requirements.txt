@@ -1,7 +1,0 @@
-matplotlib==1.5.3
-scipy==0.18.1
-Django==1.10.3
-pandas==0.19.1
-aubio==0.4.3a2
-numpy==1.11.2
-scikit_learn==0.18.1
