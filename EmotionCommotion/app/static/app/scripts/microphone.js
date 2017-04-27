@@ -68,13 +68,25 @@ $("#stop").click(function () {
     toggleRecording(document.getElementById("microphone"))
     microphone.stop()
     frameNum = 0;
+    var frameCaught = true;
 
     //when all ajax calls have returned
     //show the dominant emoji
     $(document).ajaxStop(function () {
+        $(document).off('ajaxStop')
         $("#graph").hide()
         loadEmoji(emotion);
+        frameCaught = false;
     });
+
+    //if a frame gets sent sent to server, but user 
+    //ends recording then ajax call will never receive
+    //so show emoji from current set
+    if (frameCaught) {
+        $(document).off('ajaxStop')
+        $("#graph").hide()
+        setTimeout(loadEmoji, 5000, emotion);
+    }
 });
 
 
@@ -91,7 +103,6 @@ function doneEncoding(blob) {
         data.append("blob", blob);
         data.append("frame-number", frameNum);
 
-
         //ajax call
         //POST to blob
         $.ajax({
@@ -101,7 +112,6 @@ function doneEncoding(blob) {
             processData: false,
             contentType: false,
             success: function (a) {
-                console.log(a);
                 callback(a);
             },
             error: function (e) {
@@ -117,10 +127,10 @@ function doneEncoding(blob) {
 function callback(a) {
     //increment number of returned frames
     returnedFrames++;
-    emotion.neu = ((parseFloat(a.neu) + emotion.neu * (returnedFrames - 1)) / returnedFrames).toFixed(2);
-    emotion.hap = ((parseFloat(a.hap) + emotion.hap * (returnedFrames - 1)) / returnedFrames).toFixed(2);
-    emotion.ang = ((parseFloat(a.ang) + emotion.ang * (returnedFrames - 1)) / returnedFrames).toFixed(2);
-    emotion.sad = ((parseFloat(a.sad) + emotion.sad * (returnedFrames - 1)) / returnedFrames).toFixed(2);
+    emotion.neu = parseFloat((parseFloat(a.neu) + emotion.neu * (returnedFrames - 1)) / returnedFrames).toPrecision(2);
+    emotion.hap = parseFloat((parseFloat(a.hap) + emotion.hap * (returnedFrames - 1)) / returnedFrames).toPrecision(2);
+    emotion.ang = parseFloat((parseFloat(a.ang) + emotion.ang * (returnedFrames - 1)) / returnedFrames).toPrecision(2);
+    emotion.sad = parseFloat((parseFloat(a.sad) + emotion.sad * (returnedFrames - 1)) / returnedFrames).toPrecision(2);
 
     //show graph on success
     $("#graph").show()
@@ -132,16 +142,11 @@ function loop() {
     audioRecorder.getBuffers(gotBuffers);
 }
 
-
 //calculates dominant emoji from dictionary
 function loadEmoji(data) {
     var max = 0;
     var dominant;
-<<<<<<< HEAD
-=======
 
-    //for each emoji
->>>>>>> 80a9a335c895a7dff9be52fe90134f0ec0b92133
     for (var key in data) {
 
         //get probability, if greater than previous highest

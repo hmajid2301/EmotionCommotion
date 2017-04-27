@@ -47,6 +47,7 @@ def home(request):
 def blob(request):
     '''renders blob backend'''
 
+
     #From ajax get the information
     #frame - audio file
     #frameNum - number of the frame (since user started recording)
@@ -82,9 +83,12 @@ def blob(request):
     # Get string label from index
     label = index_to_label(index)
 
+
     #return predictions
     return HttpResponse(json.dumps({'neu': format(result[0][0], '.2f'),
                                     'hap': format(result[0][1], '.2f'),
                                     'sad': format(result[0][2], '.2f'),
-                                    'ang': format(result[0][3], '.2f')})
+                                    'ang': format(result[0][3], '.2f'),
+                                    'frame': frameNum})
+
                                     , content_type="application/json")

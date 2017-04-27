@@ -17,12 +17,12 @@ svg.append("g").attr("class", "labelValue");
 svg.append("g").attr("class", "lines");
 
 //create height, width and radius of the pie chart
-var width = 960;
+var width = 900;
 var height = 450;
 var radius = Math.min(width, height) / 2;
 
 
-//create default pie chart
+//create default pie chart )
 var pie = d3.layout.pie()
 	.sort(null)
 	.value(function(d) {
