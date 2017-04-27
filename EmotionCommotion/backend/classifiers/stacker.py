@@ -61,33 +61,30 @@ X_train = min_max_scaler.fit_transform(X_train)
 X_test = min_max_scaler.transform(X_test)
 
 # Classifiers to stack
-clf_funcs = [get_gnb, get_svm]
-clf_names = ['gnb', 'svm']
+clf_funcs = [get_rf, get_svm]
+clf_names = ['rf', 'svm']
 
-from sklearn.externals import joblib
-svm = get_svm()
-svm.fit(X_train,y_train)
 
-preds = svm.predict(X_test)
-print(y_test.shape)
-print(preds.shape)
-accuracy = save_confusion_matrix(y_test, preds, 'tmp.png')
-
-preds = svm.predict(X_train)
-
-accuracy = save_confusion_matrix(y_train, preds, 'tmp.png')
-
-print(accuracy)
-joblib.dump(svm, 'saved_classifiers/svm2.pkl')
+# preds = svm.predict(X_test)
+# print(y_test.shape)
+# accuracy = save_confusion_matrix(y_test, preds, 'tmp.png')
+#
+# preds = svm.predict(X_train)
+# print(svm.predict_proba(X_train))
+#
+# accuracy = save_confusion_matrix(y_train, preds, 'tmp.png')
+#
+# print(accuracy)
+# joblib.dump(svm, 'saved_classifiers/svm2.pkl')
 
 # Index of final sample from session 3
-# split_index = 3548
-#
-# for i in range(0,len(clf_funcs)):
-# 	clf_func = clf_funcs[i]
-# 	clf_name = clf_names[i]
-# 	print("Stacking " + clf_name + "...")
-# 	[model, train_probs, test_probs] = get_stacker_probs(clf_func, X_train, y_train, X_test, split_index)
-# 	np.savetxt('probs/' + clf_name + '_train.csv', train_probs, delimiter=',')
-# 	np.savetxt('probs/' + clf_name + '_test.csv', test_probs, delimiter=',')
-# 	joblib.dump(model, 'saved_classifiers/svm.pkl')
+split_index = 3548
+
+for i in range(0,len(clf_funcs)):
+	clf_func = clf_funcs[i]
+	clf_name = clf_names[i]
+	print("Stacking " + clf_name + "...")
+	[model, train_probs, test_probs] = get_stacker_probs(clf_func, X_train, y_train, X_test, split_index)
+	np.savetxt('probs/' + clf_name + '_train.csv', train_probs, delimiter=',')
+	np.savetxt('probs/' + clf_name + '_test.csv', test_probs, delimiter=',')
+	joblib.dump(model, 'saved_classifiers/' + clf_name +'.pkl')

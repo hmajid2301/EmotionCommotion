@@ -47,8 +47,6 @@ $("#microphone").click(function () {
     $("#emojis").hide()
     $("#waveform").show()
     $("#stop").show()
-    
- 
     toggleRecording(this)
     microphone.start()
     interval = setInterval(loop, 2000)
@@ -139,8 +137,11 @@ function loop() {
 function loadEmoji(data) {
     var max = 0;
     var dominant;
+<<<<<<< HEAD
+=======
 
     //for each emoji
+>>>>>>> 80a9a335c895a7dff9be52fe90134f0ec0b92133
     for (var key in data) {
 
         //get probability, if greater than previous highest
@@ -188,4 +189,3 @@ function updateEmoji(emot) {
     }
 
 }
-
