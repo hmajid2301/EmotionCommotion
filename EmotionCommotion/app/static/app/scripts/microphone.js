@@ -44,8 +44,10 @@ $("#microphone").click(function () {
     //start recording
     //set interval to loop, i.e. keep recording audio data
     $("#microphone").hide()
+    $("#emojis").hide()
     $("#waveform").show()
     $("#stop").show()
+	
  
     toggleRecording(this)
     microphone.start()
@@ -60,14 +62,20 @@ $("#stop").click(function () {
     //show microphone
     //hide waveform and stop and graph
     //end recording
+
+
     clearInterval(interval);
     $("#microphone").show()
     $("#waveform").hide()
     $("#stop").hide()
-    $("#graph").hide()
     toggleRecording(document.getElementById("microphone"))
     microphone.stop()
     frameNum = 0;
+
+    $(document).ajaxStop(function () {
+        $("#graph").hide()
+        loadEmoji(emotion);
+    });
 });
 
 
@@ -108,10 +116,10 @@ function doneEncoding(blob) {
 function callback(a) {
     console.log("Major Frame", a)
     returnedFrames++;
-    emotion.neu = (parseFloat(a.neu) + emotion.neu * (returnedFrames - 1)) / returnedFrames;
-    emotion.hap = (parseFloat(a.hap) + emotion.hap * (returnedFrames - 1)) / returnedFrames;
-    emotion.ang = (parseFloat(a.ang) + emotion.ang * (returnedFrames - 1)) / returnedFrames;
-    emotion.sad = (parseFloat(a.sad) + emotion.sad * (returnedFrames - 1)) / returnedFrames;
+    emotion.neu = ((parseFloat(a.neu) + emotion.neu * (returnedFrames - 1)) / returnedFrames).toFixed(2);
+    emotion.hap = ((parseFloat(a.hap) + emotion.hap * (returnedFrames - 1)) / returnedFrames).toFixed(2);
+    emotion.ang = ((parseFloat(a.ang) + emotion.ang * (returnedFrames - 1)) / returnedFrames).toFixed(2);
+    emotion.sad = ((parseFloat(a.sad) + emotion.sad * (returnedFrames - 1)) / returnedFrames).toFixed(2);
 
     $("#graph").show()
 
@@ -121,3 +129,50 @@ function callback(a) {
 function loop() {
     audioRecorder.getBuffers(gotBuffers);
 }
+
+function loadEmoji(data) {
+    var max = 0;
+    var dominant; 
+    for (var key in data) {
+        if (max < data[key]) {
+            max = data[key];
+            dominant = key;
+        }
+    }
+
+    updateEmoji(dominant)
+    emotion = {hap: 0, neu: 0, sad: 0,ang: 0};
+}
+
+
+function updateEmoji(emot) {
+
+
+    $("#emojis").show()
+    $("#angry,#happy,#sad,#neutral").css({ width: "0px" });
+    switch (emot) {
+
+        case 'ang':
+            $("#angry").animate({
+                width: "30%"
+            });
+            break;
+        case 'sad':
+            $("#sad").animate({
+                width: "30%"
+            });
+            break;
+        case 'neu':
+            $("#neutral").animate({
+                width: "30%"
+            });
+            break;
+        case 'hap':
+            $("#happy").animate({
+                width: "30%"
+            });
+            break;
+    }
+
+}
+

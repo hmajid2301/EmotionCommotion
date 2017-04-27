@@ -53,17 +53,6 @@ function newData() {
     ];
 }
 
-//function newData() {
-//    result = getEmotion();
-//    return [
-//        { label: "Neutral", value: 1 * 100 },
-//        { label: "Happy", value: 0* 100 },
-//        { label: "Sadness", value: 0 * 100 },
-//        { label: "Angry", value: 0* 100 }
-//    ];
-//}
-
-	
 //Changes the graph with the new data
 //taken from D3 own dynamically updating pie chart example
 function change(data) {
