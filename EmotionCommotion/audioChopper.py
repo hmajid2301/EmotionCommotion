@@ -15,17 +15,20 @@ import json
 
 #If you get a 'chunk data' error, try loading your audio into audacity and exporting as windows 16bit floating point WAV
 
+#constants for error codes
 VALID = 0
 TRIPLE_ERROR = 1
 START_TIME_ERROR = 2
 EMPTY_LIST_ERROR = 3
 INVALID_EMOTION_ERROR = 4
 
+#constants for emotions
 NEUTRAL = 0
 HAPPY = 1
 ANGRY = 2
 SAD = 3
 
+#function to take a number from 0 to 3 as an input and output the emotion as a string
 def map_emotion_number(emotion_number):
 	if(emotion_number == NEUTRAL):
 		return "Neutral"
@@ -36,6 +39,7 @@ def map_emotion_number(emotion_number):
 	else:
 		return "Sad"
 
+#function which carries out a series of checks then returns an error code
 def validity_test(triples):
 	if (len(triples) == 0):
 		return EMPTY_LIST_ERROR 
@@ -51,7 +55,7 @@ def validity_test(triples):
 
 def audioChopper(filepath,triples):
 	'''
-	Triples is a list of startTime/finishTime/emotion triples. 
+	'triples' is a list of startTime/finishTime/emotion triples. 
 	Times are given in seconds.
 	Emotions are represented by a number in the range 0 to 3.
 	Example: audioChopper("~/audio/clip_1.wav", [[1,3,0],[4,8,3],[13,20,1]])
@@ -61,6 +65,7 @@ def audioChopper(filepath,triples):
 	print(triples)
 	print("\n")
 
+	#check for errors, return and print an error message if an error is found
 	error_code = validity_test(triples)
 	if(error_code == TRIPLE_ERROR):
 		print("Error: An input was not a triple")
@@ -74,23 +79,30 @@ def audioChopper(filepath,triples):
 	if(error_code == INVALID_EMOTION_ERROR):
 		print("Error: Invalid emotion number given")
 		return
-
-	#input_file = open(filepath, 'rb')
+	
+	#wav.read gets the sample rate and creates an audio variable which allows use of the audio data at filepath
 	[sample_rate, audio] = wav.read(filepath)
 	print("sample rate = " + str(sample_rate))
-	sample_rate = sample_rate
 	
-	#len(audio)/sample_rate=length of audio in seconds	
+	#len(audio)/sample_rate=length of audio in seconds
+	
+	#for loop to iterate over each triple
 	for i in range(len(triples)):
+		#t = the next triple to consider
 		t = triples[i]
+		#isolate the samples of interest from the original audio clip
 		start = t[0]*sample_rate
 		finish = (t[1]+1)*sample_rate
 		samples = audio[start:finish]
+		#map the input emotion number to a string
 		emotion = map_emotion_number(t[2])
+		#construct the file name for the generated file
 		output_name = emotion + "_" + str(i) + "_" + ntpath.basename(filepath)
+		#write the samples to a new file
 		wav.write(output_name, sample_rate, samples)
 		print("Saved interval from sample " + str(start) + " to sample " + str(finish) + " at " + output_name)
 		
+		#append the name of the new file and its emotion to a CSV file
 		fields = [output_name,emotion]
 		csv_name = 'emotion_labels.csv'
 		fd = open(csv_name,'a')
@@ -98,5 +110,5 @@ def audioChopper(filepath,triples):
 		print("Appened to output csv file: " + csv_name)
 
 filepath = sys.argv[1]
-triples = json.loads(sys.argv[2])
+triples = json.loads(sys.argv[2]) #json.loads allows command line input to be treated as a python list
 audioChopper(filepath, triples)
