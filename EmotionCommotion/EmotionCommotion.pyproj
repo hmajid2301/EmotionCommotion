@@ -31,7 +31,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="app\allExtractors.py" />
-    <Compile Include="app\datagrabber.py" />
     <Compile Include="app\forms.py" />
     <Compile Include="app\models.py" />
     <Compile Include="app\tests.py" />
@@ -68,10 +67,14 @@
     <Folder Include="app\static\" />
     <Folder Include="app\static\app\" />
     <Folder Include="app\static\app\content\" />
+    <Folder Include="app\static\app\content\less\" />
+    <Folder Include="app\static\app\content\vendor\" />
     <Folder Include="app\static\app\fonts\" />
     <Folder Include="app\static\app\images\" />
     <Folder Include="app\static\app\images\emojis\" />
     <Folder Include="app\static\app\scripts\" />
+    <Folder Include="app\static\app\scripts\recording\" />
+    <Folder Include="app\static\app\scripts\vendor\" />
     <Folder Include="app\templates\" />
     <Folder Include="app\templates\app\" />
     <Folder Include="backend\" />
@@ -88,19 +91,23 @@
     <Folder Include="tmp\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\static\app\scripts\recorder.js" />
-    <Content Include="app\static\app\scripts\recorderWorker.js" />
+    <Content Include="app\static\app\content\less\library.less" />
+    <Content Include="app\static\app\content\less\site.less" />
+    <Content Include="app\static\app\content\vendor\bootstrap.min.css" />
+    <Content Include="app\static\app\scripts\recording\recorder.js" />
+    <Content Include="app\static\app\scripts\recording\recorderWorker.js" />
+    <Content Include="app\static\app\scripts\recording\recording.js" />
+    <Content Include="app\static\app\scripts\vendor\bootstrap.min.js" />
+    <Content Include="app\static\app\scripts\vendor\jquery-1.10.2.min.js" />
+    <Content Include="app\static\app\scripts\vendor\modernizr-2.6.2.js" />
     <Content Include="tmp\test.wav" />
     <None Include="compilerconfig.json" />
-    <Content Include="app\static\app\content\library.less" />
-    <Content Include="app\static\app\content\site.less" />
     <Content Include="app\static\app\content\site.min.css" />
     <Content Include="app\static\app\images\emojis\angry.svg" />
     <Content Include="app\static\app\images\emojis\sad.svg" />
     <Content Include="app\static\app\images\emojis\sceptic.svg" />
     <Content Include="app\static\app\images\emojis\smile.svg" />
     <Content Include="app\static\app\images\logo.svg" />
-    <Content Include="app\static\app\scripts\graph_temp.js" />
     <Content Include="app\static\app\scripts\graph.js" />
     <Content Include="app\static\app\scripts\microphone.js" />
     <None Include="bundleconfig.json" />
@@ -133,16 +140,11 @@
     </Content>
     <Content Include="requirements.txt" />
     <Content Include="db.sqlite3" />
-    <Content Include="app\static\app\content\bootstrap.css" />
-    <Content Include="app\static\app\content\bootstrap.min.css" />
     <Content Include="app\static\app\content\site.css" />
     <Content Include="app\static\app\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="app\static\app\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="app\static\app\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="app\static\app\fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="app\static\app\scripts\bootstrap.min.js" />
-    <Content Include="app\static\app\scripts\jquery-1.10.2.min.js" />
-    <Content Include="app\static\app\scripts\modernizr-2.6.2.js" />
     <Content Include="app\templates\app\index.html" />
     <Content Include="app\templates\app\layout.html" />
   </ItemGroup>

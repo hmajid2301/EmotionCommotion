@@ -52,13 +52,13 @@ def blob(request):
     #frameNum - number of the frame (since user started recording)
     frame = request.FILES['blob']
     frameNum = request.POST['frame-number']
-
-    if (frameNum == "1"):
-        print("Resetting summed probs")
-        summed_path = 'backend/summed_probs.npy'
-        tot_frames = 'backend/tot_frames.txt'
-        np.savetxt(summed_path, np.array([[0,0,0,0]]))
-        open(tot_frames, 'w').write('%d' % 0)
+    print("Frame Num: ", frameNum)
+    #if (frameNum == "1"):
+    #    print("Resetting summed probs")
+    #    summed_path = 'backend/summed_probs.npy'
+    #    tot_frames = 'backend/tot_frames.txt'
+    #    np.savetxt(summed_path, np.array([[0,0,0,0]]))
+    #    open(tot_frames, 'w').write('%d' % 0)
 
     filename = 'frame' + frameNum + '.wav'
     path = default_storage.save('tmp/' + filename, ContentFile(frame.read()))
@@ -68,6 +68,7 @@ def blob(request):
     #convert from stereo to mono
     mydata = scipy.io.wavfile.read(path)
     mydata = mydata[1][:,0]
+
 
     #delete file
     if os.path.isfile(path):

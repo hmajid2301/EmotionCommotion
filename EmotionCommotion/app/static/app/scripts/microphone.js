@@ -8,14 +8,15 @@
 // frameNum - number of frames sent to server
 //***********************************************************************************
 var emotion = {
-    neu: 100,
     hap: 0,
+    neu: 0,
     sad: 0,
-    ang, 0
+    ang: 0
 };
 
 var interval = null;
 var frameNum = 0;
+var returnedFrames = 0;
 
 //create waveform, amplitude against time
 var wavesurfer = WaveSurfer.create({
@@ -45,6 +46,7 @@ $("#microphone").click(function () {
     $("#microphone").hide()
     $("#waveform").show()
     $("#stop").show()
+ 
     toggleRecording(this)
     microphone.start()
     interval = setInterval(loop, 2000)
@@ -81,7 +83,7 @@ function doneEncoding(blob) {
         data.append("enctype", "multipart/form-data");
         data.append("blob", blob);
         data.append("frame-number", frameNum);
-
+        console.log("Sending Framenum ", frameNum)
         //ajax call
         //POST to blob
         $.ajax({
@@ -91,9 +93,8 @@ function doneEncoding(blob) {
             processData: false,
             contentType: false,
             success: function (a) {
-                //on success show graph and update emotion data
-                $("#graph").show()
-                emotion = a;
+                console.log(a);
+                callback(a);
             },
             error: function (e) {
                 console.log(e)
@@ -104,6 +105,17 @@ function doneEncoding(blob) {
     frameNum++;
 }
 
+function callback(a) {
+    console.log("Major Frame", a)
+    returnedFrames++;
+    emotion.neu = (parseFloat(a.neu) + emotion.neu * (returnedFrames - 1)) / returnedFrames;
+    emotion.hap = (parseFloat(a.hap) + emotion.hap * (returnedFrames - 1)) / returnedFrames;
+    emotion.ang = (parseFloat(a.ang) + emotion.ang * (returnedFrames - 1)) / returnedFrames;
+    emotion.sad = (parseFloat(a.sad) + emotion.sad * (returnedFrames - 1)) / returnedFrames;
+
+    $("#graph").show()
+
+}
 
 //loop calls doneEncoding but first get blob data
 function loop() {

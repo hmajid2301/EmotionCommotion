@@ -15,8 +15,7 @@ DEALINGS IN THE SOFTWARE.
 
 (function (window) {
 
-    //var WORKER_PATH = 'recorderWorker.js';
-    var WORKER_PATH = "../../static/app/scripts/recorderWorker.js";
+    var WORKER_PATH = "../../static/app/scripts/recording/recorderWorker.js";
 
     var Recorder = function (source, cfg) {
         var config = cfg || {};

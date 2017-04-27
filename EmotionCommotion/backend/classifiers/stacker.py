@@ -73,7 +73,7 @@ print(y_test.shape)
 print(preds.shape)
 accuracy = save_confusion_matrix(y_test, preds, 'tmp.png')
 print(accuracy)
-joblib.dump(svm, 'saved_classifiers/svm.pkl')
+joblib.dump(svm, 'saved_classifiers/svm2.pkl')
 
 # Index of final sample from session 3
 # split_index = 3548

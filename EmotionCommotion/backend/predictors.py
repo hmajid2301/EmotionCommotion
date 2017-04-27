@@ -79,11 +79,17 @@ def svmPredict(audiofile):
     '''
     Use a pre-trained SVM to predict emotion from audiofile
     '''
+
+    #import scipy.io.wavfile as wav   # Reads wav file
+    #[sample_rate, audio] = wav.read(filename)
+
+    audiofile = get_audiofile('C:/Users/Haseeb Majid/Documents/cs407/Project/EmotionCommotion/local/IEMOCAP_full_release/Session1/sentences/wav/Ses01F_impro01/Ses01F_impro01_F000.wav')
     # List of features to be extracted
     features = [amplitude,zerocrossing,cepstrum,mfcc,f0,energy,silence_ratio]
-
+    
     # Split audio into frames
     frames = get_frames(audiofile)
+    print(features[0])
 
     agg_vals = []
     for feature in features:
@@ -102,6 +108,7 @@ def svmPredict(audiofile):
         feature_agg_vals = aggregate(vals)
         agg_vals = np.concatenate((agg_vals,feature_agg_vals), axis=0)
         #print(feature_agg_vals)
+
 
     agg_func_names = ["max", "mean", "var"]
 
@@ -131,35 +138,36 @@ def svmPredict(audiofile):
 
     # Scale values
     agg_vals_scaled = min_max_scaler.transform(agg_vals)
+    print(agg_vals_scaled)
     # Load SVM and use to predict emotion
     svm = joblib.load('backend/classifiers/saved_classifiers/svm.pkl')
     #svm = pickle.load(open('backend/classifiers/saved_classifiers/svm.pkl', 'rb'))
     result = svm.predict_proba(agg_vals_scaled)
 
 
-    summed_path = 'backend/summed_probs.npy'
-    tot_frames_path = 'backend/tot_frames.txt'
+    #summed_path = 'backend/summed_probs.npy'
+    #tot_frames_path = 'backend/tot_frames.txt'
 
 
-    #if os.path.isfile(path):
-    #os.remove(path)
-    summed_probs = np.loadtxt(summed_path).reshape(1,4)
-    summed_probs = summed_probs + result
+    ##if os.path.isfile(path):
+    ##os.remove(path)
+    #summed_probs = np.loadtxt(summed_path).reshape(1,4)
+    #summed_probs = summed_probs + result
 
-    f = open(tot_frames_path, 'r')
-    for line in f.readlines():
-        tot_frames = int(line) + 1
+    #f = open(tot_frames_path, 'r')
+    #for line in f.readlines():
+    #    tot_frames = int(line) + 1
 
-    print("tot_frames",tot_frames)
+    #print("tot_frames",tot_frames)
+    #print(result)
+    #print(summed_probs/tot_frames)
+
+    #np.savetxt(summed_path, summed_probs)
+    #f = open(tot_frames_path, 'w')
+    #f.write('%d' % tot_frames)
+
     print(result)
-    print(summed_probs/tot_frames)
-
-    np.savetxt(summed_path, summed_probs)
-    f = open(tot_frames_path, 'w')
-    f.write('%d' % tot_frames)
-
-
-    return summed_probs/tot_frames
+    return result
 
 def cnnPredict(audiofile):
     '''

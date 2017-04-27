@@ -73,7 +73,7 @@ def get_audiofile(filename, data=None,read_file=True,frame_size=16000):
         [sample_rate, audio] = wav.read(filename)
     else:
         audio = data
-
+    
     audiofile['sample_rate'] = sample_rate
     audiofile['frame_size'] = frame_size
     audiofile['filename'] = filename

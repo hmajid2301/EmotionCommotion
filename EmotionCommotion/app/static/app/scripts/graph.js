@@ -44,7 +44,7 @@ var color = d3.scale.ordinal().range(["#20c11b", "#f4eb30" , "#1989d3", "#d33917
 //this function get new data, by GetEmotion() from microphone which contains
 //latest information about emotions, multiple by 100
 function newData() {
-    result = getEmotion()
+    result = getEmotion();
     return [
         {label:"Neutral", value: result.neu*100},
         {label:"Happy", value: result.hap*100},
@@ -52,6 +52,16 @@ function newData() {
         {label:"Angry", value: result.ang*100}
     ];
 }
+
+//function newData() {
+//    result = getEmotion();
+//    return [
+//        { label: "Neutral", value: 1 * 100 },
+//        { label: "Happy", value: 0* 100 },
+//        { label: "Sadness", value: 0 * 100 },
+//        { label: "Angry", value: 0* 100 }
+//    ];
+//}
 
 	
 //Changes the graph with the new data
