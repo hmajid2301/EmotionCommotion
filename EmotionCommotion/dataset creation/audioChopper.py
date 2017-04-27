@@ -47,7 +47,7 @@ def validity_test(triples):
 		this_triple = triples[t]
 		if (len(this_triple) != 3):
 			return TRIPLE_ERROR
-		if (this_triple[0] > this_triple[1])
+		if (this_triple[0] > this_triple[1]):
 			return START_TIME_ERROR
 		if not (this_triple[2] in range(0,4)):
 			return INVALID_EMOTION_ERROR
