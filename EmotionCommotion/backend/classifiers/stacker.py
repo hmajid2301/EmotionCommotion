@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from classifiers import *
-import pickle 
+import pickle
 
 # Get classifier tuned previously using grid search
 def get_stacker_probs(model_func, X_train, y_train, X_test, split_index):
@@ -57,21 +57,32 @@ X_test = X_test.drop(['max(zerocrossing(zerocrossing))',
             'mean(zerocrossing(zerocrossing))'],axis=1)
 
 min_max_scaler = preprocessing.MinMaxScaler()
-X_train_scaled = min_max_scaler.fit_transform(X_train)
-X_test_scaled = min_max_scaler.transform(X_test)
+X_train = min_max_scaler.fit_transform(X_train)
+X_test = min_max_scaler.transform(X_test)
 
 # Classifiers to stack
-clf_funcs = [get_gnb, get_svm, get_rf]
-clf_names = ['gnb', 'svm', 'rf']
+clf_funcs = [get_gnb, get_svm]
+clf_names = ['gnb', 'svm']
+
+from sklearn.externals import joblib
+svm = get_svm()
+svm.fit(X_train,y_train)
+
+preds = svm.predict(X_test)
+print(y_test.shape)
+print(preds.shape)
+accuracy = save_confusion_matrix(y_test, preds, 'tmp.png')
+print(accuracy)
+joblib.dump(svm, 'saved_classifiers/svm.pkl')
 
 # Index of final sample from session 3
-split_index = 3548
-
-for i in range(0,len(clf_funcs)):
-	clf_func = clf_funcs[i]
-	clf_name = clf_names[i]
-	print("Stacking " + clf_name + "...")
-	[model, train_probs, test_probs] = get_stacker_probs(clf_func, X_train, y_train, X_test, split_index)
-	np.savetxt('probs/' + clf_name + '_train.csv', train_probs, delimiter=',')
-	np.savetxt('probs/' + clf_name + '_test.csv', test_probs, delimiter=',')
-	pickle.dump(model, open('saved_classifiers/' + clf_name + '.pkl', 'wb'))
+# split_index = 3548
+#
+# for i in range(0,len(clf_funcs)):
+# 	clf_func = clf_funcs[i]
+# 	clf_name = clf_names[i]
+# 	print("Stacking " + clf_name + "...")
+# 	[model, train_probs, test_probs] = get_stacker_probs(clf_func, X_train, y_train, X_test, split_index)
+# 	np.savetxt('probs/' + clf_name + '_train.csv', train_probs, delimiter=',')
+# 	np.savetxt('probs/' + clf_name + '_test.csv', test_probs, delimiter=',')
+# 	joblib.dump(model, 'saved_classifiers/svm.pkl')
