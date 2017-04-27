@@ -31,7 +31,7 @@ for session in range(1,6):
             else:
                 clip_labels[j] = np.array([0,0,0,1]).reshape(1,4)
             j+=1
-        print j
+        print(j)
 
 # Resize array
 clip_labels = clip_labels[0:j]
