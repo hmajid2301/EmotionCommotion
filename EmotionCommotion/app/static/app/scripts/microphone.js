@@ -47,8 +47,8 @@ $("#microphone").click(function () {
     $("#emojis").hide()
     $("#waveform").show()
     $("#stop").show()
-	
- 
+
+
     toggleRecording(this)
     microphone.start()
     interval = setInterval(loop, 2000)
@@ -132,7 +132,7 @@ function loop() {
 
 function loadEmoji(data) {
     var max = 0;
-    var dominant; 
+    var dominant;
     for (var key in data) {
         if (max < data[key]) {
             max = data[key];
@@ -175,4 +175,3 @@ function updateEmoji(emot) {
     }
 
 }
-
