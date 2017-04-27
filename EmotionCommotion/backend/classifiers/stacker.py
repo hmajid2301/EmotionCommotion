@@ -72,6 +72,11 @@ preds = svm.predict(X_test)
 print(y_test.shape)
 print(preds.shape)
 accuracy = save_confusion_matrix(y_test, preds, 'tmp.png')
+
+preds = svm.predict(X_train)
+
+accuracy = save_confusion_matrix(y_train, preds, 'tmp.png')
+
 print(accuracy)
 joblib.dump(svm, 'saved_classifiers/svm2.pkl')
 

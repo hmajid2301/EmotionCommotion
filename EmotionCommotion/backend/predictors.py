@@ -19,15 +19,15 @@ os.environ['KMP_DUPLICATE_LIB_OK']='True'
 #import tensorflow as tf
 global graph
 
-SCALAR_LOCATION = 'backend/deeplearning/scaler.sav'
+FEATURE_SCALAR_LOCATION = 'backend/feature_scaler.sav'
 FRAME_SCALER_LOCATION  = "backend/frame_scaler.sav"
 
 #cnn_scaler = pickle.load(open(SCALAR_LOCATION,'rb'),encoding='latin1') # encoding for python 2 pickle
 #cnn = load_model('backend/classifiers/cnns/all_data_cnn.h5')
 #graph = tf.get_default_graph()
 
-# Load pre-trained scaler
-scaler = pickle.load(open(SCALER_LOCATION, 'rb'),encoding='latin1')
+# Load pre-trained scalers
+feature_scaler = pickle.load(open(FEATURE_SCALAR_LOCATION, 'rb'),encoding='latin1')
 frame_scaler = pickle.load(open(FRAME_SCALER_LOCATION, 'rb'),encoding='latin1')
 
 def index_to_label(index):
@@ -83,10 +83,10 @@ def svmPredict(audiofile):
     #import scipy.io.wavfile as wav   # Reads wav file
     #[sample_rate, audio] = wav.read(filename)
 
-    audiofile = get_audiofile('C:/Users/Haseeb Majid/Documents/cs407/Project/EmotionCommotion/local/IEMOCAP_full_release/Session1/sentences/wav/Ses01F_impro01/Ses01F_impro01_F000.wav')
+    #audiofile = get_audiofile('/home/olly/cs/4_year/project/local/IEMOCAP_full_release/Session1/sentences/wav/Ses01F_impro01/Ses01F_impro01_M013.wav')
     # List of features to be extracted
     features = [amplitude,zerocrossing,cepstrum,mfcc,f0,energy,silence_ratio]
-    
+
     # Split audio into frames
     frames = get_frames(audiofile)
     print(features[0])
@@ -116,31 +116,18 @@ def svmPredict(audiofile):
     #     for j in range(0, len(labels)):
     #         print((agg_func_names[i]+'('+labels[j]+'('+features.__name__+'))'))
 
-    # Load data to get scaler
-    training = pd.read_csv('backend/data/allFeatures_standardized.csv')
-    training.drop('session',axis=1,inplace=True)
-    training = training.replace([np.inf, -np.inf], np.nan)
-    training = training.fillna(0)
-    #print(training.columns.values)
-    training = training.drop(['max(zerocrossing(zerocrossing))',
-            'mean(zerocrossing(zerocrossing))'],axis=1)
-
     # Remove max and mean zerocrossing features
     #print(agg_vals.shape)
     agg_vals = np.append(agg_vals[0:9],agg_vals[11:])
-    #print(agg_vals.shape)
     agg_vals = agg_vals.reshape(1,-1)
-    #print(agg_vals)
-    min_max_scaler = preprocessing.MinMaxScaler()
 
-    # Fit scaler to traning data
-    min_max_scaler.fit(training)
+    #print(agg_vals)
 
     # Scale values
-    agg_vals_scaled = min_max_scaler.transform(agg_vals)
-    print(agg_vals_scaled)
+    agg_vals_scaled = feature_scaler.transform(agg_vals)
+
     # Load SVM and use to predict emotion
-    svm = joblib.load('backend/classifiers/saved_classifiers/svm.pkl')
+    svm = joblib.load('backend/classifiers/saved_classifiers/svm2.pkl')
     #svm = pickle.load(open('backend/classifiers/saved_classifiers/svm.pkl', 'rb'))
     result = svm.predict_proba(agg_vals_scaled)
 
