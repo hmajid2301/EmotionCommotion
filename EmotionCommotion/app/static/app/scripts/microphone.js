@@ -47,7 +47,7 @@ $("#microphone").click(function () {
     $("#emojis").hide()
     $("#waveform").show()
     $("#stop").show()
-	
+    
  
     toggleRecording(this)
     microphone.start()
@@ -62,8 +62,7 @@ $("#stop").click(function () {
     //show microphone
     //hide waveform and stop and graph
     //end recording
-
-
+    //restart frame number
     clearInterval(interval);
     $("#microphone").show()
     $("#waveform").hide()
@@ -72,6 +71,8 @@ $("#stop").click(function () {
     microphone.stop()
     frameNum = 0;
 
+    //when all ajax calls have returned
+    //show the dominant emoji
     $(document).ajaxStop(function () {
         $("#graph").hide()
         loadEmoji(emotion);
@@ -113,14 +114,16 @@ function doneEncoding(blob) {
     frameNum++;
 }
 
+//on successful return of ajax call update emotions, with an averaging function for each emoji
 function callback(a) {
-    console.log("Major Frame", a)
+    //increment number of returned frames
     returnedFrames++;
     emotion.neu = ((parseFloat(a.neu) + emotion.neu * (returnedFrames - 1)) / returnedFrames).toFixed(2);
     emotion.hap = ((parseFloat(a.hap) + emotion.hap * (returnedFrames - 1)) / returnedFrames).toFixed(2);
     emotion.ang = ((parseFloat(a.ang) + emotion.ang * (returnedFrames - 1)) / returnedFrames).toFixed(2);
     emotion.sad = ((parseFloat(a.sad) + emotion.sad * (returnedFrames - 1)) / returnedFrames).toFixed(2);
 
+    //show graph on success
     $("#graph").show()
 
 }
@@ -130,21 +133,30 @@ function loop() {
     audioRecorder.getBuffers(gotBuffers);
 }
 
+
+//calculates dominant emoji from dictionary
 function loadEmoji(data) {
     var max = 0;
-    var dominant; 
+    var dominant;
+
+    //for each emoji
     for (var key in data) {
+
+        //get probability, if greater than previous highest
+        //update highest and store emoji name
         if (max < data[key]) {
             max = data[key];
             dominant = key;
         }
     }
 
+    //show dominant emoji and reset emotion dictionary
     updateEmoji(dominant)
     emotion = {hap: 0, neu: 0, sad: 0,ang: 0};
 }
 
 
+//show dominant emoji hide all the others
 function updateEmoji(emot) {
 
 
