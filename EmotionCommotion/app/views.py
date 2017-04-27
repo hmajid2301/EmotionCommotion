@@ -45,29 +45,35 @@ def home(request):
 
 @csrf_exempt
 def blob(request):
+    '''renders blob backend'''
 
+    #From ajax get the information
+    #frame - audio file
+    #frameNum - number of the frame (since user started recording) 
     frame = request.FILES['blob']
     frameNum = request.POST['frame-number']
+
+    #name the file, then save in tmp
     filename = 'frame' + frameNum + '.wav'
     path = default_storage.save('tmp/' + filename, ContentFile(frame.read()))
 
+
+    #convert to array of amplitudes 
+    #convert from stereo to mono
     mydata = scipy.io.wavfile.read(path)
     mydata = mydata[1][:,0]
 
+    #delete file
     if os.path.isfile(path):
         os.remove(path)
 
 
-
-
+    #run through function to get in correct format for cnn
+    #predict using cnn
     audiofile = get_audiofile(filename,data=mydata,flag=False,frame_size=16000)
-
     result = cnnPredict(audiofile)
-    # Get index of largest probability
-    index = np.argmax(result)
-    # Get string label from index
-    label = index_to_label(index)
 
+    #return predictions
     return HttpResponse(json.dumps({'neu': format(result[0][0], '.2f'),
                                     'hap': format(result[0][1], '.2f'),
                                     'sad': format(result[0][2], '.2f'),

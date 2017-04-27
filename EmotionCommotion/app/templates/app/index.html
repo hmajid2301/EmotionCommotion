@@ -23,14 +23,9 @@
         <img class="emoji" id="sad" src="../../static/app/images/emojis/sad.svg" />
         <img class="emoji" id="neutral" src="../../static/app/images/emojis/sceptic.svg" />
         <img class="emoji" id="happy" src="../../static/app/images/emojis/smile.svg" /> -->
-    </div>
+     </div> <!-- For use later if you want both a graph and emojis -->
 
 
-     <!-- <form action="/blob">
-        <input type="file" name="blob" accept="audio/wav">
-        <input type="hidden" name="frame-number" value="100">
-        <input id="submit" type="submit">
-    </form> -->
 
 </div>
 
@@ -38,7 +33,10 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="../../static/app/scripts/recording.js"></script>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="../../static/app/scripts/recording/recorderWorker.js"></script>
+<script src="../../static/app/scripts/recording/recorder.js"></script>
+<script src="../../static/app/scripts/recording/recording.js"></script>
 <script src="../../static/app/scripts/microphone.js"></script>
 <script src="../../static/app/scripts/graph.js"></script>
 {% endblock %}

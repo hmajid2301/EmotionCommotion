@@ -6,11 +6,8 @@
     <title>{{ title }} - Emotion Commotion</title>
     {% load staticfiles %}
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,800" rel="stylesheet">
-    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="{% static 'app/content/bootstrap.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/vendor/bootstrap.min.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'app/content/site.min.css' %}" />
-    <script src="{% static 'app/scripts/modernizr-2.6.2.js' %}"></script>
-</head>
 
 <body>
     <div class="navbar navbar-fixed-top">
@@ -42,16 +39,14 @@
     <footer id="footer">
         <p>&copy; Team "Emotion Commotion", All rights Reserved. {{ year }} </p>
     </footer>
+    <script src="{% static 'app/scripts/vendor/modernizr-2.6.2.js' %}"></script>
+</head>
 
-    <script src="{% static 'app/scripts/jquery-1.10.2.min.js' %}"></script>
-    <script src="{% static 'app/scripts/bootstrap.min.js' %}"></script>
+    <script src="{% static 'app/scripts/vendor/jquery-1.10.2.min.js' %}"></script>
+    <script src="{% static 'app/scripts/vendor/bootstrap.min.js' %}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.1.2/wavesurfer.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.1.2/plugin/wavesurfer.microphone.min.js"></script>
     <script src="https://use.fontawesome.com/bc46617bcd.js"></script>
-    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-    <script src="http://d3js.org/d3.v3.min.js"></script>
-    <script src="../../static/app/scripts/recorderWorker.js"></script>
-    <script src="../../static/app/scripts/recorder.js"></script>
     {% block scripts %}{% endblock %}
 
 </body>
