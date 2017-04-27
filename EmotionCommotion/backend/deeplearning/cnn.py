@@ -66,18 +66,24 @@ print(X_test.shape[0], 'test samples')
 # Create model
 model = Sequential()
 
+# First convolution
 model.add(Convolution2D(nb_filters, kernel_size[0], kernel_size[1],
                         border_mode='valid',
                         input_shape=input_shape))
 model.add(Activation('relu'))
+# Second convolution
 model.add(Convolution2D(nb_filters, kernel_size[0], kernel_size[1]))
 model.add(Activation('relu'))
+# Max pooling
 model.add(MaxPooling2D(pool_size=pool_size))
 model.add(Dropout(0.5))
+# Flattern (2d to 1d)
 model.add(Flatten())
+# Fully connected layer
 model.add(Dense(128))
 model.add(Activation('relu'))
 model.add(Dropout(0.75))
+# Softmax prediction
 model.add(Dense(nb_classes))
 model.add(Activation('softmax'))
 
