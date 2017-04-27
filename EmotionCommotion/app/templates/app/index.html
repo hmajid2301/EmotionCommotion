@@ -18,12 +18,14 @@
 
 
     <div id="graph"></div>
-    <!-- <div id="emojis">
-        <img class="emoji" id="angry" src="../../static/app/images/emojis/angry.svg" />
+    <div id="emojis">
+         <!--<img class="emoji" id="angry" src="../../static/app/images/emojis/angry.svg" />
         <img class="emoji" id="sad" src="../../static/app/images/emojis/sad.svg" />
         <img class="emoji" id="neutral" src="../../static/app/images/emojis/sceptic.svg" />
-        <img class="emoji" id="happy" src="../../static/app/images/emojis/smile.svg" /> 
-    </div> -->
+        <img class="emoji" id="happy" src="../../static/app/images/emojis/smile.svg" /> -->
+     </div> <!-- For use later if you want both a graph and emojis -->
+
+
 
 </div>
 
@@ -31,7 +33,10 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="../../static/app/scripts/recording.js"></script>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="../../static/app/scripts/recording/recorderWorker.js"></script>
+<script src="../../static/app/scripts/recording/recorder.js"></script>
+<script src="../../static/app/scripts/recording/recording.js"></script>
 <script src="../../static/app/scripts/microphone.js"></script>
 <script src="../../static/app/scripts/graph.js"></script>
 {% endblock %}

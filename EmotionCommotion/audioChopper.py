@@ -42,6 +42,8 @@ def validity_test(triples):
 	for t in range(0,len(triples)):
 		this_triple = triples[t]
 		if (len(this_triple) != 3):
+			return TRIPLE_ERROR
+		if (this_triple[0] > this_triple[1])
 			return START_TIME_ERROR
 		if not (this_triple[2] in range(0,4)):
 			return INVALID_EMMOTION_ERROR
@@ -49,7 +51,7 @@ def validity_test(triples):
 
 def audioChopper(filepath,triples):
 	'''
-	Triples is a list of startTime/finishTime/emmotion triples. 
+	Triples is a list of startTime/finishTime/emotion triples. 
 	Times are given in seconds.
 	Emmotions are represented by a number in the range 0 to 3.
 	Example: audioChopper("~/audio/clip_1.wav", [[1,3,0],[4,8,3],[13,20,1]])
@@ -64,7 +66,7 @@ def audioChopper(filepath,triples):
 		print("Error: An input was not a triple")
 		return
 	if(error_code == START_TIME_ERROR):
-		print("Error: A start time was before a finish time")
+		print("Error: A start time was after a finish time")
 		return
 	if(error_code == EMPTY_LIST_ERROR):
 		print("Error: Please give at least one interval")

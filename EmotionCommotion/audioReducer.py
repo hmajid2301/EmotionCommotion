@@ -12,7 +12,7 @@ from types import *
 import json
 
 #AUDIOPATH ON EMOTCOMM: "/dcs/project/emotcomm/local/wild_dataset/chopped_and_labelled/"
-MIN_CLIP_LENGTH = 5 #min length of output clips in seconds
+MIN_CLIP_LENGTH = 10 #min length of output clips in seconds
 
 def save_clip(start, finish, emmotion, counter, audio, sample_rate):
 	samples = audio[start:finish]
@@ -28,6 +28,8 @@ def save_clip(start, finish, emmotion, counter, audio, sample_rate):
 	print("Appened to output csv file: " + csv_name)
 
 def audioReducer(audiopath):
+	print("\n")
+	print("WARNING: `audioReducer.py' has been written to postprocess the output of `audioChopper.py'. Otherwise ensure that 1. filenames begin *_ 2. include only emotion * 3. are in .wav format [Where * is Happy, Sad, Neutral or Angry]")
 	print("\n")
 	print("Processing audio at: " + audiopath)
 	print("\n")
@@ -61,6 +63,7 @@ def audioReducer(audiopath):
 			start = sample_position * sample_rate
 			finish = audio_length * sample_rate
 			save_clip(start, finish, emmotion, counter, audio, sample_rate)
+			counter = counter + 1
 			
 		else:
 			print("Skipping non-wavfile: " + fullpath + "\n")
