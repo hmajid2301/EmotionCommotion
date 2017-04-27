@@ -19,19 +19,19 @@ VALID = 0
 TRIPLE_ERROR = 1
 START_TIME_ERROR = 2
 EMPTY_LIST_ERROR = 3
-INVALID_EMMOTION_ERROR = 4
+INVALID_EMOTION_ERROR = 4
 
 NEUTRAL = 0
 HAPPY = 1
 ANGRY = 2
 SAD = 3
 
-def map_emmotion_number(emmotion_number):
-	if(emmotion_number == NEUTRAL):
+def map_emotion_number(emotion_number):
+	if(emotion_number == NEUTRAL):
 		return "Neutral"
-	elif(emmotion_number == HAPPY):
+	elif(emotion_number == HAPPY):
 		return "Happy"
-	elif(emmotion_number == ANGRY):
+	elif(emotion_number == ANGRY):
 		return "Angry"
 	else:
 		return "Sad"
@@ -46,14 +46,14 @@ def validity_test(triples):
 		if (this_triple[0] > this_triple[1])
 			return START_TIME_ERROR
 		if not (this_triple[2] in range(0,4)):
-			return INVALID_EMMOTION_ERROR
+			return INVALID_EMOTION_ERROR
 	return VALID
 
 def audioChopper(filepath,triples):
 	'''
 	Triples is a list of startTime/finishTime/emotion triples. 
 	Times are given in seconds.
-	Emmotions are represented by a number in the range 0 to 3.
+	Emotions are represented by a number in the range 0 to 3.
 	Example: audioChopper("~/audio/clip_1.wav", [[1,3,0],[4,8,3],[13,20,1]])
 	'''
 
@@ -71,8 +71,8 @@ def audioChopper(filepath,triples):
 	if(error_code == EMPTY_LIST_ERROR):
 		print("Error: Please give at least one interval")
 		return
-	if(error_code == INVALID_EMMOTION_ERROR):
-		print("Error: Invalid emmotion number given")
+	if(error_code == INVALID_EMOTION_ERROR):
+		print("Error: Invalid emotion number given")
 		return
 
 	#input_file = open(filepath, 'rb')
@@ -86,15 +86,15 @@ def audioChopper(filepath,triples):
 		start = t[0]*sample_rate
 		finish = (t[1]+1)*sample_rate
 		samples = audio[start:finish]
-		emmotion = map_emmotion_number(t[2])
-		output_name = emmotion + "_" + str(i) + "_" + ntpath.basename(filepath)
+		emotion = map_emotion_number(t[2])
+		output_name = emotion + "_" + str(i) + "_" + ntpath.basename(filepath)
 		wav.write(output_name, sample_rate, samples)
 		print("Saved interval from sample " + str(start) + " to sample " + str(finish) + " at " + output_name)
 		
-		fields = [output_name,emmotion]
-		csv_name = 'emmotion_labels.csv'
+		fields = [output_name,emotion]
+		csv_name = 'emotion_labels.csv'
 		fd = open(csv_name,'a')
-		fd.write(output_name+","+emmotion+"\n")
+		fd.write(output_name+","+emotion+"\n")
 		print("Appened to output csv file: " + csv_name)
 
 filepath = sys.argv[1]
