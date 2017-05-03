@@ -127,10 +127,10 @@ function doneEncoding(blob) {
 function callback(a) {
     //increment number of returned frames
     returnedFrames++;
-    emotion.neu =  ('' + parseFloat(a.neu) + emotion.neu * (returnedFrames - 1)) / returnedFrames).substring(0,2);
-    emotion.hap = ('' + parseFloat(a.hap) + emotion.hap * (returnedFrames - 1)) / returnedFrames).substring(0,2);
-    emotion.ang = ('' + parseFloat(a.ang) + emotion.ang * (returnedFrames - 1)) / returnedFrames).substring(0,2);
-    emotion.sad = ('' + parseFloat(a.sad) + emotion.sad * (returnedFrames - 1)) / returnedFrames).substring(0,2);
+    emotion.neu =  floor(parseFloat(a.neu) + emotion.neu * (returnedFrames - 1)) / returnedFrames);
+    emotion.hap = floor(parseFloat(a.hap) + emotion.hap * (returnedFrames - 1)) / returnedFrames);
+    emotion.ang = floor(parseFloat(a.ang) + emotion.ang * (returnedFrames - 1)) / returnedFrames);
+    emotion.sad = floor(parseFloat(a.sad) + emotion.sad * (returnedFrames - 1)) / returnedFrames);
 
     //show graph on success
     $("#graph").show()
