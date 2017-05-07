@@ -1,7 +1,7 @@
 ﻿//*************************************************************************************
 // graph.js
 // This file updates the pie chart, when it gets the data back from the ajax call
-// The graph updates itself every 2 seconds, if data is still the same, 
+// The graph updates itself every 2 seconds, if data is still the same,
 // i.e. emotion variable has not been changed then the graph will stay the same
 //
 // The graph relies on D3
@@ -46,10 +46,10 @@ var color = d3.scale.ordinal().range(["#20c11b", "#f4eb30" , "#1989d3", "#d33917
 function newData() {
     result = getEmotion();
     return [
-        {label:"Neutral", value: result.neu*100},
-        {label:"Happy", value: result.hap*100},
-        {label:"Sadness", value: result.sad*100},
-        {label:"Angry", value: result.ang*100}
+        {label:"Neutral", value: result.neu},
+        {label:"Happy", value: result.hap},
+        {label:"Sadness", value: result.sad},
+        {label:"Angry", value: result.ang}
     ];
 }
 
