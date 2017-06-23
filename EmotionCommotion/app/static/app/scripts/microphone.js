@@ -83,12 +83,11 @@ $("#stop").click(function () {
     //ends recording then ajax call will never receive
     //so show emoji from current set
     if (frameCaught) {
-        $(document).off('ajaxStop')
-        $("#graph").hide()
         setTimeout(loadEmoji, 5000, emotion);
     }
 });
 
+var timeset = {};
 
 //done encoding called every 1 second
 //ajax call
@@ -103,6 +102,8 @@ function doneEncoding(blob) {
         data.append("blob", blob);
         data.append("frame-number", frameNum);
 
+        timeset[frameNum] = new Date().getTime();
+
         //ajax call
         //POST to blob
         $.ajax({
@@ -112,7 +113,9 @@ function doneEncoding(blob) {
             processData: false,
             contentType: false,
             success: function (a) {
+                console.log(a);
                 callback(a);
+                console.log("Frame Num ", a.frame ," Run Time: ", new Date().getTime() - timeset[a.frame]);
             },
             error: function (e) {
                 console.log(e)
@@ -141,6 +144,7 @@ function callback(a) {
 function loop() {
     audioRecorder.getBuffers(gotBuffers);
 }
+
 
 //calculates dominant emoji from dictionary
 function loadEmoji(data) {
