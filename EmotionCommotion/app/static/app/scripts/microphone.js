@@ -17,6 +17,7 @@ var emotion = {
 var interval = null;
 var frameNum = 0;
 var returnedFrames = 0;
+var isRecording = false;
 
 //create waveform, amplitude against time
 var wavesurfer = WaveSurfer.create({
@@ -38,6 +39,8 @@ function getEmotion() {
 
 //on click of microphone
 $("#microphone").click(function () {
+    returnedFrames = 0;
+
 
     //hide microphone
     //show waveform and stop button
@@ -50,6 +53,7 @@ $("#microphone").click(function () {
     toggleRecording(this)
     microphone.start()
     interval = setInterval(loop, 2000)
+    isRecording = true;
 });
 
 
@@ -69,6 +73,7 @@ $("#stop").click(function () {
     microphone.stop()
     frameNum = 0;
     var frameCaught = true;
+    isRecording = false;
 
     //when all ajax calls have returned
     //show the dominant emoji
@@ -79,15 +84,16 @@ $("#stop").click(function () {
         frameCaught = false;
     });
 
-    //if a frame gets sent sent to server, but user 
+    //if a frame gets sent sent to server, but user
     //ends recording then ajax call will never receive
     //so show emoji from current set
     if (frameCaught) {
-        setTimeout(loadEmoji, 5000, emotion);
+        $(document).off('ajaxStop')
+        $("#graph").hide()
+        setTimeout(loadEmoji, 2000, emotion);
     }
 });
 
-var timeset = {};
 
 //done encoding called every 1 second
 //ajax call
@@ -102,8 +108,6 @@ function doneEncoding(blob) {
         data.append("blob", blob);
         data.append("frame-number", frameNum);
 
-        timeset[frameNum] = new Date().getTime();
-
         //ajax call
         //POST to blob
         $.ajax({
@@ -113,9 +117,9 @@ function doneEncoding(blob) {
             processData: false,
             contentType: false,
             success: function (a) {
-                console.log(a);
+              if(isRecording) {
                 callback(a);
-                console.log("Frame Num ", a.frame ," Run Time: ", new Date().getTime() - timeset[a.frame]);
+              }
             },
             error: function (e) {
                 console.log(e)
@@ -130,12 +134,12 @@ function doneEncoding(blob) {
 function callback(a) {
     //increment number of returned frames
     returnedFrames++;
-    emotion.neu = parseFloat((parseFloat(a.neu) + emotion.neu * (returnedFrames - 1)) / returnedFrames).toPrecision(2);
-    emotion.hap = parseFloat((parseFloat(a.hap) + emotion.hap * (returnedFrames - 1)) / returnedFrames).toPrecision(2);
-    emotion.ang = parseFloat((parseFloat(a.ang) + emotion.ang * (returnedFrames - 1)) / returnedFrames).toPrecision(2);
-    emotion.sad = parseFloat((parseFloat(a.sad) + emotion.sad * (returnedFrames - 1)) / returnedFrames).toPrecision(2);
-
+    emotion.neu =  Math.floor((parseFloat(a.neu)*100 + emotion.neu * (returnedFrames - 1)) / returnedFrames);
+    emotion.hap = Math.floor((parseFloat(a.hap)*100 + emotion.hap * (returnedFrames - 1)) / returnedFrames);
+    emotion.ang = Math.floor((parseFloat(a.ang)*100 + emotion.ang * (returnedFrames - 1)) / returnedFrames);
+    emotion.sad = Math.floor((parseFloat(a.sad)*100 + emotion.sad * (returnedFrames - 1)) / returnedFrames);
     //show graph on success
+    console.log(returnedFrames);
     $("#graph").show()
 
 }
@@ -144,7 +148,6 @@ function callback(a) {
 function loop() {
     audioRecorder.getBuffers(gotBuffers);
 }
-
 
 //calculates dominant emoji from dictionary
 function loadEmoji(data) {

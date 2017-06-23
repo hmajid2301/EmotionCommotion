@@ -83,16 +83,16 @@ def svmPredict(audiofile):
     #import scipy.io.wavfile as wav   # Reads wav file
     #[sample_rate, audio] = wav.read(filename)
 
-    #audiofile = get_audiofile('/home/olly/cs/4_year/project/local/IEMOCAP_full_release/Session1/sentences/wav/Ses01F_impro03/Ses01F_impro03_F013.wav')
+    audiofile = get_audiofile('/home/olly/cs/4_year/project/local/wild_dataset/10_to_20_seconds/Angry_125.wav')
     # List of features to be extracted
     features = [amplitude,zerocrossing,cepstrum,mfcc,f0,energy,silence_ratio]
 
     # Split audio into frames
     frames = get_frames(audiofile)
-    print(features[0])
 
     agg_vals = []
     for feature in features:
+        print(feature)
         vals = []
         for frame in frames:
             frame = frame_scaler.transform(frame.reshape(1,-1))
